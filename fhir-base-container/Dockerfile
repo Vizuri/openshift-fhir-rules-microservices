@@ -1,4 +1,5 @@
-FROM registry.access.redhat.com/rhel7.4
+#FROM registry.access.redhat.com/rhel7.4
+FROM centos:7
 MAINTAINER keudy@vizuri.com
 
 #
@@ -9,12 +10,11 @@ USER root
 
 ENV APP_ROOT=/opt/app-root 
 
-RUN yum -y upgrade \
-     && yum -y install java-1.8.0-openjdk-devel  \
+RUN yum-config-manager --enable centos:7 && \
+     yum -y install java-1.8.0-openjdk-devel  \
      && yum clean all -y \
      && mkdir ${APP_ROOT} ${APP_ROOT}/bin
 
-#     && yum install -y --enablerepo=rhel-server-rhscl-7-rpms --enablerepo=rhel-7-server-optional-rpms $INSTALL_PKGS \
 COPY jolokia.jar ${APP_ROOT}
 COPY run ${APP_ROOT}/bin
 
