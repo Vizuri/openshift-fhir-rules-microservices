@@ -1,0 +1,221 @@
+{
+   "kind": "List",
+   "apiVersion": "v1",
+   "metadata": {
+      "name": "nexus3"
+   },
+   "items": [
+      {
+         "kind": "Template",
+         "apiVersion": "v1",
+         "metadata": {
+            "name": "nexus3",
+            "annotations": {
+               "description": "Nexus service, with persistent storage. Scaling to more than one replica is not supported",
+               "tags": "repository-managers,nexus"
+            }
+         },
+         "labels": {
+            "application": "nexus3",
+            "createdBy": "template-nexus3"
+         },
+         "parameters": [
+            {
+               "description": "The name for the application. The service will be named like the application.",
+               "displayName": "Application name.",
+               "name": "APPLICATION_NAME",
+               "value": "nexus3"
+            },
+            {
+               "description": "Custom hostname for service routes.  Leave blank for default hostname, e.g.: <application-name>.<project>.<default-domain-suffix>",
+               "displayName": "Nexus instance hostname",
+               "name": "APPLICATION_HOSTNAME"
+            },
+            {
+               "description": "Persistent Volume Size (512Mi, 5Gi,...)",
+               "displayName": "Persistent Volume Size",
+               "name": "SIZE",
+               "value": "100Gi"
+            }
+         ],
+         "objects": [
+            {
+               "apiVersion": "v1",
+               "kind": "PersistentVolumeClaim",
+               "metadata": {
+                   "name": "nexus3-claim",
+                   "labels": {
+                       "application": "nexus3-claim"
+                   }
+             },
+               "spec": {
+                  "accessModes": [
+                     "ReadWriteOnce"
+                  ],
+                  "resources": {
+                     "requests": {
+                        "storage": "${SIZE}"
+                     }
+                  }
+               }
+            },
+	    {
+               "kind": "ImageStream",
+               "apiVersion": "v1",
+               "metadata": {
+                   "name": "nexus3"
+               },
+               "spec": {
+                   "dockerImageRepository": "sonatype/nexus3"
+               }
+            },
+            {
+               "kind": "DeploymentConfig",
+               "apiVersion": "v1",
+               "metadata": {
+                  "name": "nexus3"
+               },
+               "spec": {
+                  "strategy": {
+                     "type": "Rolling",
+                     "rollingParams": {
+                        "updatePeriodSeconds": 1,
+                        "intervalSeconds": 1,
+                        "timeoutSeconds": 600
+                     },
+                     "post": {
+                        "failurePolicy": "Ignore",
+                        "execNewPod": {
+                           "containerName": "nexus3",
+                           "command": [
+                              "/opt/sonatype/nexus/scripts/add-repos.sh"
+                           ]
+                        }
+                     },
+                     "resources": {}
+                  },
+                  "triggers": [
+                     {
+                        "type": "ConfigChange"
+                     },
+                     {
+                        "type": "ImageChange",
+                        "imageChangeParams": {
+                           "automatic": true,
+                           "containerNames": [
+                              "nexus3"
+                           ],
+                           "from": {
+                              "kind": "ImageStreamTag",
+                              "name": "nexus3:latest"
+                           }
+                        }
+                     }
+                  ],
+                  "replicas": 1,
+                  "selector": {
+                     "deploymentconfig": "nexus3"
+                  },
+                  "template": {
+                     "metadata": {
+                        "labels": {
+                           "deploymentconfig": "nexus3"
+                        }
+                     },
+                     "spec": {
+                        "volumes": [
+                           {
+                              "name": "nexus-data",
+                              "persistentVolumeClaim": {
+                                 "claimName": "nexus3-claim"
+                              }
+                           }
+                        ],
+                        "containers": [
+                           {
+                              "name": "nexus3",
+                              "image": "nexus3",
+                              "ports": [
+                                 {
+                                    "containerPort": 8081,
+                                    "protocol": "TCP"
+                                 }
+                              ],
+                              "volumeMounts": [
+                                 {
+                                    "name": "nexus-data",
+                                    "mountPath": "/nexus-data"
+                                 }
+                              ],
+                              "livenessProbe": {
+                                 "httpGet": {
+                                    "port": 8081
+                                 },
+                                 "initialDelaySeconds": 180,
+                                 "timeoutSeconds": 1
+                              },
+                              "readinessProbe": {
+                                 "httpGet": {
+                                    "port": 8081
+                                 },
+                                 "initialDelaySeconds": 20,
+                                 "timeoutSeconds": 1
+                              },
+                              "resources": {
+                                 "requests": {
+                                    "memory": "2Gi"
+                                 }
+                              },
+                              "terminationMessagePath": "/dev/termination-log",
+                              "imagePullPolicy": "Always",
+                              "securityContext": {
+                                 "capabilities": {},
+                                 "privileged": false
+                              }
+                           }
+                        ],
+                        "restartPolicy": "Always",
+                        "dnsPolicy": "ClusterFirst"
+                     }
+                  }
+               }
+            },
+            {
+               "kind": "Route",
+               "apiVersion": "v1",
+               "metadata": {
+                  "name": "nexus3"
+               },
+               "spec": {
+                  "host": "${APPLICATION_HOSTNAME}",
+                  "to": {
+                     "kind": "Service",
+                     "name": "nexus3"
+                  }
+               }
+            },
+            {
+               "kind": "Service",
+               "apiVersion": "v1",
+               "metadata": {
+                  "name": "nexus3"
+               },
+               "spec": {
+                  "ports": [
+                     {
+                        "name": "http",
+                        "port": 8081,
+                        "targetPort": 8081
+                     }
+                  ],
+                  "selector": {
+                     "deploymentconfig": "nexus3"
+                  },
+                  "type": "ClusterIP",
+                  "sessionAffinity": "None"
+               }
+            }
+         ]
+      }
+   ]
+}

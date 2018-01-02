@@ -1,0 +1,5 @@
+{
+  "name": "maven",
+  "type": "groovy",
+  "content": "repository.createMavenProxy('apache-snapshots', 'https://repository.apache.org/snapshots/'); repository.createMavenProxy('codehaus-snapshots', 'https://nexus.codehaus.org/snapshots/'); repository.createMavenProxy('redhat-ea-repository', 'https://maven.repository.redhat.com/earlyaccess/all'); repository.createMavenProxy('redhat-ga', 'https://maven.repository.redhat.com/ga'); repository.createMavenProxy('jboss-fuse', 'https://repo.fusesource.com/nexus/content/groups/public/'); repository.createMavenProxy('redhat-techpreview', 'http://maven.repository.redhat.com/techpreview/all/'); repository.createMavenProxy('jboss-ce', 'https://repository.jboss.org/nexus/content/groups/public/');repository.createMavenGroup('maven-all',['maven-releases','maven-snapshots', 'maven-central', 'apache-snapshots', 'codehaus-snapshots', 'redhat-ea-repository', 'redhat-ga', 'jboss-fuse', 'redhat-techpreview', 'jboss-ce'])"
+}

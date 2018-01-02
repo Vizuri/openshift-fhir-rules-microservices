@@ -1,0 +1,5 @@
+{
+  "name": "docker",
+  "type": "groovy",
+  "content": "repository.createDockerHosted('docker-internal'); repository.createDockerGroup('docker-all',['docker-internal'])"
+}

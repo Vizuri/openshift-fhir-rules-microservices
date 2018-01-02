@@ -1,0 +1,10 @@
+node ('maven') { 
+    stage('Checkout') {
+        echo "In checkout"
+    	checkout scm
+   }
+    stage('MavenBuild') {
+        echo "In Build"
+        sh "mvn -s configuration/settings.xml clean install deploy -Dnexus.url=http://nexus:8081"
+    }
+}

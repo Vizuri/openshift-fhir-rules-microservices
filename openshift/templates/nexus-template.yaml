@@ -1,0 +1,139 @@
+kind: Template
+apiVersion: v1
+labels:
+  version: 3.5.0-02-rhel
+  group: infrastructure
+metadata:
+  annotations:
+    description: Creates Nexus
+    tags: instant-app,nexus
+    version: 3.5.0-02-rhel
+  name: nexus3
+objects:
+- kind: ImageStream
+  apiVersion: v1
+  metadata:
+    name: nexus3
+  spec:
+    tags:
+      - name: "3.5.0-02-rhel"
+        from:
+          kind: DockerImage
+          name: "registry.connect.redhat.com/sonatype/nexus-repository-manager"
+        importPolicy: {}
+      - name: latest
+        from:
+          kind: ImageStreamTag
+          name: "3.5.0-02-rhel"
+- kind: PersistentVolumeClaim
+  apiVersion: v1
+  metadata:
+    name: nexus-data
+    annotations:
+  spec:
+    accessModes:
+      - ReadWriteOnce
+    resources:
+      requests:
+        storage: '${NEXUS_VOLUME_CAPACITY}'
+- kind: Route
+  apiVersion: v1
+  metadata:
+    name: nexus3
+  spec:
+    to:
+      kind: Service
+      name: nexus3
+- kind: Service
+  apiVersion: v1
+  metadata:
+    name: nexus3
+    annotations:
+      app: nexus3
+      service.openshift.io/infrastructure: 'true'
+  spec:
+    ports:
+    - name: nexus3
+      port: 8081
+      protocol: TCP
+      targetPort: 8081
+    selector:
+      app: nexus3
+    sessionAffinity: None
+    type: ClusterIP
+- kind: DeploymentConfig
+  apiVersion: v1
+  metadata:
+    name: nexus3
+    labels:
+      app: nexus3
+  spec:
+    serviceName: nexus3
+    replicas: 1
+    triggers:
+      - type: ConfigChange
+      - type: ImageChange
+        imageChangeParams:
+          automatic: true
+          containerNames:
+            - nexus3
+          from:
+            kind: ImageStreamTag
+            name: nexus3:3.5.0-02-rhel
+          lastTriggeredImage: ''
+    test: false
+    strategy:
+      recreateParams:
+        timeoutSeconds: 600
+      resources: {}
+      type: Recreate
+    template:
+      metadata:
+        labels:
+          deploymentconfig: nexus3
+          app: nexus3
+      spec:
+        containers:
+        - name: nexus3
+          image: sonatype/nexus3:3.5.0-02-rhel
+          imagePullPolicy: Always
+          env:
+          ports:
+          - containerPort: 8081
+            protocol: TCP
+          resources:
+            limits:
+              cpu: 512m
+              memory: 768Mi
+          securityContext:
+            capabilities: {}
+            privileged: false
+          terminationMessagePath: /dev/termination-log
+          volumeMounts:
+          - mountPath: /nexus-data
+            name: nexus-data
+        dnsPolicy: ClusterFirst
+        restartPolicy: Always
+        securityContext: {}
+        terminationGracePeriodSeconds: 30
+        volumes:
+        - name: nexus-data
+          persistentVolumeClaim:
+            claimName: nexus-data
+    volumeClaimTemplates:
+      - metadata:
+          name: nexus-data
+          annotations:
+            app: nexus3
+        spec:
+          accessModes:
+            - "ReadWriteOnce"
+          resources:
+            requests:
+              storage: 1Gi
+parameters:
+  - name: NEXUS_VOLUME_CAPACITY
+    displayName: Volume Capacity
+    description: 'Volume space available for data, e.g. 512Mi, 2Gi.'
+    value: 1Gi
+    required: true

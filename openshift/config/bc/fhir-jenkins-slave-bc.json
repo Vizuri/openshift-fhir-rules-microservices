@@ -1,0 +1,39 @@
+{
+    "kind": "BuildConfig",
+    "apiVersion": "v1",
+    "metadata": {
+        "name": "fhir-jenkins-slave",
+        "namespace": "openshift"
+    },
+    "spec": {
+        "source": {
+            "type": "Git",
+            "git": {
+                "uri": "git@bitbucket.org:vizuri/fhir-jenkins-slave.git",
+                "ref": "master"
+            },
+            "sourceSecret": {
+                "name": "bitbucketsecret"
+            },
+            "secrets": null
+        },
+        "strategy": {
+            "type": "Docker",
+            "dockerStrategy": {
+                "dockerfilePath": "Dockerfile"
+            }
+        },
+        "output": {
+            "to": {
+                "kind": "ImageStreamTag",
+                "name": "fhir-jenkins-slave:latest",
+                "namespace": "openshift"
+            }
+        },
+        "resources": {},
+        "postCommit": {}
+    },
+    "status": {
+        "lastVersion": 1
+    }
+}

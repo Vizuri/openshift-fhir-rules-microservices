@@ -1,0 +1,342 @@
+kind: Template
+apiVersion: v1
+labels:
+  version: 5.2.1-1
+  group: infrastructure
+metadata:
+  annotations:
+    description: Creates the infrastructure for the end-to-end content and security management story.
+    tags: instant-app,artifactory
+    version: 5.2.1-1
+  name: artifactory
+objects:
+- kind: ImageStream
+  apiVersion: v1
+  metadata:
+    name: artifactory
+  spec:
+    tags:
+      - name: "5.4.5"
+        from:
+          kind: DockerImage
+          name: "docker.bintray.io/jfrog/artifactory-oss:5.4.5"
+        importPolicy: {}
+      - name: latest
+        from:
+          kind: ImageStreamTag
+          name: "${ARTIFACTORY_VERSION}"
+- kind: PersistentVolumeClaim
+  apiVersion: v1
+  metadata:
+    name: artifactory-postgresql
+  spec:
+    accessModes:
+      - ReadWriteOnce
+    resources:
+      requests:
+        storage: '${POSTGRESQL_VOLUME_CAPACITY}'
+- kind: Route
+  apiVersion: v1
+  metadata:
+    name: artifactory
+  spec:
+    to:
+      kind: Service
+      name: artifactory
+- kind: Service
+  apiVersion: v1
+  metadata:
+    name: artifactory
+    annotations:
+      app: artifactory
+      service.openshift.io/infrastructure: 'true'
+      service.alpha.openshift.io/dependencies: '[{"name":"${DATABASE_SERVICE_NAME}","namespace":"","kind":"Service"}]'
+      service.alpha.openshift.io/serving-cert-secret-name: artifactory
+  spec:
+    ports:
+    - name: artifactory
+      port: 8081
+      protocol: TCP
+      targetPort: 8081
+    selector:
+      app: artifactory
+    sessionAffinity: None
+    type: ClusterIP
+- kind: Service
+  apiVersion: v1
+  metadata:
+    name: artifactory-postgresql
+    annotations:
+      description: Exposes the database server
+  spec:
+    ports:
+    - name: postgresql
+      port: 5432
+      targetPort: 5432
+    selector:
+      name: artifactory-postgresql
+- kind: DeploymentConfig
+  apiVersion: v1
+  metadata:
+    name: artifactory
+    labels:
+      app: artifactory
+  spec:
+    serviceName: artifactory
+    replicas: 1
+    triggers:
+      - type: ConfigChange
+      - type: ImageChange
+        imageChangeParams:
+          automatic: true
+          containerNames:
+            - artifactory
+          from:
+            kind: ImageStreamTag
+            name: artifactory:5.4.5
+          lastTriggeredImage: ''
+    test: false
+    strategy:
+      recreateParams:
+        timeoutSeconds: 600
+      resources: {}
+      type: Recreate
+    template:
+      metadata:
+        labels:
+          deploymentconfig: artifactory
+          app: artifactory
+      spec:
+        serviceAccountName: artifactory
+        serviceAccount: artifactory
+        containers:
+        - name: artifactory
+          image: docker.bintray.io/jfrog/artifactory-pro:5.4.5
+          imagePullPolicy: Always
+          env:
+          - name: DB_USER
+            value: '${DATABASE_USER}'
+          - name: DB_PASSWORD
+            value: '${DATABASE_PASSWORD}'
+          - name: DB_HOST
+            value: '${DATABASE_SERVICE_NAME}'
+          - name: DB_TYPE
+            value: postgresql
+          livenessProbe:
+            failureThreshold: 3
+            initialDelaySeconds: 130
+            periodSeconds: 10
+            successThreshold: 1
+            timeoutSeconds: 5
+            httpGet:
+              path: /
+              port: 8081
+          ports:
+          - containerPort: 8081
+            protocol: TCP
+          resources:
+            limits:
+              cpu: 512m
+              memory: 768Mi
+          securityContext:
+            capabilities: {}
+            privileged: false
+          terminationMessagePath: /dev/termination-log
+          volumeMounts:
+          - mountPath: /var/opt/jfrog/artifactory
+            name: artifactory-data
+          - name: generated-certificate-volume
+            mountPath: /etc/opt/jfrog/certs/
+            readOnly: true
+        dnsPolicy: ClusterFirst
+        restartPolicy: Always
+        securityContext: {}
+        terminationGracePeriodSeconds: 30
+        volumes:
+        - name: artifactory-etc
+          configMap:
+            name: artifactory-default-config
+            items:
+              - key: default
+                path: default
+              - key: artifactory.system.properties
+                path: artifactory.system.properties
+              - key: artifactory.config.xml
+                path: artifactory.config.xml
+              - key: artifactory.lic
+                path: artifactory.lic
+        - name: artifactory-data
+          persistentVolumeClaim:
+            claimName: artifactory-data
+        - name: artifactory-logs
+          persistentVolumeClaim:
+            claimName: artifactory-logs
+        - name: artifactory-backup
+          persistentVolumeClaim:
+            claimName: artifactory-backup
+        - name: artifactory-var
+          persistentVolumeClaim:
+            claimName: artifactory-var
+        - name: generated-certificate-volume
+          secret:
+            secretName: artifactory
+    volumeClaimTemplates:
+      - metadata:
+          name: artifactory-data
+          annotations:
+            app: artifactory
+        spec:
+          accessModes:
+            - "ReadWriteOnce"
+          resources:
+            requests:
+              storage: 1Gi
+      - metadata:
+          name: artifactory-logs
+          annotations:
+            app: artifactory
+        spec:
+          accessModes:
+            - "ReadWriteOnce"
+          resources:
+            requests:
+              storage: 1Gi
+      - metadata:
+          name: artifactory-backup
+          annotations:
+            app: artifactory
+        spec:
+          accessModes:
+            - "ReadWriteOnce"
+          resources:
+            requests:
+              storage: 1Gi
+      - metadata:
+          name: artifactory-var
+          annotations:
+            app: artifactory
+        spec:
+          accessModes:
+            - "ReadWriteOnce"
+          resources:
+            requests:
+              storage: 1Gi
+- kind: DeploymentConfig
+  apiVersion: v1
+  metadata:
+    name: '${DATABASE_SERVICE_NAME}'
+    annotations:
+      description: Defines how to deploy the database
+  spec:
+    strategy:
+      type: Recreate
+    triggers:
+      - type: ImageChange
+        imageChangeParams:
+          automatic: true
+          containerNames:
+            - artifactory-postgresql
+          from:
+            kind: ImageStreamTag
+            namespace: openshift
+            name: 'postgresql:9.5'
+      - type: ConfigChange
+    replicas: 1
+    selector:
+      name: '${DATABASE_SERVICE_NAME}'
+    template:
+      metadata:
+        name: '${DATABASE_SERVICE_NAME}'
+        labels:
+          name: '${DATABASE_SERVICE_NAME}'
+      spec:
+        volumes:
+          - name: data
+            emptyDir: {}
+        containers:
+          - name: '${DATABASE_SERVICE_NAME}'
+            image: ' '
+            ports:
+              - containerPort: 5432
+            restartPolicy: Always
+            dnsPolicy: ClusterFirst
+            imagePullPolicy: IfNotPresent
+            capabilities: {}
+            securityContext:
+              capabilities: {}
+              privileged: false
+            readinessProbe:
+              timeoutSeconds: 1
+              initialDelaySeconds: 5
+              exec:
+                command:
+                  - '/bin/sh'
+                  - '-i'
+                  - '-c'
+                  - 'psql -h 127.0.0.1 -U ${POSTGRESQL_USER} -q -d ${POSTGRESQL_DATABASE} -c "SELECT 1"'
+            livenessProbe:
+              timeoutSeconds: 1
+              initialDelaySeconds: 30
+              tcpSocket:
+                port: 5432
+            volumeMounts:
+              - name: artifactory-postgresql-data
+                mountPath: /var/lib/pgsql/data
+            terminationMessagePath: /dev/termination-log
+            env:
+              - name: POSTGRESQL_USER
+                value: '${DATABASE_USER}'
+              - name: POSTGRESQL_PASSWORD
+                value: '${DATABASE_PASSWORD}'
+              - name: POSTGRESQL_DATABASE
+                value: '${DATABASE_NAME}'
+              - name: POSTGRESQL_MAX_CONNECTIONS
+                value: '${POSTGRESQL_MAX_CONNECTIONS}'
+              - name: POSTGRESQL_SHARED_BUFFERS
+                value: '${POSTGRESQL_SHARED_BUFFERS}'
+            resources:
+              limits:
+                memory: '${MEMORY_POSTGRESQL_LIMIT}'
+        volumes:
+          - name: artifactory-postgresql-data
+            persistentVolumeClaim:
+              claimName: artifactory-postgresql
+parameters:
+  - name: MEMORY_POSTGRESQL_LIMIT
+    displayName: Memory Limit (PostgreSQL)
+    required: true
+    description: Maximum amount of memory the PostgreSQL container can use.
+    value: 512Mi
+  - name: DATABASE_SERVICE_NAME
+    displayName: Database Service Name
+    value: artifactory-postgresql
+  - name: DATABASE_USER
+    displayName: Database Username
+    generate: expression
+    from: 'user[A-Z0-9]{3}'
+    value: artifactory
+  - name: DATABASE_PASSWORD
+    displayName: Database Password
+    generate: expression
+    from: '[a-zA-Z0-9]{8}'
+    value: artifactory
+  - name: DATABASE_NAME
+    required: true
+    displayName: Database Name
+    value: artifactory
+  - name: POSTGRESQL_MAX_CONNECTIONS
+    displayName: Maximum Database Connections
+    value: '100'
+  - name: POSTGRESQL_SHARED_BUFFERS
+    displayName: Shared Buffer Amount
+    value: 12MB
+  - name: POSTGRESQL_VOLUME_CAPACITY
+    displayName: Volume Capacity
+    description: 'Volume space available for data, e.g. 512Mi, 2Gi.'
+    value: 1Gi
+    required: true
+  - name: ARTIFACTORY_VERSION
+    displayName: Artifactory Version
+    description: 'Version of the Artifactory container image to be used'
+    value: "5.4.5"
+    required: true

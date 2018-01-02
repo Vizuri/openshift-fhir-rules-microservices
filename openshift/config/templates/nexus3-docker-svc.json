@@ -1,0 +1,26 @@
+{
+    "kind": "Service",
+    "apiVersion": "v1",
+    "metadata": {
+        "name": "nexus3-docker",
+        "labels": {
+            "app": "nexus3-docker",
+            "application": "nexus3-docker"
+        }
+    },
+    "spec": {
+        "ports": [
+            {
+                "name": "http",
+                "protocol": "TCP",
+                "port": 8082,
+                "targetPort": 8082
+            }
+        ],
+        "selector": {
+            "deploymentconfig": "nexus3"
+        },
+    "status": {
+    }
+  }
+}

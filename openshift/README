@@ -1,0 +1,56 @@
+fhir-openshift contains scripts for running and deploying the FHIR serivces to openshift
+
+### LOCAL DEPLOY ###
+To run a local OpenShift Installation perform the following steps.
+
+# Prequisites
+
+Docker Installed
+
+Click on the Docker Icon in the top Toolbar of you Mac.
+Choose Preferences
+Choose Daemon from Top Menu
+
+Add the following insecure registries:
+
+172.30.0.0/16
+docker-registry.127.0.0.1.xip.io
+
+# Download OpenShift Command Line Interface CLI executable for mac
+
+https://github.com/openshift/origin/releases/download/v1.5.1/openshift-origin-client-tools-v1.5.1-7b451fc-mac.zip
+
+Once downloaded, unzip and copy the oc executable to your /usr/local/bin folder.
+
+# Run
+
+Change to the ./fhir-openshift/local directory
+
+Execute 
+
+./start.sh
+
+This will launch OpenShift localy as a group of docker containers.
+Ensure yo don't have any errors.
+
+
+# Post Installation
+
+Next Navigate to ./fhir-openshift/scripts
+
+Run
+
+./setup-openshift.sh 
+
+This will update some default settings with the OpenShift docker registry
+
+./setup-project.sh
+
+This will create a fhir-development project with and deploy a mongo container for use by deployments
+
+You can log into the admin console with:
+
+https://127.0.0.1:8443
+
+userid: developer
+password: developer
