@@ -1,0 +1,97 @@
+//echo "Build Number ${BUILD_NUMBER}"
+//def ocp_project="fhir-test"
+//def image_project
+//def app_name="patient-service"
+//def image_tag="v1.${BUILD_NUMBER}"
+
+//println "Branch Name:" + BRANCH_NAME
+
+
+
+echo "Build Number ${BUILD_NUMBER}"
+def ocp_project="fhir-test"
+def image_project
+def app_name="patient-service"
+def image_tag="v1.${BUILD_NUMBER}"
+
+def snapshot_release_number = "1.0-SNAPSHOT"
+def release_number=""
+
+println "Branch Name:" + BRANCH_NAME
+
+
+
+//try {
+
+if(BRANCH_NAME.startsWith("release")) {
+	//def (branch_name, branch_release_number) = branch.tokenize( '/' )
+
+	image_project="fhir"
+	stage('Confirm Deploy?') {
+	    milestone 1
+	        input message: "Do you want to deploy release ${BRANCH_NAME} to test to test?" 
+	}
+}
+else {
+	image_project="fhir-snapshot"
+}
+
+
+node ('fhir-jenkins-slave') { 
+    stage('Checkout') {
+        echo "In checkout"
+    	checkout scm
+//        git branch: "${branch}", 
+//            url: "${git_url}",
+//            credentialsId: 'BitBucket'    
+//        echo "Checkout Done"
+   }
+    stage('MavenBuild') {
+        echo "In Build"
+        sh "mvn -Dbuild.number=${BUILD_NUMBER}-SNAPSHOT clean install deploy"
+        stash includes: 'target/*.jar', name: 'artifacts'
+        //sh """ls 
+        //     mvn clean install"""
+        //    def output = sh returnStdout: true, script: 'ls -l build/libs'
+        //    echo output
+            
+            //#sh "mv build/libs/beneficiary-api-0.0.1-SNAPSHOT.war build/libs/${app_name}.war"     
+            
+    }
+}
+node () { 
+    stage('DockerBuild') {
+        dir('.') {
+            deleteDir()
+        }
+        checkout scm
+        //git branch: "${branch}", 
+        //    url: "${git_url}",
+        //    credentialsId: 'BitBucket'
+        echo "Checkout Done"
+        unstash 'artifacts'
+        sh "pwd"
+        sh "ls"
+        sh "ls target/*"
+        sh """
+            sudo docker login docker.demo.vizuri.com -u admin -p demopass34 
+            sudo docker build -t docker.demo.vizuri.com/${image_project}/${app_name}:${image_tag} .
+            sudo docker push docker.demo.vizuri.com/${image_project}/${app_name}:${image_tag}"""
+    }
+}
+
+node ('fhir-jenkins-slave') { 
+    stage('OpenShiftDeploy') {
+        sh """
+            oc whoami 
+            oc project ${ocp_project}
+            oc tag -n ${ocp_project} docker.demo.vizuri.com/${image_project}/${app_name}:${image_tag} ${app_name}:latest --insecure=true
+            """
+            //oc deploy ${app_name} --latest -n fhir-development"""
+    }
+}
+//} catch (exc) {
+       // hipchatSend (color: 'RED', notify: true,
+       //     message: "Version :: " + version + " FAILED: Job '${env.JOB_NAME} BUILD: [${env.BUILD_NUMBER}]' (${env.BUILD_URL})"
+        //)
+//}

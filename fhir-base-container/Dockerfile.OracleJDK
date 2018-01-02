@@ -1,0 +1,49 @@
+#FROM registry.access.redhat.com/rhel7.3
+FROM centos:7
+MAINTAINER keudy@vizuri.com
+
+#
+# Docker base image for FHIR OpenShift Deployment
+#
+
+USER root
+RUN groupadd -g 1000 jboss \
+     && useradd -g 1000 -u 1000 jboss \
+     && curl -jksSLH "Cookie: oraclelicense=accept-securebackup-cookie" -o /tmp/jdk-8u92-linux-x64.rpm http://download.oracle.com/otn-pub/java/jdk/8u92-b14/jdk-8u92-linux-x64.rpm \
+     && rpm -ivh /tmp/jdk-8u92-linux-x64.rpm \
+     && rm -rf /tmp/jdk-8u92-linux-x64.rpm \
+           /tmp/LOGISTICARE-CA.pem \
+           /tmp/gdroot-g2.pem \
+           /usr/java/latest/lib/missioncontrol \
+           /usr/java/latest/lib/visualvm \
+           /usr/java/latest/lib/*javafx* \
+           /usr/java/latest/jre/plugin \
+           /usr/java/latest/jre/bin/javaws \
+           /usr/java/latest/jre/bin/jjs \
+           /usr/java/latest/jre/bin/orbd \
+           /usr/java/latest/jre/bin/pack200 \
+           /usr/java/latest/jre/bin/policytool \
+           /usr/java/latest/jre/bin/rmid \
+           /usr/java/latest/jre/bin/rmiregistry \
+           /usr/java/latest/jre/bin/servertool \
+           /usr/java/latest/jre/bin/tnameserv \
+           /usr/java/latest/jre/bin/unpack200 \
+           /usr/java/latest/jre/lib/javaws.jar \
+           /usr/java/latest/jre/lib/deploy* \
+           /usr/java/latest/jre/lib/desktop \
+           /usr/java/latest/jre/lib/*javafx* \
+           /usr/java/latest/jre/lib/*jfx* \
+           /usr/java/latest/jre/lib/amd64/libdecora_sse.so \
+           /usr/java/latest/jre/lib/amd64/libprism_*.so \
+           /usr/java/latest/jre/lib/amd64/libfxplugins.so \
+           /usr/java/latest/jre/lib/amd64/libglass.so \
+           /usr/java/latest/jre/lib/amd64/libgstreamer-lite.so \
+           /usr/java/latest/jre/lib/amd64/libjavafx*.so \
+           /usr/java/latest/jre/lib/amd64/libjfx*.so \
+           /usr/java/latest/jre/lib/ext/jfxrt.jar \
+           /usr/java/latest/jre/lib/ext/nashorn.jar \
+           /usr/java/latest/jre/lib/oblique-fonts \
+           /usr/java/latest/jre/lib/plugin.jar 
+
+USER jboss
+WORKDIR /home/jboss

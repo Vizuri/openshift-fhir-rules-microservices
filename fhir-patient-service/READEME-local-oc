@@ -1,0 +1,21 @@
+To deploy the patient service to your local openshift do the following.
+
+#CREATE APP
+
+Run he local-oc-create.sh script to initialize the openshift app for the patient service.
+It performs the following tasks.
+
+1) Create the service app.
+2) Update the environment variable needed to run the app.
+
+This is a one time thing.  To redeploy an updated container just perform the next step.
+
+
+#DEPLOY
+Run the local-oc-deploy.sh script.
+
+This script will do the following.
+
+1) Performs a mvn pacakge to build the springboot jar file
+2) Runs docker build to build the docker image and tag it with the URI of the local OpenShift docker registry
+3) Pushes the built docker container into the 

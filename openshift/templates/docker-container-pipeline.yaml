@@ -16,10 +16,10 @@ parameters:
   displayName: Source Ref
   required: true
   value: develop
-- name: GIT_SOURCE_SECRET
-  description: The source Secret for the application
-  displayName: Source Secret
-  required: true
+- name: CONTEXT_DIR
+  description: Path within Git project to build; empty for root project directory.
+  displayName: Context Directory
+  required: false
 - description: Github trigger secret.  A difficult to guess string encoded as part of the webhook URL.  Not encrypted.
   displayName: GitHub Webhook Secret
   from: '[a-zA-Z0-9]{40}'
@@ -57,8 +57,7 @@ objects:
       git:
         uri: ${GIT_SOURCE_URL}
         ref: ${GIT_SOURCE_REF}
-      sourceSecret:
-        name: ${GIT_SOURCE_SECRET}
+      contextDir: ${CONTEXT_DIR}
     strategy:
       jenkinsPipelineStrategy:
         jenkinsfile: |-

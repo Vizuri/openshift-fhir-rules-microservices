@@ -1,0 +1,42 @@
+FROM centos:7
+#FROM registry.access.redhat.com/rhel7.3
+MAINTAINER keudy@vizuri.com
+
+#
+# Docker base image for FHIR OpenShift Deployment
+#
+
+USER root
+
+ENV APP_ROOT=/opt/app-root \
+    USER_NAME=default \
+    USER_UID=10001
+
+RUN yum -y upgrade \
+     && INSTALL_PKGS="java-1.8.0-openjdk-devel"  \
+     && yum install -y --enablerepo=centosplus $INSTALL_PKGS \
+     && rpm -V $INSTALL_PKGS \
+     && yum -y install nss_wrapper gettext \
+     && yum clean all -y
+
+RUN mkdir ${APP_ROOT} ${APP_ROOT}/etc ${APP_ROOT}/bin
+COPY jolokia.jar ${APP_ROOT}
+COPY run ${APP_ROOT}/bin
+
+ENV PATH=$PATH:${APP_ROOT}/bin
+
+RUN chmod -R ug+x ${APP_ROOT} && \
+    useradd -l -u ${USER_UID} -r -g 0 -d ${APP_ROOT} -s /sbin/nologin -c "${USER_NAME} user" ${USER_NAME} && \
+    chown -R ${USER_UID}:0 ${APP_ROOT} && \
+    chmod -R g=u ${APP_ROOT}
+
+USER 10001
+WORKDIR ${APP_ROOT}
+
+ENV JAVA_OPTS=""
+ENV APP_JAR="app.jar"
+ENV SPRING_PROFILES_ACTIVE=openshift
+
+RUN sed "s@${USER_NAME}:x:${USER_UID}:0@${USER_NAME}:x:\${USER_ID}:\${GROUP_ID}@g" /etc/passwd > ${APP_ROOT}/etc/passwd.template
+
+CMD run $APP_JAR

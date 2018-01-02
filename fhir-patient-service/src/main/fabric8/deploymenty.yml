@@ -1,0 +1,22 @@
+spec:  
+  replicas: 1
+  template:
+    spec:
+      containers:
+        - 
+          resources:
+            requests:
+              cpu: "0.2"
+#              memory: 256Mi
+            limits:
+              cpu: "1.0"
+#              memory: 256Mi
+          env:
+          - name: MONGODB_NAME
+     i       value: fhirdb
+          - name: MONGODB_DATABASE
+            value: sampledb
+          - name: MONGODB_USERNAME
+            value: ${mongodb-username}
+          - name: MONGODB_PASSWORD
+            value: ${mongodb-password}
