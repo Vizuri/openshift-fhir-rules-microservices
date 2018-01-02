@@ -10,9 +10,9 @@
 
 #oc new-app --file=templates/maven-pipeline.yaml -p APP_NAME=fhir-base -p GIT_SOURCE_URL=https://github.com/Vizuri/openshift-fhir-rules-microservices.git -p GIT_SOURCE_REF=master -p CONTEXT_DIR=fhir-base
 
-oc new-app --file=templates/docker-container-pipeline.yaml -p APP_NAME=fhir-base-container -p GIT_SOURCE_URL=https://github.com/Vizuri/openshift-fhir-rules-microservices.git -p GIT_SOURCE_REF=master -p CONTEXT_DIR=fhir-base-container
+#oc new-app --file=templates/docker-container-pipeline.yaml -p APP_NAME=fhir-base-container -p GIT_SOURCE_URL=https://github.com/Vizuri/openshift-fhir-rules-microservices.git -p GIT_SOURCE_REF=master -p CONTEXT_DIR=fhir-base-container
 
-oc new-app --file==templates/springboot-pipeline.yaml -p APP_NAME=fhir-patient-service -p GIT_SOURCE_URL=https://github.com/Vizuri/openshift-fhir-rules-microservices.git -p GIT_SOURCE_REF=master -p CONTEXT_DIR=fhir-patient-service
+oc new-app --file=templates/springboot-pipeline.yaml -p APP_NAME=fhir-patient-service -p GIT_SOURCE_URL=https://github.com/Vizuri/openshift-fhir-rules-microservices.git -p GIT_SOURCE_REF=master -p CONTEXT_DIR=fhir-patient-service
 
 #oc new-app --template=springboot-pipeline -p APP_NAME=fhir-observation-service -p GIT_SOURCE_URL=ssh://git@bitbucket.org/vizuri/fhir-observation-service.git -p GIT_SOURCE_REF=develop -p GIT_SOURCE_SECRET=bitbucket-secret
 
@@ -38,10 +38,10 @@ oc new-app --file==templates/springboot-pipeline.yaml -p APP_NAME=fhir-patient-s
 
 #oc new-app -f templates/nodejs-pipeline.yaml -p APP_NAME=fhir-frontend -p GIT_SOURCE_URL=ssh://git@bitbucket.org/vizuri/fhir-frontEnd.git -p GIT_SOURCE_REF=developer -p GIT_SOURCE_SECRET=bitbucket-secret
 
-oc start-build -w fhir-parent
-oc start-build -w fhir-base
+#oc start-build -w fhir-parent
+#oc start-build -w fhir-base
 #oc start-build -w fhir-base-container
-#oc start-build -w fhir-patient-service
+oc start-build -w fhir-patient-service
 #oc start-build -w fhir-observation-service
 #oc start-build -w fhir-riskassessment-service
 #oc start-build -w fhir-questionnaire-service

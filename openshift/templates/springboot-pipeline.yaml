@@ -77,12 +77,11 @@ objects:
                     project = env.PROJECT_NAME
                   }
                   stage("Checkout") {
-                    git url: "${GIT_SOURCE_URL}", branch: "${GIT_SOURCE_REF}", credentialsId: "fhir-development-${GIT_SOURCE_SECRET}"
+                    git url: "${GIT_SOURCE_URL}", branch: "${GIT_SOURCE_REF}"
                   }
                   stage("Build Jar") {
-                    sh "cd ${CONTEXT_DIR}"
-                    sh "mvn -s configuration/settings.xml -DskipTests=true clean install"
-                    sh "cp target/*.jar ${APP_NAME}.jar"
+                    sh "cd ${CONTEXT_DIR};mvn -s ../configuration/settings.xml -DskipTests=true clean install"
+                    sh "cp ${CONTEXT_DIR}/target/*.jar ${APP_NAME}.jar"
                     stash name:"jar", includes:" ${APP_NAME}.jar"
                   }
                 }
@@ -128,7 +127,7 @@ objects:
     source:
       dockerfile: |-
         FROM fhir-base-container:latest
-        COPY  ${APP_NAME}.jar /home/jboss
+        COPY  ${APP_NAME}.jar ${APP_ROOT}
         ENV JAVA_OPTS=""
         ENV APP_JAR=${APP_NAME}.jar
       binary:

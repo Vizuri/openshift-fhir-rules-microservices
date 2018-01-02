@@ -71,7 +71,7 @@ objects:
                     project = env.PROJECT_NAME
                   }
                   stage("Checkout") {
-                    //git url: "${GIT_SOURCE_URL}", branch: "${GIT_SOURCE_REF}, credentialsId: ${GIT_SOURCE_SECRET}"
+                    //git url: "${GIT_SOURCE_URL}", branch: "${GIT_SOURCE_REF}"
                   }
                 }
 
@@ -115,8 +115,7 @@ objects:
       git:
         uri: ${GIT_SOURCE_URL}
         ref: ${GIT_SOURCE_REF}
-      sourceSecret:
-        name: ${GIT_SOURCE_SECRET}
+      contextDir: ${CONTEXT_DIR}
     strategy:
       dockerStrategy:
         dockerfilePath: Dockerfile

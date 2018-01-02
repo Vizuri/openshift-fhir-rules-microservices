@@ -14,6 +14,15 @@
     </server>
   </servers>
 
+  <mirrors>
+    <mirror>
+      <id>nexus-central</id>
+      <name>Nexus Mirror Central</name>
+      <url>http://nexus:8081/repository/maven-central/</url>
+      <mirrorOf>central</mirrorOf>
+    </mirror>
+  </mirrors>
+
    <profiles>
     <profile>
       <id>fhir-repo</id>
