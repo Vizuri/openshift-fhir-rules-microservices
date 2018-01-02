@@ -3,9 +3,9 @@
 #oc create -f templates/springboot-pipeline.yaml
 #oc create -f templates/decisionserver64-basic-s2i.json
 #oc create -f templates/nodejs-pipeline.yaml
-oc create -f https://raw.githubusercontent.com/jboss-openshift/application-templates/master/jboss-image-streams.json -n openshift
+####### oc create -f https://raw.githubusercontent.com/jboss-openshift/application-templates/master/jboss-image-streams.json
 
-oc new-project fhir-development
+###### oc new-project fhir-development
 #oc secret new-sshauth --ssh-privatekey=fhir-bb bitbucket-secret
 
 oc new-app --template=mongodb-persistent --param=DATABASE_SERVICE_NAME=fhirdb --param=MONGODB_USER=fhir --param=MONGODB_DATABASE=fhir
@@ -15,7 +15,7 @@ oc new-app --template=mongodb-persistent --param=DATABASE_SERVICE_NAME=fhirdb --
 #oc start-build -w fhir-jenkins
 #oc new-app --template jenkins-persistent --name=jenkins -p JENKINS_IMAGE_STREAM_TAG=fhir-jenkins:latest -p NAMESPACE=fhir-development
 
-oc new-app --docker-image=sonatype/nexus --name=nexus
+#### oc new-app --docker-image=sonatype/nexus --name=nexus
 
 #oc secrets new-dockercfg rh-registry --docker-server=registry.connect.redhat.com --docker-username=keudy@vizuri.com --docker-password=M@dison30 --docker-email=keudy@vizuri.com
 
@@ -30,9 +30,9 @@ oc new-app --docker-image=sonatype/nexus --name=nexus
 #oc new-app -f templates/nexus-template.yaml
 #oc new-app -f templates/nexus3-persistent-template.yaml -p VOLUME_CAPACITY=25Gi
 
-oc new-app  --file=templates/maven-pipeline.yaml -p APP_NAME=fhir-parent -p GIT_SOURCE_URL=git@github.com:Vizuri/openshift-fhir-rules-microservices.git -p GIT_SOURCE_REF=master -p GIT_SOURCE_SECRET=bitbucket-secret
+oc new-app  --file=templates/maven-pipeline.yaml -p APP_NAME=fhir-parent -p GIT_SOURCE_URL=https://github.com/Vizuri/openshift-fhir-rules-microservices.git -p GIT_SOURCE_REF=master -p CONTEXT_DIR=fhir-parent
 
-oc new-app --file=templates/maven-pipeline.yaml -p APP_NAME=fhir-base -p GIT_SOURCE_URL=ssh://git@bitbucket.org/vizuri/fhir-base.git -p GIT_SOURCE_REF=develop -p GIT_SOURCE_SECRET=bitbucket-secret
+oc new-app --file=templates/maven-pipeline.yaml -p APP_NAME=fhir-base -p GIT_SOURCE_URL=https://github.com/Vizuri/openshift-fhir-rules-microservices.git -p GIT_SOURCE_REF=master -p CONTEXT_DIR=fhir-base
 
 #oc new-app --template=docker-container-pipeline -p APP_NAME=fhir-base-container -p GIT_SOURCE_URL=ssh://git@bitbucket.org/vizuri/fhir-base-container.git -p GIT_SOURCE_REF=master -p GIT_SOURCE_SECRET=bitbucket-secret
 
