@@ -15,7 +15,7 @@ oc new-app --template=mongodb-persistent --param=DATABASE_SERVICE_NAME=fhirdb --
 #oc start-build -w fhir-jenkins
 #oc new-app --template jenkins-persistent --name=jenkins -p JENKINS_IMAGE_STREAM_TAG=fhir-jenkins:latest -p NAMESPACE=fhir-development
 
-#### oc new-app --docker-image=sonatype/nexus --name=nexus
+##### oc new-app --docker-image=sonatype/nexus3 --name=nexus
 
 #oc secrets new-dockercfg rh-registry --docker-server=registry.connect.redhat.com --docker-username=keudy@vizuri.com --docker-password=M@dison30 --docker-email=keudy@vizuri.com
 

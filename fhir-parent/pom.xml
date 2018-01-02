@@ -6,7 +6,7 @@
 	<version>0.0.1-SNAPSHOT</version>
 	<packaging>pom</packaging>
 	<properties>
-		<nexus.url>http://nexus3:8081</nexus.url>
+		<nexus.url>http://nexus:8081</nexus.url>
 	</properties>
 	<parent>
 		<groupId>org.springframework.boot</groupId>
