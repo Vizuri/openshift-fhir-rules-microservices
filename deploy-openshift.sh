@@ -22,27 +22,27 @@ do
    STATUS=`oc get dc nexus | tail -n +2 | awk '{print $4}'`
 done
 
-oc new-app  --file=templates/maven-pipeline.yaml -p APP_NAME=fhir-parent -p GIT_SOURCE_URL=${SERVICE_GIT_URL} -p GIT_SOURCE_REF=master -p CONTEXT_DIR=fhir-parent
+oc new-app  --file=openshift/templates/maven-pipeline.yaml -p APP_NAME=fhir-parent -p GIT_SOURCE_URL=${SERVICE_GIT_URL} -p GIT_SOURCE_REF=master -p CONTEXT_DIR=fhir-parent
 
-oc new-app --file=templates/maven-pipeline.yaml -p APP_NAME=fhir-base -p GIT_SOURCE_URL=${SERVICE_GIT_URL} -p GIT_SOURCE_REF=master -p CONTEXT_DIR=fhir-base
+oc new-app --file=openshift/templates/maven-pipeline.yaml -p APP_NAME=fhir-base -p GIT_SOURCE_URL=${SERVICE_GIT_URL} -p GIT_SOURCE_REF=master -p CONTEXT_DIR=fhir-base
 
-oc new-app --file=templates/docker-container-pipeline.yaml -p APP_NAME=fhir-base-container -p GIT_SOURCE_URL=${SERVICE_GIT_URL} -p GIT_SOURCE_REF=master -p CONTEXT_DIR=fhir-base-container
+oc new-app --file=openshift/templates/docker-container-pipeline.yaml -p APP_NAME=fhir-base-container -p GIT_SOURCE_URL=${SERVICE_GIT_URL} -p GIT_SOURCE_REF=master -p CONTEXT_DIR=fhir-base-container
 
-oc new-app --file=templates/springboot-pipeline.yaml -p APP_NAME=fhir-patient-service -p GIT_SOURCE_URL=${SERVICE_GIT_URL} -p GIT_SOURCE_REF=master -p CONTEXT_DIR=fhir-patient-service
+oc new-app --file=openshift/templates/springboot-pipeline.yaml -p APP_NAME=fhir-patient-service -p GIT_SOURCE_URL=${SERVICE_GIT_URL} -p GIT_SOURCE_REF=master -p CONTEXT_DIR=fhir-patient-service
 
-oc new-app --file=templates/springboot-pipeline.yaml -p APP_NAME=fhir-observation-service -p GIT_SOURCE_URL=${SERVICE_GIT_URL} -p GIT_SOURCE_REF=develop -p CONTEXT_DIR=fhir-observation-service
+oc new-app --file=openshift/templates/springboot-pipeline.yaml -p APP_NAME=fhir-observation-service -p GIT_SOURCE_URL=${SERVICE_GIT_URL} -p GIT_SOURCE_REF=develop -p CONTEXT_DIR=fhir-observation-service
 
-oc new-app --file=templates/springboot-pipeline.yaml -p APP_NAME=fhir-riskassessment-service -p GIT_SOURCE_URL=${SERVICE_GIT_URL} -p GIT_SOURCE_REF=develop -p CONTEXT_DIR=fhir-riskassessment-service
+oc new-app --file=openshift/templates/springboot-pipeline.yaml -p APP_NAME=fhir-riskassessment-service -p GIT_SOURCE_URL=${SERVICE_GIT_URL} -p GIT_SOURCE_REF=develop -p CONTEXT_DIR=fhir-riskassessment-service
 
-oc new-app --file=templates/springboot-pipeline.yaml -p APP_NAME=fhir-questionnaire-service -p GIT_SOURCE_URL=${SERVICE_GIT_URL} -p GIT_SOURCE_REF=develop -p CONTEXT_DIR=fhir-questionnaire-service
+oc new-app --file=openshift/templates/springboot-pipeline.yaml -p APP_NAME=fhir-questionnaire-service -p GIT_SOURCE_URL=${SERVICE_GIT_URL} -p GIT_SOURCE_REF=develop -p CONTEXT_DIR=fhir-questionnaire-service
 
-oc new-app --file=templates/springboot-pipeline.yaml -p APP_NAME=fhir-questionnaireresponse-service -p GIT_SOURCE_URL=${SERVICE_GIT_URL} -p GIT_SOURCE_REF=develop -p CONTEXT_DIR=fhir-questionnaireresponse-service
+oc new-app --file=openshift/templates/springboot-pipeline.yaml -p APP_NAME=fhir-questionnaireresponse-service -p GIT_SOURCE_URL=${SERVICE_GIT_URL} -p GIT_SOURCE_REF=develop -p CONTEXT_DIR=fhir-questionnaireresponse-service
 
-oc new-app --file=templates/springboot-pipeline.yaml -p APP_NAME=fhir-familymemberhistory-service -p GIT_SOURCE_URL=${SERVICE_GIT_URL} -p GIT_SOURCE_REF=develop -p CONTEXT_DIR=fhir-familymemberhistory-service
+oc new-app --file=openshift/templates/springboot-pipeline.yaml -p APP_NAME=fhir-familymemberhistory-service -p GIT_SOURCE_URL=${SERVICE_GIT_URL} -p GIT_SOURCE_REF=develop -p CONTEXT_DIR=fhir-familymemberhistory-service
 
-#oc new-app --file=templates/springboot-pipeline.yaml -p APP_NAME=fhir-slot-service -p GIT_SOURCE_URL=${SERVICE_GIT_URL}  -p GIT_SOURCE_REF=develop -p CONTEXT_DIR=fhir-patient-service
+#oc new-app --file=openshift/templates/springboot-pipeline.yaml -p APP_NAME=fhir-slot-service -p GIT_SOURCE_URL=${SERVICE_GIT_URL}  -p GIT_SOURCE_REF=develop -p CONTEXT_DIR=fhir-patient-service
 
-#oc new-app --file=templates/springboot-pipeline.yaml -p APP_NAME=fhir-schedule-service -p GIT_SOURCE_URL=${SERVICE_GIT_URL} -p GIT_SOURCE_REF=develop -p CONTEXT_DIR=fhir-patient-service
+#oc new-app --file=openshift/templates/springboot-pipeline.yaml -p APP_NAME=fhir-schedule-service -p GIT_SOURCE_URL=${SERVICE_GIT_URL} -p GIT_SOURCE_REF=develop -p CONTEXT_DIR=fhir-patient-service
 
 #oc new-app -f templates/decisionserver64-pipeline.yaml -p KIE_CONTAINER_DEPLOYMENT='fhir-framinghamRules=com.vizuri.fhir:fhir-framinghamRules:1.0-SNAPSHOT' -p KIE_SERVER_USER=kieserver -p KIE_SERVER_PASSWORD=kieserver1!  -p APPLICATION_NAME=framingham -p SOURCE_REPOSITORY_URL=git@bitbucket.org:vizuri/fhir-rules.git -p SOURCE_REPOSITORY_REF=master -p SOURCE_REPOSITORY_SECRET=bitbucket-secret -p CONTEXT_DIR=fhir-framinghamRules -e CONTAINER_HEAP_PERCENT=.70
 
