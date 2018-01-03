@@ -1,0 +1,53 @@
+<div class='panel panel-primary'>
+    <div class='panel-heading'>
+        <div>
+            <nav class='navbar navbar-default'>
+                <div class='container-fluid' *ngIf='gotPatient'>
+                    <a class='navbar-brand' [routerLink]="['/patient', patient.id]">{{patient.name[0].text}}</a>
+                    <ul class='nav navbar-nav'>
+                        <li><a [routerLink]="['/records', patient.id]">Records</a></li>
+                        <li><a [routerLink]="['/questionnaires', patient.id]">Questionniare Responses</a></li>
+                        <li><a [routerLink]="['/riskassessment', patient.id]">Risk Assessments</a></li>
+                        <li><a><b>Appointments</b></a></li>
+                    </ul>
+                </div>
+            </nav>
+            <div class='container'>
+                <router-outlet></router-outlet>
+            </div>
+        </div>
+    </div>
+    <div class='panel-body'>
+        <div class='row'>
+            <div class="col-md-2">
+                <select class="form-control" id="genderId">
+                    <option value="" disabled selected hidden>Select a Doctor</option>
+                    <option value="{{schedule.id}}" *ngFor='let schedule of schedules'>{{schedule.id}}</option>
+                </select>
+            </div>
+        </div>
+        <div class='table-responsive'>
+            <table class='table'>
+                <thead>
+                    <tr>
+                        <th>Type</th>
+                        <th>Start Time</th>
+                        <th>End Time</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr *ngFor='let slot of slots'>
+                        <td>
+                            {{slot.id}}
+                        </td>
+                        <td>{{ slot.start}}</td>
+                        <td>{{ slot.end}}</td>
+                        <td *ngIf="slot.status == 'free'"><button class="btn btn-primary btn-xs" type="button" (click)='bookAppointment(id, slot.id);'>
+                            Book</button></td>
+                        <td *ngIf="slot.status == 'busy' && slot.comment == patient.id">Booked!</td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>

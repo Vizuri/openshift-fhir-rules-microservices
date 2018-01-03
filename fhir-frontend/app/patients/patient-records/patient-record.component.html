@@ -1,0 +1,70 @@
+<div class='panel panel-primary' *ngIf='patient'>
+    <div class='panel-heading'>
+        <div>
+            <nav class='navbar navbar-default'>
+                <div class='container-fluid'>
+                    <a class='navbar-brand' [routerLink]="['/patient', patient.id]">{{patient.name[0].text}}</a>
+                    <ul class='nav navbar-nav'>
+                        <li><a><b>Records</b></a></li>
+                        <li><a [routerLink]="['/questionnaires', patient.id]">Questionniare Responses</a></li>
+                        <li><a [routerLink]="['/riskassessment', patient.id]">Risk Assessments</a></li>
+                        <li><a [routerLink]="['/viewAvailableAppointments', patient.id]">Appointments</a></li>
+                    </ul>
+                </div>
+            </nav>
+            <div class='container'>
+                <router-outlet></router-outlet>
+            </div>
+        </div>
+    </div>
+    <div class='panel-body'>
+        <div class='row'>
+            <div class='col-md-10'>
+                <h3>Medical Records for patient: {{patient.name[0].text}} ({{patient.id}})</h3>
+                <a class="btn btn-primary" [routerLink]="['/patientRecordForm', patient.id]">
+                    Add New Medical Record
+                </a>
+            </div>
+        </div>
+        <div class='table-responsive'>
+            <table class='table'>
+                <thead>
+                    <tr>
+                        <th>Records</th>
+                        <th></th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <div>
+                        <h4>Observation:</h4>
+                    </div>
+                    <tr *ngFor='let observation of observations'>
+                        <td><a [routerLink]="['/observation', patient.id, observation.id]">
+                            {{observation.id}}</a></td>
+                        <td><button class="btn btn-success btn-xs" type="button" [routerLink]="['/editObservation', patient.id]">
+                            Edit</button></td>
+                        <td><button class="btn btn-danger btn-xs" type="button" (click)="deleteObservation(patient.id);">
+                            Delete</button></td>
+                    </tr>
+                    <div>
+                        <h4>Family Members:</h4>
+                    </div>
+                    <tr *ngFor='let history of familyMemberHistory'>
+                        <td><a [routerLink]="['/familyMemberHistory', patient.id, history.id]">
+                            {{history.name}}</a></td>
+                        <td><button class="btn btn-success btn-xs" type="button" [routerLink]="['/editFamilyMemberHistory', patient.id, history.id]">
+                            Edit</button></td>
+                        <td><button class="btn btn-danger btn-xs" type="button" (click)="deleteFamilyMemberHistory(history.id);">
+                            Delete</button></td>
+                    </tr>
+                </tbody>
+            </table>
+            <div class='panel-footer'>
+                <a class='btn btn-default' (click)='onBack()' style='width:80px'>
+                    <i class='glyphicon glyphicon-chevron-left'></i> Back
+                </a>
+            </div>
+        </div>
+
+    </div>
+</div>

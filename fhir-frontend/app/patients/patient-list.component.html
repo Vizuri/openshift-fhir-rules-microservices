@@ -1,0 +1,44 @@
+<div class='panel panel-primary'>
+    <div class='panel-heading'>
+        Patient List
+    </div>
+    <div class='panel-body'>
+        <div class='row'>
+            <div class='col-md-2'>Filter by:</div>
+            <div class='col-md-4'>
+                <input type='text' [(ngModel)]='patientFilter' />
+            </div>
+        </div>
+        <div class='row'>
+            <div class='col-md-2'>
+                <h3>Patients</h3>
+                <a class="btn btn-primary" [routerLink]="['/patientForm']">
+                    Add New Patient
+                </a>
+            </div>
+        </div>
+        <div class='table-responsive'>
+            <table class='table'>
+                <thead>
+                    <tr>
+                        <th>Name (Last, First Middle)</th>
+                        <th>Id</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr *ngFor='let patient of patients | patientFilter:patientFilter'>
+                        <td><a [routerLink]="['/patient', patient.id]">
+                            {{ patient.name[0].family+',   '+patient.name[0].given[0]+' '+patient.name[0].given[1] }}</a>
+                        </td>
+                        <td>{{ patient.id | uppercase}}</td>
+                        <td><button class="btn btn-success btn-xs" type="button" [routerLink]="['/edit', patient.id]">
+                            Edit</button></td>
+                        <td><button class="btn btn-danger btn-xs" type="button" (click)="delete(patient.id);">
+                            Delete</button></td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+
+    </div>
+</div>

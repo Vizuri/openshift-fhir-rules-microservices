@@ -1,0 +1,209 @@
+<div class="panel panel-primary">
+    <div class="panel-heading">
+        Add New Medical Record
+    </div>
+
+    <div class="panel-body">
+        <form class="form-horizontal" novalidate (ngSubmit)="save()" [formGroup]="patientRecordForm">
+            <fieldset>
+
+                <h4>Select a record type and fill out all information:</h4>
+                <br>
+
+                <div class="form-group">
+                    <label class="col-md-2 control-label" for="recordType">
+                        Record Type*
+                    </label>
+                    <div class="col-md-3">
+                        <select class="form-control" id="recordTypeId" formControlName="recordType">
+                            <option value="" disabled selected hidden>Select...</option>
+                            <option value="familyMemberHistory">Family Member History</option>
+                            <option value="observation">Observation</option>
+                        </select>
+                    </div>
+                </div>
+
+                <div *ngIf="patientRecordForm.get('recordType').value === 'observation'">
+                    <div class="form-group">
+                        <label class="col-md-2 control-label" for="systolicBloodPressureId">
+                        Blood Pressure*
+                    </label>
+                        <div class="col-md-2" [ngClass]="{'has-error': errorMessageArray[0] }">
+                            <input class="form-control" id="systolicBloodPressureId" type="number" placeholder="Systolic" formControlName="systolicBloodPressure"
+                            />
+                            <span class="help-block" *ngIf="errorMessageArray[0]">{{errorMessageArray[0]}}</span>
+                        </div>
+                        <div class="col-md-2" [ngClass]="{'has-error': errorMessageArray[1] }">
+                            <input class="form-control" id="diastolicBloodPressureId" type="number" placeholder="Diastolic" formControlName="diastolicBloodPressure"
+                            />
+                            <span class="help-block" *ngIf="errorMessageArray[1]">{{errorMessageArray[1]}}</span>
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label class="col-md-2 control-label" for="totalCholesterolId">
+                        Cholesterol*
+                    </label>
+                        <div class="col-md-2" [ngClass]="{'has-error': errorMessageArray[2] }">
+                            <input class="form-control" id="totalCholesterolId" type="number" placeholder="Total" formControlName="totalCholesterol"
+                            />
+                            <span class="help-block" *ngIf="errorMessageArray[2]">{{errorMessageArray[2]}}</span>
+                        </div>
+                        <div class="col-md-2" [ngClass]="{'has-error': errorMessageArray[3] }">
+                            <input class="form-control" id="hdlCholesterolId" type="number" placeholder="HDL" formControlName="hdlCholesterol" />
+                            <span class="help-block" *ngIf="errorMessageArray[3]">{{errorMessageArray[3]}}</span>
+                        </div>
+                        <div class="col-md-2" [ngClass]="{'has-error': errorMessageArray[4] }">
+                            <input class="form-control" id="ldlCholesterolId" type="number" placeholder="LDL" formControlName="ldlCholesterol" />
+                            <span class="help-block" *ngIf="errorMessageArray[4]">{{errorMessageArray[4]}}</span>
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label class="col-md-2 control-label" for="triglyceridesId">
+                        Triglycerides*
+                    </label>
+                        <div class="col-md-2" [ngClass]="{'has-error': errorMessageArray[5] }">
+                            <input class="form-control" id="triglyceridesId" type="number" placeholder="Triglycerides" formControlName="triglycerides"
+                            />
+                            <span class="help-block" *ngIf="errorMessageArray[5]">{{errorMessageArray[5]}}</span>
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label class="col-md-2 control-label" for="waistCircumferenceId">
+                        Waist Circumference in Inches*
+                    </label>
+                        <div class="col-md-2" [ngClass]="{'has-error': errorMessageArray[6] }">
+                            <input class="form-control" id="waistCircumferenceId" type="number" placeholder="Waist (Inches)" formControlName="waistCircumference"
+                            />
+                            <span class="help-block" *ngIf="errorMessageArray[6]">{{errorMessageArray[6]}}</span>
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label class="col-md-2 control-label" for="heightFeetId">
+                        Height*
+                    </label>
+                        <div class="col-md-2" [ngClass]="{'has-error': errorMessageArray[9] }">
+                            <input class="form-control" id="heightFeetId" type="number" placeholder="Feet" formControlName="heightFeet" />
+                            <span class="help-block" *ngIf="errorMessageArray[9]">{{errorMessageArray[9]}}</span>
+                        </div>
+                        <div class="col-md-2" [ngClass]="{'has-error': errorMessageArray[10] }">
+                            <input class="form-control" id="heightInchesId" type="number" placeholder="Inches" formControlName="heightInches" />
+                            <span class="help-block" *ngIf="errorMessageArray[10]">{{errorMessageArray[10]}}</span>
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label class="col-md-2 control-label" for="weightId">
+                        Weight*
+                    </label>
+                        <div class="col-md-2" [ngClass]="{'has-error': errorMessageArray[11] }">
+                            <input class="form-control" id="weightId" type="number" placeholder="Weight (Pounds)" formControlName="weight" />
+                            <span class="help-block" *ngIf="errorMessageArray[11]">{{errorMessageArray[11]}}</span>
+                        </div>
+                    </div>
+                </div>
+
+                <div *ngIf="patientRecordForm.get('recordType').value === 'familyMemberHistory'">
+
+                    <div class="form-group">
+                        <label class="col-md-2 control-label" for="nameId">
+                        Name of relative*
+                    </label>
+                        <div class="col-md-2" [ngClass]="{'has-error': errorMessageArray[8] }">
+                            <input class="form-control" id="nameId" type="text" placeholder="Name" formControlName="name" />
+                            <span class="help-block" *ngIf="errorMessageArray[8]">{{errorMessageArray[8]}}</span>
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label class="col-md-2 control-label" for="relationshipId">
+                        Relationship*
+                    </label>
+                        <div class="col-md-2">
+                            <select class="form-control" id="relationshipId" formControlName="relationship">
+                            <option value="" disabled selected hidden>Select...</option>
+                            <option value="Grandparent">Grandparent</option>
+                            <option value="Parent">Parent</option>
+                            <option value="Sibling">Sibling</option>
+                            <option value="Other">Other</option>
+                        </select>
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label class="col-md-2 control-label" for="genderId">
+                        Gender*
+                    </label>
+                        <div class="col-md-2">
+                            <select class="form-control" id="genderId" formControlName="gender">
+                            <option value="" disabled selected hidden>Select...</option>
+                            <option value="female">Female</option>
+                            <option value="male">Male</option>
+                        </select>
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label class="col-md-2 control-label" for="ageId">
+                        Current age / Age when deceased*
+                    </label>
+                        <div class="col-md-2" [ngClass]="{'has-error': errorMessageArray[9] }">
+                            <input class="form-control" id="ageId" type="number" placeholder="Age" formControlName="age" />
+                            <span class="help-block" *ngIf="errorMessageArray[9]">{{errorMessageArray[9]}}</span>
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label class="col-md-2 control-label" for="heartAttackId">
+                        Has had a heart attack*
+                    </label>
+                        <div class="col-md-2">
+                            <input id="heartAttackId" type="checkbox" formControlName="heartAttack" />
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label class="col-md-2 control-label" for="anginaId">
+                        Has had an angina*
+                    </label>
+                        <div class="col-md-2">
+                            <input id="anginaId" type="checkbox" formControlName="angina" />
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label class="col-md-2 control-label" for="diabetesId">
+                        Has had diabetes*
+                    </label>
+                        <div class="col-md-2">
+                            <input id="diabetesId" type="checkbox" formControlName="diabetes" />
+                        </div>
+                    </div>
+
+                </div>
+
+                <div class="form-group">
+                    <div class="col-md-4 col-md-offset-2">
+                        <span>
+                            <button class="btn btn-primary"
+                                    type="submit"
+                                    [disabled]="!patientRecordForm.valid">
+                                Submit
+                            </button>
+                        </span>
+                        <span>
+                            <button class="btn btn-danger"
+                                    type="back"
+                                    (click)='onBack()'>
+                                Back
+                            </button>
+                        </span>
+                    </div>
+                </div>
+            </fieldset>
+        </form>
+    </div>
+</div>

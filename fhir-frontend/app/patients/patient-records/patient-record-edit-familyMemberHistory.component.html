@@ -1,0 +1,109 @@
+<div class="panel panel-primary">
+    <div class="panel-heading">
+        Edit Medical Record
+    </div>
+
+    <div class="panel-body">
+        <form class="form-horizontal" novalidate (ngSubmit)="save()" [formGroup]="familyMemberHistoryEditForm">
+            <fieldset>
+
+                <h4>Editing Family Member History:</h4>
+                <br>
+
+                <div class="form-group">
+                    <label class="col-md-2 control-label" for="nameId">
+                        Name of relative*
+                    </label>
+                    <div class="col-md-2" [ngClass]="{'has-error': errorMessageArray[0] }">
+                        <input class="form-control" id="nameId" type="text" placeholder="Name" formControlName="name" />
+                        <span class="help-block" *ngIf="errorMessageArray[0]">{{errorMessageArray[0]}}</span>
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label class="col-md-2 control-label" for="relationshipId">
+                        Relationship*
+                    </label>
+                    <div class="col-md-2">
+                        <select class="form-control" id="relationshipId" formControlName="relationship">
+                            <option value="" disabled selected hidden>Select...</option>
+                            <option value="Grandparent">Grandparent</option>
+                            <option value="Parent">Parent</option>
+                            <option value="Sibling">Sibling</option>
+                            <option value="Other">Other</option>
+                        </select>
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label class="col-md-2 control-label" for="genderId">
+                        Gender*
+                    </label>
+                    <div class="col-md-2">
+                        <select class="form-control" id="genderId" formControlName="gender">
+                            <option value="" disabled selected hidden>Select...</option>
+                            <option value="female">Female</option>
+                            <option value="male">Male</option>
+                        </select>
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label class="col-md-2 control-label" for="ageId">
+                        Current age / Age when deceased*
+                    </label>
+                    <div class="col-md-2" [ngClass]="{'has-error': errorMessageArray[1] }">
+                        <input class="form-control" id="ageId" type="number" placeholder="Age" formControlName="age" />
+                        <span class="help-block" *ngIf="errorMessageArray[1]">{{errorMessageArray[1]}}</span>
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label class="col-md-2 control-label" for="heartAttackId">
+                        Has had a heart attack*
+                    </label>
+                    <div class="col-md-2">
+                        <input id="heartAttackId" type="checkbox" formControlName="heartAttack" />
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label class="col-md-2 control-label" for="anginaId">
+                        Has had angina*
+                    </label>
+                    <div class="col-md-2">
+                        <input id="anginaId" type="checkbox" formControlName="angina" />
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label class="col-md-2 control-label" for="diabetesId">
+                        Has had diabetes*
+                    </label>
+                    <div class="col-md-2">
+                        <input id="diabetesId" type="checkbox" formControlName="diabetes" />
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <div class="col-md-4 col-md-offset-2">
+                        <span>
+                            <button class="btn btn-primary"
+                                    type="submit"
+                                    [disabled]="!familyMemberHistoryEditForm.valid">
+                                Save
+                            </button>
+                        </span>
+                        <span>
+                            <button class="btn btn-danger"
+                                    type="back"
+                                    (click)='onBack()'>
+                                Back
+                            </button>
+                        </span>
+                    </div>
+                </div>
+            </fieldset>
+        </form>
+    </div>
+</div>

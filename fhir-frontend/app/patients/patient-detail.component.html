@@ -1,0 +1,39 @@
+<div class='panel panel-primary' *ngIf='patient'>
+    <div class='panel-heading' style='font-size:large'>
+        <div>
+            <nav class='navbar navbar-default'>
+                <div class='container-fluid'>
+                    <a class='navbar-brand'><b>{{patient.name[0].text}}</b></a>
+                    <ul class='nav navbar-nav'>
+                        <li><a [routerLink]="['/records', patient.id]">Records</a></li>
+                        <li><a [routerLink]="['/questionnaires', patient.id]">Questionniare Responses</a></li>
+                        <li><a [routerLink]="['/riskassessment', patient.id]">Risk Assessments</a></li>
+                        <li><a [routerLink]="['/viewAvailableAppointments', patient.id]">Appointments</a></li>
+                    </ul>
+                </div>
+            </nav>
+            <div class='container'>
+                <router-outlet></router-outlet>
+            </div>
+        </div>
+    </div>
+
+    <div class='panel-body'>
+        <div class='row'>
+            <div class='col-md-6'>
+                <div class='row'>
+                    <div class='col-md-4'>Raw Json:</div>
+                    <div class='col-md-12'>
+                        <pre>{{patient | json}}</pre>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class='panel-footer'>
+        <a class='btn btn-default' (click)='onBack()' style='width:80px'>
+            <i class='glyphicon glyphicon-chevron-left'></i> Back
+        </a>
+    </div>
+</div>

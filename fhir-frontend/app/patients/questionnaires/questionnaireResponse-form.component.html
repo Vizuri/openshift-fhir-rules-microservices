@@ -1,0 +1,52 @@
+<div class='panel panel-primary' *ngIf='questionnaire' [formGroup]='questionnaireResponseForm'>
+
+    <div class='panel-heading' style='font-size:large'>
+        {{pageTitle + ': ' + questionnaire.id}}
+    </div>
+    <div class='panel-body' novalidate *ngIf="gotData">
+        <h3>{{instructions}}</h3>
+        <div formArrayName='item'>
+            <div *ngFor='let question of questionnaire.item; let i=index'>
+
+
+                {{question.linkId +") "+question.text}}
+                <div [formGroupName]='i'>
+                    <div formArrayName='answer'>
+                        <div *ngIf='question.type == "string"' [formGroupName]='0'>
+                            <input type='text' formControlName='valueString' requried>
+                            <br>
+                        </div>
+                        <div *ngIf='question.type == "choice"' [formGroupName]='0'>
+                            <select class="form-control" formControlName="valueString">
+                                <option value="" disabled selected hidden>Select...</option>
+                                <option value="{{option.valueString}}" *ngFor='let option of question.option'>{{option.valueString}}</option>
+                            </select>
+                            <br>
+                        </div>
+                        <div *ngIf='question.type == "boolean"' [formGroupName]='0'>
+                            <input type='radio' formControlName='valueBoolean' value='true'>Yes
+                            <input type='radio' formControlName='valueBoolean' value='false'>No
+                            <br>
+                            <br>
+                        </div>
+                        <div *ngIf='question.type == "quantity"' [formGroupName]='0'>
+                            <input type='number' formControlName='valueQuantity' required>
+                            <br>
+                            <br>
+                        </div>
+                        <div *ngIf='question.type == "date"' [formGroupName]='0'>
+                            <input type='date' formControlName='valueDate' required>
+                            <br>
+                        </div>
+                    </div>
+
+
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class='panel-footer'>
+        <button class="btn btn-primary" type="submit" [disabled]="!questionnaireResponseForm.valid" (click)="save(questionnaireResponseForm)">{{saveText}}</button>
+        <button class="btn btn-danger" type="submit" (click)="onBack()">Back</button>
+    </div>
+</div>

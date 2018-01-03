@@ -1,0 +1,76 @@
+<div class="panel panel-primary">
+    <div class="panel-heading">
+        {{pageTitle}}
+    </div>
+
+    <div class="panel-body">
+        <form class="form-horizontal" novalidate (ngSubmit)="save()" [formGroup]="patientForm">
+            <fieldset>
+
+                <h4>{{pageDescription}}</h4>
+                <br>
+
+                <div class="form-group">
+                    <label class="col-md-2 control-label" for="firstNameId">
+                        Name*
+                    </label>
+                    <div class="col-md-3" [ngClass]="{'has-error': errorMessageArray[0] }">
+                        <input class="form-control" id="firstNameId" type="text" placeholder="First" formControlName="firstName" />
+                        <span class="help-block" *ngIf="errorMessageArray[0]">{{errorMessageArray[0]}}</span>
+                    </div>
+                    <div class="col-md-3" [ngClass]="{'has-error': errorMessageArray[1] }">
+                        <input class="form-control" id="middleNameId" type="text" placeholder="Middle" formControlName="middleName" />
+                        <span class="help-block" *ngIf="errorMessageArray[1]">{{errorMessageArray[1]}}</span>
+                    </div>
+                    <div class="col-md-3" [ngClass]="{'has-error': errorMessageArray[2] }">
+                        <input class="form-control" id="lastNameId" type="text" placeholder="Last" formControlName="lastName" />
+                        <span class="help-block" *ngIf="errorMessageArray[2]">{{errorMessageArray[2]}}</span>
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label class="col-md-2 control-label" for="genderId">
+                        Gender*
+                    </label>
+                    <div class="col-md-2">
+                        <select class="form-control" id="genderId" formControlName="gender">
+                            <option value="" disabled selected hidden>Select...</option>
+                            <option value="female">Female</option>
+                            <option value="male">Male</option>
+                        </select>
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label class="col-md-2 control-label" for="dateOfBirthId">
+                        Date of Birth*
+                    </label>
+                    <div class="col-md-2" [ngClass]="{'has-error': errorMessageArray[3] }">
+                        <input class="form-control" id="dateOfBirthId" type="date" placeholder="Date of Birth" formControlName="dateOfBirth" />
+                        <span class="help-block" *ngIf="errorMessageArray[3]">{{errorMessageArray[3]}}</span>
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <div class="col-md-4 col-md-offset-2">
+                        <span>
+                            <button class="btn btn-primary"
+                                    type="submit"
+                                    [disabled]="!patientForm.valid">
+                                {{saveButtonText}}
+                            </button>
+                        </span>
+                        <span>
+                            <button class="btn btn-danger"
+                                    type="back"
+                                    (click)='onBack()'>
+                                Back
+                            </button>
+                        </span>
+                    </div>
+                </div>
+            </fieldset>
+        </form>
+    </div>
+</div>
+<br>&nbsp;
