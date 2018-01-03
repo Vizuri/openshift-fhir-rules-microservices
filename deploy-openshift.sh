@@ -30,15 +30,15 @@ oc new-app --file=openshift/templates/docker-container-pipeline.yaml -p APP_NAME
 
 oc new-app --file=openshift/templates/springboot-pipeline.yaml -p APP_NAME=fhir-patient-service -p GIT_SOURCE_URL=${SERVICE_GIT_URL} -p GIT_SOURCE_REF=master -p CONTEXT_DIR=fhir-patient-service
 
-oc new-app --file=openshift/templates/springboot-pipeline.yaml -p APP_NAME=fhir-observation-service -p GIT_SOURCE_URL=${SERVICE_GIT_URL} -p GIT_SOURCE_REF=develop -p CONTEXT_DIR=fhir-observation-service
+oc new-app --file=openshift/templates/springboot-pipeline.yaml -p APP_NAME=fhir-observation-service -p GIT_SOURCE_URL=${SERVICE_GIT_URL} -p GIT_SOURCE_REF=master -p CONTEXT_DIR=fhir-observation-service
 
-oc new-app --file=openshift/templates/springboot-pipeline.yaml -p APP_NAME=fhir-riskassessment-service -p GIT_SOURCE_URL=${SERVICE_GIT_URL} -p GIT_SOURCE_REF=develop -p CONTEXT_DIR=fhir-riskassessment-service
+oc new-app --file=openshift/templates/springboot-pipeline.yaml -p APP_NAME=fhir-riskassessment-service -p GIT_SOURCE_URL=${SERVICE_GIT_URL} -p GIT_SOURCE_REF=master -p CONTEXT_DIR=fhir-riskassessment-service
 
-oc new-app --file=openshift/templates/springboot-pipeline.yaml -p APP_NAME=fhir-questionnaire-service -p GIT_SOURCE_URL=${SERVICE_GIT_URL} -p GIT_SOURCE_REF=develop -p CONTEXT_DIR=fhir-questionnaire-service
+oc new-app --file=openshift/templates/springboot-pipeline.yaml -p APP_NAME=fhir-questionnaire-service -p GIT_SOURCE_URL=${SERVICE_GIT_URL} -p GIT_SOURCE_REF=master -p CONTEXT_DIR=fhir-questionnaire-service
 
-oc new-app --file=openshift/templates/springboot-pipeline.yaml -p APP_NAME=fhir-questionnaireresponse-service -p GIT_SOURCE_URL=${SERVICE_GIT_URL} -p GIT_SOURCE_REF=develop -p CONTEXT_DIR=fhir-questionnaireresponse-service
+oc new-app --file=openshift/templates/springboot-pipeline.yaml -p APP_NAME=fhir-questionnaireresponse-service -p GIT_SOURCE_URL=${SERVICE_GIT_URL} -p GIT_SOURCE_REF=master -p CONTEXT_DIR=fhir-questionnaireresponse-service
 
-oc new-app --file=openshift/templates/springboot-pipeline.yaml -p APP_NAME=fhir-familymemberhistory-service -p GIT_SOURCE_URL=${SERVICE_GIT_URL} -p GIT_SOURCE_REF=develop -p CONTEXT_DIR=fhir-familymemberhistory-service
+oc new-app --file=openshift/templates/springboot-pipeline.yaml -p APP_NAME=fhir-familymemberhistory-service -p GIT_SOURCE_URL=${SERVICE_GIT_URL} -p GIT_SOURCE_REF=master -p CONTEXT_DIR=fhir-familymemberhistory-service
 
 #oc new-app --file=openshift/templates/springboot-pipeline.yaml -p APP_NAME=fhir-slot-service -p GIT_SOURCE_URL=${SERVICE_GIT_URL}  -p GIT_SOURCE_REF=develop -p CONTEXT_DIR=fhir-patient-service
 
@@ -57,16 +57,16 @@ oc new-app --file=openshift/templates/springboot-pipeline.yaml -p APP_NAME=fhir-
 oc start-build -w fhir-parent
 oc start-build -w fhir-base
 oc start-build -w fhir-base-container
-oc start-build -w fhir-patient-service
-oc start-build -w fhir-observation-service
-oc start-build -w fhir-riskassessment-service
-oc start-build -w fhir-questionnaire-service
-oc start-build -w fhir-questionnaireresponse-service
-oc start-build -w fhir-familymemberhistory-service
-#oc start-build -w fhir-slot-service
-#oc start-build -w fhir-schedule-service
-#oc start-build -w framingham
-#oc start-build -w heart-rules
-#oc start-build -w diabetes-rules
-#oc start-build -w schedule-rules
-#oc start-build -w fhir-frontend
+oc start-build fhir-patient-service
+oc start-build fhir-observation-service
+oc start-build fhir-riskassessment-service
+oc start-build fhir-questionnaire-service
+oc start-build fhir-questionnaireresponse-service
+oc start-build fhir-familymemberhistory-service
+#oc start-build fhir-slot-service
+#oc start-build fhir-schedule-service
+#oc start-build framingham
+#oc start-build heart-rules
+#oc start-build diabetes-rules
+#oc start-build schedule-rules
+#oc start-build fhir-frontend

@@ -36,9 +36,15 @@ parameters:
   name: GENERIC_WEBHOOK_SECRET
   required: true
 - description: The exposed hostname that will route to the service, if left blank a value will be defaulted
-  displayName: Application Hostname
+  displayName: Java Optsions
   name: JAVA_OPTS
-  value: "-Xms256m -Xmx256m"
+  value: "-Xms128m -Xmx128m"
+- description: POD Memory Limit
+  name: MEMORY_LIMIT
+  value: 128Mi
+- description: POD CPU Limit
+  name: CPU_LIMIT
+  value: 200m
 objects:
 - apiVersion: v1
   kind: ImageStream
@@ -178,10 +184,6 @@ objects:
     replicas: 1
     strategy:
       type: "Recreate"
-      resources:
-        limits:
-          cpu: "500m"
-          memory: "256Mi"
     template:
       metadata:
         labels:
@@ -224,7 +226,10 @@ objects:
           - name: jolokia
             containerPort: 8778
             protocol: TCP
-          resources: {}
+          resources:
+            limits:
+              cpu: ${CPU_LIMIT}
+              memory: ${MEMORY_LIMIT}
           securityContext:
           terminationMessagePath: "/dev/termination-log"
           volumeMounts:
