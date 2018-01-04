@@ -1,0 +1,101 @@
+{
+    "resourceType": "Questionnaire",
+    "id": "vizuri-fhir-questionnaire",
+    "text": {
+        "status": "generated",
+        "div": "<div xmlns=\"http://www.w3.org/1999/xhtml\">\n      <pre>\n      </pre>\n    </div>"
+    },
+    "name": "VizuriFhirDemoQuestionnaire",
+    "title": "Vizuri Fhir Demo Questionnaire",
+    "date": "2017-08-02",
+    "description": "Questionnaire for Vizuri FHIR demo",
+    "subjectType": [
+        "Patient"
+    ],
+    "item": [
+        {
+        	"linkId": "1",
+            "text": "Are you currently employed?",
+            "type": "boolean"
+        },
+        {
+        	"linkId": "2",
+            "text": "How many years have you smoked for / have been smoking for?",
+            "type": "quantity"
+        },
+        {
+        	"linkId": "3",
+            "text": "Have you ever been treated for High Blood Pressure?",
+            "type": "boolean"
+        },
+        {
+        	"linkId": "4",
+            "text": "Do you have diabetes?",
+            "type": "choice",
+            "option": [
+                {
+                    "valueString": "No"
+                },
+                {
+                    "valueString": "Yes: Adult onset, treated with diet alone"
+                },
+                {
+                    "valueString": "Yes: Adult onset, treated with pills and/or insulin"
+                },
+                {
+                    "valueString": "Yes: Juvenile onset, insulin dependent"
+                }
+            ]
+        },
+        {
+        	"linkId": "5",
+            "text": "How many days per week are you active at least 30 minutes?",
+            "type": "quantity"
+        },
+        {
+        	"linkId": "6",
+            "text": "How many days per week are you stressed?",
+            "type": "quantity"
+        },
+        {
+        	"linkId": "7",
+            "text": "Do you have a history of Peripheral Vascular Disease?",
+            "type": "boolean"
+        },
+        {
+        	"linkId": "8",
+            "text": "Do you have a history of Coronary Artery Disease?",
+            "type": "choice",
+            "option": [
+                {
+                    "valueString": "No"
+                },
+                {
+                    "valueString": "Yes: Known plaque through calcium score, angiogram"
+                },
+                {
+                    "valueString": "Yes: Prior MI or intervention (bypass, stent)"
+                }
+            ]
+        },
+        {
+        	"linkId": "9",
+            "text": "What is your diet?",
+            "type": "choice",
+            "option": [
+                {
+                    "valueString": "Vegan (no meat or dairy)"
+                },
+                {
+                    "valueString": "Vegetarian (no meat)"
+                },
+                {
+                    "valueString": "Eat everything, but no trans and minimum saturated fat"
+                },
+                {
+                    "valueString": "No restrictions to what I eat"
+                }
+            ]
+        }
+    ]
+}

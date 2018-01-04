@@ -1,10 +1,10 @@
 SERVICE_GIT_URL=https://github.com/Vizuri/openshift-fhir-rules-microservices.git
 RULES_GIT_URL=https://github.com/Vizuri/openshift-fhir-rules-rules.git
+PROJECT=fhir-development
 
-#oc create -f https://raw.githubusercontent.com/jboss-openshift/application-templates/master/jboss-image-streams.json
-oc new-project fhir-development
+oc new-project $PROJECT
 
-oc create -f decisionserver64-is.json 
+oc create -f openshift/templates/decisionserver64-is.json 
 
 oc new-app --template=mongodb-persistent --param=DATABASE_SERVICE_NAME=fhirdb --param=MONGODB_USER=fhir --param=MONGODB_DATABASE=fhir
 
@@ -42,17 +42,11 @@ oc new-app --file=openshift/templates/springboot-pipeline.yaml -p APP_NAME=fhir-
 
 oc new-app --file=openshift/templates/springboot-pipeline.yaml -p APP_NAME=fhir-familymemberhistory-service -p GIT_SOURCE_URL=${SERVICE_GIT_URL} -p GIT_SOURCE_REF=master -p CONTEXT_DIR=fhir-familymemberhistory-service
 
-#oc new-app --file=openshift/templates/springboot-pipeline.yaml -p APP_NAME=fhir-slot-service -p GIT_SOURCE_URL=${SERVICE_GIT_URL}  -p GIT_SOURCE_REF=develop -p CONTEXT_DIR=fhir-slot-service
+oc new-app -f openshift/templates/decisionserver64-pipeline.yaml -p KIE_CONTAINER_DEPLOYMENT='fhir-framinghamRules=com.vizuri.fhir:fhir-framinghamRules:1.0-SNAPSHOT' -p KIE_SERVER_USER=kieserver -p KIE_SERVER_PASSWORD=kieserver1!  -p APPLICATION_NAME=framingham -p SOURCE_REPOSITORY_URL=${RULES_GIT_URL} -p SOURCE_REPOSITORY_REF=master -p CONTEXT_DIR=fhir-framinghamRules -p IMAGE_STREAM_NAMESPACE=$PROJECT -e CONTAINER_HEAP_PERCENT=.75
 
-#oc new-app --file=openshift/templates/springboot-pipeline.yaml -p APP_NAME=fhir-schedule-service -p GIT_SOURCE_URL=${SERVICE_GIT_URL} -p GIT_SOURCE_REF=develop -p CONTEXT_DIR=fhir-schedule-service
+oc new-app -f openshift/templates/decisionserver64-pipeline.yaml -p KIE_CONTAINER_DEPLOYMENT='fhir-heartdisease-rules=com.vizuri.fhir:fhir-heartdisease-rules:1.0-SNAPSHOT' -p KIE_SERVER_USER=kieserver -p KIE_SERVER_PASSWORD=kieserver1!  -p APPLICATION_NAME=heart-rules -p SOURCE_REPOSITORY_URL=${RULES_GIT_URL} -p SOURCE_REPOSITORY_REF=master -p CONTEXT_DIR=fhir-heartdisease -p IMAGE_STREAM_NAMESPACE=$PROJECT -e CONTAINER_HEAP_PERCENT=.75
 
-oc new-app -f openshift/templates/decisionserver64-pipeline.yaml -p KIE_CONTAINER_DEPLOYMENT='fhir-framinghamRules=com.vizuri.fhir:fhir-framinghamRules:1.0-SNAPSHOT' -p KIE_SERVER_USER=kieserver -p KIE_SERVER_PASSWORD=kieserver1!  -p APPLICATION_NAME=framingham -p SOURCE_REPOSITORY_URL=${RULES_GIT_URL} -p SOURCE_REPOSITORY_REF=master -p CONTEXT_DIR=fhir-framinghamRules -p IMAGE_STREAM_NAMESPACE=fhir-development -e CONTAINER_HEAP_PERCENT=.75
-
-#oc new-app -f templates/decisionserver64-pipeline.yaml -p KIE_CONTAINER_DEPLOYMENT='fhir-heartdisease-rules=com.vizuri.fhir:fhir-heartdisease-rules:1.0-SNAPSHOT' -p KIE_SERVER_USER=kieserver -p KIE_SERVER_PASSWORD=kieserver1!  -p APPLICATION_NAME=heart-rules -p SOURCE_REPOSITORY_URL=git@bitbucket.org:vizuri/fhir-rules.git -p SOURCE_REPOSITORY_REF=master -p SOURCE_REPOSITORY_SECRET=bitbucket-secret -p CONTEXT_DIR=fhir-heartdisease -e CONTAINER_HEAP_PERCENT=.70
-
-#oc new-app -f templates/decisionserver64-pipeline.yaml -p KIE_CONTAINER_DEPLOYMENT='fhir-diabetes=com.vizuri.fhir:fhir-diabetes:1.0-SNAPSHOT' -p KIE_SERVER_USER=kieserver -p KIE_SERVER_PASSWORD=kieserver1!  -p APPLICATION_NAME=diabetes-rules -p SOURCE_REPOSITORY_URL=git@bitbucket.org:vizuri/fhir-rules.git -p SOURCE_REPOSITORY_REF=master -p SOURCE_REPOSITORY_SECRET=bitbucket-secret -p CONTEXT_DIR=fhir-diabetes -e CONTAINER_HEAP_PERCENT=.70
-
-#oc new-app -f templates/decisionserver64-pipeline.yaml -p KIE_CONTAINER_DEPLOYMENT='fhir-schedule-rules=com.vizuri.fhir:fhir-schedule-rules:1.0-SNAPSHOT' -p KIE_SERVER_USER=kieserver -p KIE_SERVER_PASSWORD=kieserver1!  -p APPLICATION_NAME=schedule-rules -p SOURCE_REPOSITORY_URL=git@bitbucket.org:vizuri/fhir-rules.git -p SOURCE_REPOSITORY_REF=master -p SOURCE_REPOSITORY_SECRET=bitbucket-secret -p CONTEXT_DIR=fhir-schudule-rules -e CONTAINER_HEAP_PERCENT=.70
+oc new-app -f openshift/templates/decisionserver64-pipeline.yaml -p KIE_CONTAINER_DEPLOYMENT='fhir-diabetes=com.vizuri.fhir:fhir-diabetes:1.0-SNAPSHOT' -p KIE_SERVER_USER=kieserver -p KIE_SERVER_PASSWORD=kieserver1!  -p APPLICATION_NAME=diabetes-rules -p SOURCE_REPOSITORY_URL=${RULES_GIT_URL} -p SOURCE_REPOSITORY_REF=master -p CONTEXT_DIR=fhir-diabetes -p IMAGE_STREAM_NAMESPACE=$PROJECT -e CONTAINER_HEAP_PERCENT=.75
 
 oc new-app -f openshift/templates/nodejs-pipeline.yaml -p APP_NAME=fhir-frontend -p GIT_SOURCE_URL=${SERVICE_GIT_URL}  -p GIT_SOURCE_REF=master -p CONTEXT_DIR=fhir-frontend
 
@@ -65,10 +59,7 @@ oc start-build fhir-riskassessment-service
 oc start-build fhir-questionnaire-service
 oc start-build fhir-questionnaireresponse-service
 oc start-build fhir-familymemberhistory-service
-#oc start-build fhir-slot-service
-#oc start-build fhir-schedule-service
 oc start-build framingham
-#oc start-build heart-rules
-#oc start-build diabetes-rules
-#oc start-build schedule-rules
+oc start-build heart-rules
+oc start-build diabetes-rules
 oc start-build fhir-frontend

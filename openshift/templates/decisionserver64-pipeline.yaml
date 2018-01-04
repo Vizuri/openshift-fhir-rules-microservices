@@ -103,8 +103,6 @@ objects:
       git:
         ref: ${SOURCE_REPOSITORY_REF}
         uri: ${SOURCE_REPOSITORY_URL}
-      sourceSecret:
-        name: ${SOURCE_REPOSITORY_SECRET}
       type: Git
     strategy:
       sourceStrategy:
@@ -118,7 +116,7 @@ objects:
         forcePull: true
         from:
           kind: ImageStreamTag
-          name: jboss-decisionserver64-openshift:1.1
+          name: jboss-decisionserver64-openshift:1.0
           namespace: ${IMAGE_STREAM_NAMESPACE}
       type: Source
     triggers:
@@ -214,10 +212,6 @@ parameters:
 - description: Git branch/tag reference
   displayName: Git Reference
   name: SOURCE_REPOSITORY_REF
-  value: "1.3"
-- description: Git Secret
-  displayName: Git Secret
-  name: SOURCE_REPOSITORY_SECRET
   value: "1.3"
 - description: Path within Git project to build; empty for root project directory.
   displayName: Context Directory
