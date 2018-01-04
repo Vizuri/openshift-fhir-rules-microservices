@@ -8,7 +8,9 @@ You can view the Webinar at https://engage.vizuri.com/managing-business-rules-in
 
 The source code for the the Business Rules can be located at https://github.com/Vizuri/openshift-fhir-rules-rules.
 
-The code implements a Medical Use Case providing Risk Assesments for Patients.  Standard HL7 FHIR interfaces are utilized.  The
+The code implements a Medical Use Case providing Risk Assesments for Patients.  Standard HL7 FHIR interfaces are utilized.  The HAPI FHIR (http://hapifhir.io/) implementation of the FHIR standard is utilized to provide Java classes to support FHIR. 
+
+Please contact us at https://www.vizuri.com/company/contact-us if you have any questions about this code or would like future information on OpenShift or BRMS.
 
 This project is Open Source, licensed under the Apache Software License 2.0.
 <BR>Copyright 2015 Vizuri, a business division of AEM Corporation
