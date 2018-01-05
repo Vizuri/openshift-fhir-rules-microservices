@@ -15,9 +15,6 @@
 package com.vizuri.fhir;
 
 import java.io.IOException;
-import java.io.InputStream;
-import java.io.InputStreamReader;
-import java.io.Reader;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -25,10 +22,8 @@ import org.hl7.fhir.dstu3.model.Questionnaire;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.context.event.ApplicationReadyEvent;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.context.event.EventListener;
 import org.springframework.core.convert.converter.Converter;
 import org.springframework.data.mongodb.core.convert.CustomConversions;
 
@@ -42,7 +37,6 @@ import com.mongodb.DBObject;
 import com.vizuri.fhir.converter.AbstractMongoConverter;
 import com.vizuri.fhir.converter.ResourceDeserializer;
 import com.vizuri.fhir.converter.ResourceSerializer;
-import com.vizuri.fhir.repository.QuestionnaireRepository;
 
 import ca.uhn.fhir.context.FhirContext;
 
@@ -105,25 +99,5 @@ public class FhirConfig {
 		om.registerModule(module);
 		return om;
 	}
-	@Autowired
-	QuestionnaireRepository repository;
 
-	@EventListener(ApplicationReadyEvent.class)
-	public void doSomethingAfterStartup() {
-		logger.info(">>>> In AfterStartup");
-		FhirContext ctx = FhirContext.forDstu3();
-		
-		InputStream is = getClass().getResourceAsStream("/vizuriDemoQuestionnaire.json");
-		Reader reader = new InputStreamReader(is);
-		
-		Questionnaire questionnaire = (Questionnaire)ctx.newJsonParser().parseResource(reader);
-		String id = questionnaire.getIdElement().getIdPart();
-		
-		logger.info(">>>>>>Saving Questionnaire:" + questionnaire.getId());
-		
-		repository.save(questionnaire);
-		
-		logger.info(">>>> Saved Questionnaire");
-
-	}
 }

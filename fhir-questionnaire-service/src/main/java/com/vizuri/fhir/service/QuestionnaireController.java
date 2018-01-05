@@ -14,10 +14,16 @@
 
 package com.vizuri.fhir.service;
 
+import java.io.InputStream;
+import java.io.InputStreamReader;
+import java.io.Reader;
+
 import org.hl7.fhir.dstu3.model.Questionnaire;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.context.event.ApplicationReadyEvent;
+import org.springframework.context.event.EventListener;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -26,6 +32,8 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.vizuri.fhir.repository.QuestionnaireRepository;
+
+import ca.uhn.fhir.context.FhirContext;
 
 @CrossOrigin(origins = {"http://localhost:3000", "*"})
 @RestController
@@ -57,5 +65,25 @@ public class QuestionnaireController {
 	public void delete(@PathVariable("id")String id){
 		logger.info(">>>>>>>>>>>Deleting Questionnaire:" + id);
 		repository.delete(id);
+	}
+	
+
+	@EventListener(ApplicationReadyEvent.class)
+	public void doSomethingAfterStartup() {
+		logger.info(">>>> In AfterStartup");
+		FhirContext ctx = FhirContext.forDstu3();
+		
+		InputStream is = getClass().getResourceAsStream("/vizuriDemoQuestionnaire.json");
+		Reader reader = new InputStreamReader(is);
+		
+		Questionnaire questionnaire = (Questionnaire)ctx.newJsonParser().parseResource(reader);
+		String id = questionnaire.getIdElement().getIdPart();
+		
+		logger.info(">>>>>>Saving Questionnaire:" + questionnaire.getId());
+		
+		repository.save(questionnaire);
+		
+		logger.info(">>>> Saved Questionnaire");
+
 	}
 }
