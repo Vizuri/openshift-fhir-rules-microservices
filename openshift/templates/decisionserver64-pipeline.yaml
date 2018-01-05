@@ -260,4 +260,4 @@ parameters:
   value: 500Mi
 - description: POD CPU Limit 
   name: CPU_LIMIT
-  value: 500m
+  value: 750m

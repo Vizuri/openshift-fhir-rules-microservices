@@ -44,7 +44,7 @@ parameters:
   value: 256Mi
 - description: POD CPU Limit
   name: CPU_LIMIT
-  value: 200m
+  value: 750m
 objects:
 - apiVersion: v1
   kind: ImageStream
