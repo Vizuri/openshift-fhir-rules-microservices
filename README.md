@@ -6,7 +6,7 @@ This project provides the Microservice code in support of the Webinar "Business 
 
 You can view the Webinar at http://bit.ly/2F1BhVF.
 
-The source code for the the Business Rules can be located at https://engage.vizuri.com/jboss/brms/openshift/how-to-use-openshift-and-jboss-brms-to-manage-business-rules-in-a-microservices-architecture.
+The source code for the the Business Rules can be located at https://github.com/Vizuri/openshift-fhir-rules-rules.
 
 The code implements a Medical Use Case providing Risk Assesments for Patients.  Standard HL7 FHIR interfaces are utilized.  The HAPI FHIR (http://hapifhir.io/) implementation of the FHIR standard is utilized to provide Java classes to support FHIR. 
 
