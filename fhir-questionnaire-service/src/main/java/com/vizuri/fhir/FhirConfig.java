@@ -14,7 +14,12 @@
 
 package com.vizuri.fhir;
 
+import static org.junit.Assert.assertTrue;
+
 import java.io.IOException;
+import java.io.InputStream;
+import java.io.InputStreamReader;
+import java.io.Reader;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -28,6 +33,7 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.context.event.EventListener;
 import org.springframework.core.convert.converter.Converter;
 import org.springframework.data.mongodb.core.convert.CustomConversions;
+import org.springframework.http.ResponseEntity;
 
 import com.fasterxml.jackson.core.JsonParser;
 import com.fasterxml.jackson.core.JsonProcessingException;
@@ -39,6 +45,7 @@ import com.mongodb.DBObject;
 import com.vizuri.fhir.converter.AbstractMongoConverter;
 import com.vizuri.fhir.converter.ResourceDeserializer;
 import com.vizuri.fhir.converter.ResourceSerializer;
+import com.vizuri.fhir.repository.QuestionnaireRepository;
 
 import ca.uhn.fhir.context.FhirContext;
 
@@ -101,9 +108,25 @@ public class FhirConfig {
 		om.registerModule(module);
 		return om;
 	}
-	
+	@Autowired
+	QuestionnaireRepository repository;
+
 	@EventListener(ApplicationReadyEvent.class)
 	public void doSomethingAfterStartup() {
-	    System.out.println(">>>> hello world, I have just started up");
+		logger.info(">>>> In AfterStartup");
+		FhirContext ctx = FhirContext.forDstu3();
+		
+		InputStream is = getClass().getResourceAsStream("/vizuriDemoQuestionnaire.json");
+		Reader reader = new InputStreamReader(is);
+		
+		Questionnaire questionnaire = (Questionnaire)ctx.newJsonParser().parseResource(reader);
+		String id = questionnaire.getIdElement().getIdPart();
+		
+		logger.info(">>>>>>Saving Questionnaire:" + questionnaire.getId());
+		
+		repository.save(questionnaire);
+		
+		logger.info(">>>> Saved Questionnaire");
+
 	}
 }
