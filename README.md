@@ -4,7 +4,7 @@
 
 This project provides the Microservice code in support of the Webinar "Business Rules in a Microservice Architecture".  
 
-You can view the Webinar at https://engage.vizuri.com/managing-business-rules-in-microservices-thank-you-0.
+You can view the Webinar at http://bit.ly/2F1BhVF.
 
 The source code for the the Business Rules can be located at https://engage.vizuri.com/jboss/brms/openshift/how-to-use-openshift-and-jboss-brms-to-manage-business-rules-in-a-microservices-architecture.
 
