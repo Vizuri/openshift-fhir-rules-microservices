@@ -125,6 +125,8 @@ public class BundleTest {
 		bundle.addEntry().setResource(cholesterol);
 		bundle.addEntry().setResource(systolicBP);
 		bundle.addEntry().setResource(questionnaireResponse);
+		
+
 			
 		FhirContext ctx = FhirContext.forDstu3();
 //		String xmlEncoded = ctx.newXmlParser().encodeResourceToString(patient);

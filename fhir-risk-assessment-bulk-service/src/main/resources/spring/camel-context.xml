@@ -31,6 +31,15 @@
             <from id="_fromProcessBundle" uri="direct:processBundle"/>
             <log id="_log1" message="In ProcessBundle ${body}"/>
             <!--  
+            Split on entry
+            Content Based Router on Resource Type
+            Save Resource
+            
+             When all resources are saved, then Execute each Risk Assessment
+             
+             Build Response == Bundle with each RiskAssessment 
+            
+            
 			<setBody id="_setBody1">
 				<constant>Response</constant>
 			</setBody>
