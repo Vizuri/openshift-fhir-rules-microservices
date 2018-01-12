@@ -16,8 +16,6 @@ package com.vizuri.fhir.service;
 
 import java.io.IOException;
 
-import org.apache.camel.component.jackson.JacksonDataFormat;
-import org.apache.camel.spi.DataFormat;
 import org.hl7.fhir.dstu3.model.Bundle;
 import org.hl7.fhir.dstu3.model.FamilyMemberHistory;
 import org.hl7.fhir.dstu3.model.Observation;

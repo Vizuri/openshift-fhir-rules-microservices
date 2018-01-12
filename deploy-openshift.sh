@@ -42,6 +42,8 @@ oc new-app --file=openshift/templates/springboot-pipeline.yaml -p APP_NAME=fhir-
 
 oc new-app --file=openshift/templates/springboot-pipeline.yaml -p APP_NAME=fhir-familymemberhistory-service -p GIT_SOURCE_URL=${SERVICE_GIT_URL} -p GIT_SOURCE_REF=master -p CONTEXT_DIR=fhir-familymemberhistory-service
 
+oc new-app --file=openshift/templates/springboot-pipeline.yaml -p APP_NAME=fhir-risk-assessment-bulk-service -p GIT_SOURCE_URL=${SERVICE_GIT_URL} -p GIT_SOURCE_REF=master -p CONTEXT_DIR=fhir-risk-assessment-bulk-service
+
 oc new-app -f openshift/templates/decisionserver64-pipeline.yaml -p KIE_CONTAINER_DEPLOYMENT='fhir-framinghamRules=com.vizuri.fhir:fhir-framinghamRules:1.0-SNAPSHOT' -p KIE_SERVER_USER=kieserver -p KIE_SERVER_PASSWORD=kieserver1!  -p APPLICATION_NAME=framingham -p SOURCE_REPOSITORY_URL=${RULES_GIT_URL} -p SOURCE_REPOSITORY_REF=master -p CONTEXT_DIR=fhir-framinghamRules -p IMAGE_STREAM_NAMESPACE=$PROJECT -e CONTAINER_HEAP_PERCENT=.75
 
 oc new-app -f openshift/templates/decisionserver64-pipeline.yaml -p KIE_CONTAINER_DEPLOYMENT='fhir-heartdisease-rules=com.vizuri.fhir:fhir-heartdisease-rules:1.0-SNAPSHOT' -p KIE_SERVER_USER=kieserver -p KIE_SERVER_PASSWORD=kieserver1!  -p APPLICATION_NAME=heart-rules -p SOURCE_REPOSITORY_URL=${RULES_GIT_URL} -p SOURCE_REPOSITORY_REF=master -p CONTEXT_DIR=fhir-heartdisease -p IMAGE_STREAM_NAMESPACE=$PROJECT -e CONTAINER_HEAP_PERCENT=.75
@@ -59,7 +61,10 @@ oc start-build fhir-riskassessment-service
 oc start-build fhir-questionnaire-service
 oc start-build fhir-questionnaireresponse-service
 oc start-build fhir-familymemberhistory-service
+oc start-build fhir-risk-assessment-bulk-service
 oc start-build framingham
 oc start-build heart-rules
 oc start-build diabetes-rules
 oc start-build fhir-frontend
+
+
