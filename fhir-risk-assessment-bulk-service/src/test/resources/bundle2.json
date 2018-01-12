@@ -1,0 +1,165 @@
+{
+	"resourceType": "Bundle",
+	"entry": [
+		{
+			"resource": {
+				"resourceType": "Patient",
+				"id": "1",
+				"active": true,
+				"name": [
+					{
+						"family": "Eudy",
+						"given": [
+							"Kent",
+							"E"
+						]
+					}
+				],
+				"telecom": [
+					{
+						"system": "phone",
+						"value": "703.771.2209",
+						"use": "home"
+					},
+					{
+						"system": "phone",
+						"value": "703.609.5222",
+						"use": "mobile"
+					},
+					{
+						"system": "email",
+						"value": "keudy@vizuri.com",
+						"use": "home"
+					}
+				],
+				"gender": "male",
+				"birthDate": "1964-09-10",
+				"address": [
+					{
+						"use": "home",
+						"line": [
+							"714 Duncan Place SE"
+						],
+						"city": "Leesburg",
+						"state": "VA",
+						"postalCode": "20175"
+					}
+				],
+				"generalPractitioner": [
+					{
+						"reference": "333",
+						"display": "My Docktor"
+					}
+				]
+			}
+		},
+		{
+			"resource": {
+				"resourceType": "Observation",
+				"id": "HDL",
+				"valueQuantity": {
+					"value": 30,
+					"unit": "mm[Hg]",
+					"code": "mm[Hg]"
+				},
+				"component": [
+					{
+						"code": {
+							"coding": [
+								{
+									"code": "2085-9",
+									"display": "HDL"
+								}
+							]
+						},
+						"valueQuantity": {
+							"value": 30,
+							"unit": "mm[Hg]",
+							"code": "mm[Hg]"
+						}
+					}
+				]
+			}
+		},
+		{
+			"resource": {
+				"resourceType": "Observation",
+				"id": "Cholesterol",
+				"valueQuantity": {
+					"value": 159,
+					"unit": "mm[Hg]",
+					"code": "mm[Hg]"
+				},
+				"component": [
+					{
+						"code": {
+							"coding": [
+								{
+									"code": "2093-3",
+									"display": "Cholesterol"
+								}
+							]
+						},
+						"valueQuantity": {
+							"value": 159,
+							"unit": "mm[Hg]",
+							"code": "mm[Hg]"
+						}
+					}
+				]
+			}
+		},
+		{
+			"resource": {
+				"resourceType": "Observation",
+				"id": "Systolic Blood Pressure",
+				"valueQuantity": {
+					"value": 122,
+					"unit": "mm[Hg]",
+					"code": "Treated"
+				},
+				"component": [
+					{
+						"code": {
+							"coding": [
+								{
+									"code": "8480-6",
+									"display": "Systolic blood pressure"
+								}
+							]
+						},
+						"valueQuantity": {
+							"value": 122,
+							"unit": "mm[Hg]",
+							"code": "Treated"
+						}
+					}
+				]
+			}
+		},
+		{
+			"resource": {
+				"resourceType": "QuestionnaireResponse",
+				"id": "Smoker Status",
+				"item": [
+					{
+						"text": "Do you smoke?",
+						"answer": [
+							{
+								"valueString": "Yes"
+							}
+						]
+					},
+					{
+						"text": "Do you treat your blood pressure?",
+						"answer": [
+							{
+								"valueString": "Yes"
+							}
+						]
+					}
+				]
+			}
+		}
+	]
+}

@@ -1,0 +1,50 @@
+[
+	{
+		"resourceType": "FamilyMemberHistory",
+		"id": "FamilyMemberHistory_Mom_65859978",
+		"patient": {
+			"reference": "65859978"
+		},
+		"date": "2018-01-12T14:20:49.371Z",
+		"name": "Mom",
+		"relationship": {
+			"text": "Parent"
+		},
+		"gender": "male",
+		"ageAge": {
+			"value": 84
+		},
+		"condition": [
+			{
+				"code": {
+					"coding": [
+						{
+							"code": "false"
+						}
+					],
+					"text": "Heart Attack"
+				}
+			},
+			{
+				"code": {
+					"coding": [
+						{
+							"code": "true"
+						}
+					],
+					"text": "Angina"
+				}
+			},
+			{
+				"code": {
+					"coding": [
+						{
+							"code": "false"
+						}
+					],
+					"text": "Diabetes"
+				}
+			}
+		]
+	}
+]

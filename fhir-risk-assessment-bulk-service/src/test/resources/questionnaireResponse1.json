@@ -1,0 +1,98 @@
+[
+	{
+		"resourceType": "QuestionnaireResponse",
+		"id": "65859978_vizuri-fhir-questionnaire",
+		"subject": {
+			"reference": "65859978"
+		},
+		"item": [
+			{
+				"linkId": "1",
+				"text": "Are you currently employed?",
+				"answer": [
+					{
+						"valueBoolean": true
+					}
+				]
+			},
+			{
+				"linkId": "2",
+				"text": "How many years have you smoked for / have been smoking for?",
+				"answer": [
+					{
+						"valueQuantity": {
+							"value": 25
+						}
+					}
+				]
+			},
+			{
+				"linkId": "3",
+				"text": "Have you ever been treated for High Blood Pressure?",
+				"answer": [
+					{
+						"valueBoolean": true
+					}
+				]
+			},
+			{
+				"linkId": "4",
+				"text": "Do you have diabetes?",
+				"answer": [
+					{
+						"valueString": "Yes: Adult onset, treated with pills and/or insulin"
+					}
+				]
+			},
+			{
+				"linkId": "5",
+				"text": "How many days per week are you active at least 30 minutes?",
+				"answer": [
+					{
+						"valueQuantity": {
+							"value": 3
+						}
+					}
+				]
+			},
+			{
+				"linkId": "6",
+				"text": "How many days per week are you stressed?",
+				"answer": [
+					{
+						"valueQuantity": {
+							"value": 5
+						}
+					}
+				]
+			},
+			{
+				"linkId": "7",
+				"text": "Do you have a history of Peripheral Vascular Disease?",
+				"answer": [
+					{
+						"valueBoolean": false
+					}
+				]
+			},
+			{
+				"linkId": "8",
+				"text": "Do you have a history of Coronary Artery Disease?",
+				"answer": [
+					{
+						"valueString": "Yes: Known plaque through calcium score, angiogram"
+					}
+				]
+			},
+			{
+				"linkId": "9",
+				"text": "What is your diet?",
+				"answer": [
+					{
+						"valueString": "No restrictions to what I eat"
+					}
+				]
+			}
+		]
+	}
+]

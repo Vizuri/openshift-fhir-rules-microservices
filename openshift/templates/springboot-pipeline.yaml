@@ -45,6 +45,12 @@ parameters:
 - description: POD CPU Limit
   name: CPU_LIMIT
   value: 750m
+- description: POD Memory Request
+  name: MEMORY_REQUEST
+  value: 256Mi
+- description: POD CPU Request
+  name: CPU_REQUEST
+  value: 200m
 objects:
 - apiVersion: v1
   kind: ImageStream
@@ -230,6 +236,9 @@ objects:
             limits:
               cpu: ${CPU_LIMIT}
               memory: ${MEMORY_LIMIT}
+            requests:
+              cpu: ${CPU_REQUEST}
+              memory: ${MEMORY_REQUEST}
           securityContext:
           terminationMessagePath: "/dev/termination-log"
           volumeMounts:

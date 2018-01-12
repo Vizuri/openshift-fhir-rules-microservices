@@ -1,0 +1,52 @@
+{
+	"resource": {
+		"resourceType": "Patient",
+		"id": "1",
+		"active": true,
+		"name": [
+			{
+				"family": "Eudy",
+				"given": [
+					"Kent",
+					"E"
+				]
+			}
+		],
+		"telecom": [
+			{
+				"system": "phone",
+				"value": "703.771.2209",
+				"use": "home"
+			},
+			{
+				"system": "phone",
+				"value": "703.609.5222",
+				"use": "mobile"
+			},
+			{
+				"system": "email",
+				"value": "keudy@vizuri.com",
+				"use": "home"
+			}
+		],
+		"gender": "male",
+		"birthDate": "1964-09-10",
+		"address": [
+			{
+				"use": "home",
+				"line": [
+					"714 Duncan Place SE"
+				],
+				"city": "Leesburg",
+				"state": "VA",
+				"postalCode": "20175"
+			}
+		],
+		"generalPractitioner": [
+			{
+				"reference": "333",
+				"display": "My Docktor"
+			}
+		]
+	}
+}

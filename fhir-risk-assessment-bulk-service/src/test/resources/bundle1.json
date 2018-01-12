@@ -1,0 +1,314 @@
+{
+	"resourceType": "Bundle",
+	"entry": [
+		{
+			"resource": {
+				"resourceType": "Patient",
+				"id": "65859978",
+				"name": [
+					{
+						"text": "Kent Eric Eudy",
+						"family": "Eudy",
+						"given": [
+							"Kent",
+							"Eric",
+							"Eudy"
+						]
+					}
+				],
+				"gender": "male",
+				"birthDate": "1964-09-10"
+			}
+		},
+		{
+			"resource": {
+				"resourceType": "FamilyMemberHistory",
+				"id": "FamilyMemberHistory_Mom_65859978",
+				"patient": {
+					"reference": "65859978"
+				},
+				"date": "2018-01-12T14:20:49.371Z",
+				"name": "Mom",
+				"relationship": {
+					"text": "Parent"
+				},
+				"gender": "male",
+				"ageAge": {
+					"value": 84
+				},
+				"condition": [
+					{
+						"code": {
+							"coding": [
+								{
+									"code": "false"
+								}
+							],
+							"text": "Heart Attack"
+						}
+					},
+					{
+						"code": {
+							"coding": [
+								{
+									"code": "true"
+								}
+							],
+							"text": "Angina"
+						}
+					},
+					{
+						"code": {
+							"coding": [
+								{
+									"code": "false"
+								}
+							],
+							"text": "Diabetes"
+						}
+					}
+				]
+			}
+		},
+		{
+			"resource": {
+				"resourceType": "Observation",
+				"id": "Observation_65859978",
+				"subject": {
+					"reference": "65859978"
+				},
+				"issued": "2018-01-12T14:23:22.416Z",
+				"component": [
+					{
+						"code": {
+							"coding": [
+								{
+									"code": "8480-6"
+								}
+							],
+							"text": "Systolic Blood Pressure"
+						},
+						"valueQuantity": {
+							"value": 140
+						}
+					},
+					{
+						"code": {
+							"coding": [
+								{
+									"code": "8462-4"
+								}
+							],
+							"text": "Diastolic Blood Pressure"
+						},
+						"valueQuantity": {
+							"value": 100
+						}
+					},
+					{
+						"code": {
+							"coding": [
+								{
+									"code": "2093-3"
+								}
+							],
+							"text": "Total Cholesterol"
+						},
+						"valueQuantity": {
+							"value": 240
+						}
+					},
+					{
+						"code": {
+							"coding": [
+								{
+									"code": "2085-9"
+								}
+							],
+							"text": "HDL Cholesterol"
+						},
+						"valueQuantity": {
+							"value": 100
+						}
+					},
+					{
+						"code": {
+							"coding": [
+								{
+									"code": "13457-7"
+								}
+							],
+							"text": "LDL Cholesterol"
+						},
+						"valueQuantity": {
+							"value": 140
+						}
+					},
+					{
+						"code": {
+							"coding": [
+								{
+									"code": "2571-8"
+								}
+							],
+							"text": "Triglycerides"
+						},
+						"valueQuantity": {
+							"value": 130
+						}
+					},
+					{
+						"code": {
+							"coding": [
+								{
+									"code": "56086-2"
+								}
+							],
+							"text": "Waist Circumference"
+						},
+						"valueQuantity": {
+							"value": 38
+						}
+					},
+					{
+						"code": {
+							"coding": [
+								{
+									"code": "39156-5"
+								}
+							],
+							"text": "BMI"
+						},
+						"valueQuantity": {
+							"value": 33.75
+						}
+					},
+					{
+						"code": {
+							"coding": [
+								{
+									"code": "3141-9"
+								}
+							],
+							"text": "Height in Inches"
+						},
+						"valueQuantity": {
+							"value": 70
+						}
+					},
+					{
+						"code": {
+							"coding": [
+								{
+									"code": "8302-9"
+								}
+							],
+							"text": "Weight in Pounds"
+						},
+						"valueQuantity": {
+							"value": 225
+						}
+					}
+				]
+			}
+		},
+		{
+			"resource": {
+				"resourceType": "QuestionnaireResponse",
+				"id": "65859978_vizuri-fhir-questionnaire",
+				"subject": {
+					"reference": "65859978"
+				},
+				"item": [
+					{
+						"linkId": "1",
+						"text": "Are you currently employed?",
+						"answer": [
+							{
+								"valueBoolean": true
+							}
+						]
+					},
+					{
+						"linkId": "2",
+						"text": "How many years have you smoked for / have been smoking for?",
+						"answer": [
+							{
+								"valueQuantity": {
+									"value": 25
+								}
+							}
+						]
+					},
+					{
+						"linkId": "3",
+						"text": "Have you ever been treated for High Blood Pressure?",
+						"answer": [
+							{
+								"valueBoolean": true
+							}
+						]
+					},
+					{
+						"linkId": "4",
+						"text": "Do you have diabetes?",
+						"answer": [
+							{
+								"valueString": "Yes: Adult onset, treated with pills and/or insulin"
+							}
+						]
+					},
+					{
+						"linkId": "5",
+						"text": "How many days per week are you active at least 30 minutes?",
+						"answer": [
+							{
+								"valueQuantity": {
+									"value": 3
+								}
+							}
+						]
+					},
+					{
+						"linkId": "6",
+						"text": "How many days per week are you stressed?",
+						"answer": [
+							{
+								"valueQuantity": {
+									"value": 5
+								}
+							}
+						]
+					},
+					{
+						"linkId": "7",
+						"text": "Do you have a history of Peripheral Vascular Disease?",
+						"answer": [
+							{
+								"valueBoolean": false
+							}
+						]
+					},
+					{
+						"linkId": "8",
+						"text": "Do you have a history of Coronary Artery Disease?",
+						"answer": [
+							{
+								"valueString": "Yes: Known plaque through calcium score, angiogram"
+							}
+						]
+					},
+					{
+						"linkId": "9",
+						"text": "What is your diet?",
+						"answer": [
+							{
+								"valueString": "No restrictions to what I eat"
+							}
+						]
+					}
+				]
+			}
+		}
+	]
+}

@@ -1,0 +1,17 @@
+{
+	"resourceType": "Patient",
+	"id": "65859978",
+	"name": [
+		{
+			"text": "Kent Eric Eudy",
+			"family": "Eudy",
+			"given": [
+				"Kent",
+				"Eric",
+				"Eudy"
+			]
+		}
+	],
+	"gender": "male",
+	"birthDate": "1964-09-10"
+}

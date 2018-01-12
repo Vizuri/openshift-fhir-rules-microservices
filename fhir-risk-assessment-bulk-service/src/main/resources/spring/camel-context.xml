@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+    xmlns:camel="http://camel.apache.org/schema/spring"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="        http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd        http://camel.apache.org/schema/spring http://camel.apache.org/schema/spring/camel-spring.xsd">
+    <!-- Define a traditional camel context here -->
+    <bean
+        class="org.apache.camel.component.servlet.CamelHttpTransportServlet" id="camelHttpTransportServlet"/>
+    <bean
+        class="org.springframework.boot.web.servlet.ServletRegistrationBean" id="servlet">
+        <property name="name" value="CamelServlet"/>
+        <property name="servlet" ref="camelHttpTransportServlet"/>
+        <property name="urlMappings" value="/*"/>
+    </bean>
+    <bean class="com.vizuri.fhir.service.FhirDataFormat" id="json-jackson"/>
+    <camelContext id="camel" xmlns="http://camel.apache.org/schema/spring">
+        <restConfiguration apiContextPath="api-docs" bindingMode="json"
+            component="servlet" contextPath="/">
+            <apiProperty key="cors" value="true"/>
+            <apiProperty key="api.title" value="Healthcare demo clinical API"/>
+            <apiProperty key="api.version" value="1.0.0"/>
+            <corsHeaders key="Access-Control-Allow-Origin" value="*"/>
+            <corsHeaders key="Access-Control-Allow-Methods" value="GET, HEAD, POST, PUT, DELETE, TRACE, OPTIONS, CONNECT, PATCH"/>
+            <corsHeaders key="Access-Control-Allow-Headers" value="Origin, Accept, X-Requested-With, Content-Type, Access-Control-Request-Method, Access-Control-Request-Headers"/>
+        </restConfiguration>
+        <rest path="/riskassessment">
+            <post outType="org.hl7.fhir.dstu3.model.Bundle" type="org.hl7.fhir.dstu3.model.Bundle">
+                <to uri="direct:processBundle"/>
+            </post>
+        </rest>
+        <route id="processBundle">
+            <from id="_fromProcessBundle" uri="direct:processBundle"/>
+            <log id="_log1" message="In ProcessBundle ${body}"/>
+            <!--  
+			<setBody id="_setBody1">
+				<constant>Response</constant>
+			</setBody>
+			-->
+        </route>
+    </camelContext>
+</beans>
