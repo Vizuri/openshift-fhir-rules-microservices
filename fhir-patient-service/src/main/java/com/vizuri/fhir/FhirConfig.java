@@ -14,8 +14,6 @@
 
 package com.vizuri.fhir;
 
-import static org.mockito.Mockito.RETURNS_DEEP_STUBS;
-
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
