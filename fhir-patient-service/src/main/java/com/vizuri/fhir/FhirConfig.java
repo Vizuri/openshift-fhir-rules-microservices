@@ -14,6 +14,8 @@
 
 package com.vizuri.fhir;
 
+import static org.mockito.Mockito.RETURNS_DEEP_STUBS;
+
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
@@ -24,6 +26,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.context.annotation.Primary;
 import org.springframework.core.convert.converter.Converter;
 import org.springframework.data.mongodb.core.convert.CustomConversions;
 
@@ -39,6 +42,14 @@ import com.vizuri.fhir.converter.ResourceDeserializer;
 import com.vizuri.fhir.converter.ResourceSerializer;
 
 import ca.uhn.fhir.context.FhirContext;
+import springfox.documentation.builders.PathSelectors;
+import springfox.documentation.builders.RequestHandlerSelectors;
+import springfox.documentation.spi.DocumentationType;
+import springfox.documentation.spring.web.DocumentationCache;
+import springfox.documentation.spring.web.plugins.Docket;
+import springfox.documentation.swagger.web.InMemorySwaggerResourcesProvider;
+import springfox.documentation.swagger.web.SwaggerResource;
+import springfox.documentation.swagger.web.SwaggerResourcesProvider;
 
 @Configuration
 public class FhirConfig {
@@ -99,4 +110,36 @@ public class FhirConfig {
 		om.registerModule(module);
 		return om;
 	}
+
+	@Bean @Autowired
+	public InMemorySwaggerResourcesProvider inMemorySwaggerResourcesProvider() {
+		DocumentationCache documentationCache = new DocumentationCache();
+		return new InMemorySwaggerResourcesProvider(documentationCache);
+	}
+	
+	@Autowired
+    @Primary
+    @Bean
+    public SwaggerResourcesProvider swaggerResourcesProvider(InMemorySwaggerResourcesProvider defaultResourcesProvider) {
+        return () -> {
+            SwaggerResource wsResource = new SwaggerResource();
+            wsResource.setName("Patient API");
+            wsResource.setSwaggerVersion("2.0");
+            wsResource.setLocation("/swagger.yaml");
+
+            List<SwaggerResource> resources = new ArrayList<>(defaultResourcesProvider.get());
+            resources.add(wsResource);
+            return resources;
+        };
+    }
+	
+	@Bean
+	  public Docket petApi() {
+	    return new Docket(DocumentationType.SWAGGER_2)
+	        .select()
+	          .apis(RequestHandlerSelectors.any())
+	          .paths(PathSelectors.none())
+	          .build()
+	        ;
+	  }
 }

@@ -27,6 +27,7 @@ import com.fasterxml.jackson.databind.JsonSerializer;
 import com.fasterxml.jackson.databind.SerializerProvider;
 
 import ca.uhn.fhir.context.FhirContext;
+import ca.uhn.fhir.context.RuntimeResourceDefinition;
 import ca.uhn.fhir.parser.DataFormatException;
 import ca.uhn.fhir.parser.IParser;
 
@@ -45,6 +46,7 @@ public class ResourceSerializer extends JsonSerializer<IBaseResource>{
 			IParser jsonParser = fhirContext.newJsonParser();
 			String encoded = jsonParser.encodeResourceToString(resource);
 			logger.info("ResourceString:" + encoded);
+			
 			generator.writeRawValue(encoded);
 		} catch (DataFormatException | IOException e) {
 			// TODO Auto-generated catch block
