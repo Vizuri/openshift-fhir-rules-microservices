@@ -27,12 +27,9 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.vizuri.fhir.repository.PatientRepository;
 
-import springfox.documentation.swagger2.annotations.EnableSwagger2;
-
 @CrossOrigin(origins = {"http://localhost:3000", "*"})
 @RestController
 @RequestMapping("/patient")
-@EnableSwagger2
 public class PatientController {
 	private final PatientRepository repository;
 	private static Logger logger = LoggerFactory.getLogger(PatientController.class);

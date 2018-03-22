@@ -1,0 +1,76 @@
+swagger: '2.0'
+info:
+  description: FHIR Questionnaire API
+  version: 1.0.0
+  title: Questionnaire
+  license:
+    name: Apache 2.0
+    url: http://www.apache.org/licenses/LICENSE-2.0
+schemes: ["http"]
+paths:
+  /questionnaire:
+    post:
+      summary:  Create Questionnaire
+      description: Creates a new Questionnaire.
+      operationId: createQuestionnaire
+      consumes:
+      - application/json
+      produces:
+      - application/json            
+      parameters:
+      - name: questionnaire
+        in: body
+        description: Questionnaire
+        required: true         
+        schema:
+          $ref: "definitions.yaml#/definitions/Questionnaire"         
+      responses:
+        200:
+          description: Questionnaire Created Succesfully.
+          schema:
+            # Reference to a Schema Object described in 'definitions' section
+            $ref: "definitions.yaml#/definitions/Questionnaire" 
+        500:
+          description: Fatal Error Creating Questionnaire.
+    get:
+      summary: Get all Questionnaires
+      description: Returns All Questionnaires
+      responses:
+        '200':
+          description: OK
+          schema:
+            $ref: "definitions.yaml#/definitions/Questionnaire" 
+  /questionnaire/{id}:
+    get:
+      summary: Find a Questionnaire
+      description: Return the specified Questionnaire
+      parameters:
+        - name: id
+          in: path
+          description: Questionnaire ID
+          required: true
+          type: string  
+      responses:
+        '200':
+          description: OK 
+          schema:       
+            $ref: "definitions.yaml#/definitions/Questionnaire" 
+        '404':
+          description: Not Found
+    delete:
+      summary: Delete a Questionnaire
+      description: Delete the entire list (for collection resources) or an item (for object resources)
+      parameters:
+        - name: id
+          in: path
+          description: Questionnaire ID
+          required: true
+          type: string
+      responses:
+        '200':
+          description: OK
+        '404':
+          description: Not Found
+    
+    
+    

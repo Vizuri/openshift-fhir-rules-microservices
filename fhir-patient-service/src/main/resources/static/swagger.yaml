@@ -1,0 +1,76 @@
+swagger: '2.0'
+info:
+  description: FHIR Patient API
+  version: 1.0.0
+  title: Patient
+  license:
+    name: Apache 2.0
+    url: http://www.apache.org/licenses/LICENSE-2.0
+schemes: ["http"]
+paths:
+  /patient:
+    post:
+      summary:  Create Patient
+      description: Creates a new Patient.
+      operationId: createPatient
+      consumes:
+      - application/json
+      produces:
+      - application/json            
+      parameters:
+      - name: patient
+        in: body
+        description: Patient
+        required: true         
+        schema:
+          $ref: "definitions.yaml#/definitions/Patient"         
+      responses:
+        200:
+          description: Patient Created Succesfully.
+          schema:
+            # Reference to a Schema Object described in 'definitions' section
+            $ref: "definitions.yaml#/definitions/Patient" 
+        500:
+          description: Fatal Error Creating Patient.
+    get:
+      summary: Get all Patients
+      description: Returns All Patients
+      responses:
+        '200':
+          description: OK
+          schema:
+            $ref: "definitions.yaml#/definitions/Patient" 
+  /patient/{id}:
+    get:
+      summary: Find a Patient
+      description: Return the specified Patient
+      parameters:
+        - name: id
+          in: path
+          description: Patient ID
+          required: true
+          type: string  
+      responses:
+        '200':
+          description: OK 
+          schema:       
+            $ref: "definitions.yaml#/definitions/Patient" 
+        '404':
+          description: Not Found
+    delete:
+      summary: Delete a Patient
+      description: Delete the entire list (for collection resources) or an item (for object resources)
+      parameters:
+        - name: id
+          in: path
+          description: Patient ID
+          required: true
+          type: string
+      responses:
+        '200':
+          description: OK
+        '404':
+          description: Not Found
+    
+    
+    

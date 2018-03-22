@@ -21,11 +21,16 @@ import org.springframework.boot.autoconfigure.EnableAutoConfiguration;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.annotation.ComponentScan;
+import org.springframework.web.servlet.config.annotation.ResourceHandlerRegistry;
+import org.springframework.web.servlet.config.annotation.WebMvcConfigurerAdapter;
+
+import springfox.documentation.swagger2.annotations.EnableSwagger2;
 
 @ComponentScan
 @SpringBootApplication
 @EnableAutoConfiguration
-public class FhirPatientServiceApplication {
+@EnableSwagger2
+public class FhirPatientServiceApplication extends WebMvcConfigurerAdapter {
 	private static Logger logger = LoggerFactory.getLogger(FhirPatientServiceApplication.class);
 	public static void main(String[] args) {
 		ApplicationContext ctx = SpringApplication.run(FhirPatientServiceApplication.class, args);

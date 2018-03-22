@@ -37,6 +37,8 @@ import com.vizuri.fhir.converter.ResourceDeserializer;
 import com.vizuri.fhir.converter.ResourceSerializer;
 
 import ca.uhn.fhir.context.FhirContext;
+import io.swagger.converter.ModelConverters;
+import io.swagger.jackson.ModelResolver;
 
 @Configuration
 public class FhirConfig {
@@ -111,8 +113,9 @@ public class FhirConfig {
 				return (QuestionnaireResponse) resourceDeserializer.deserialize(parser, context);
 			}			
 		});
-		
 		om.registerModule(module);
+		ModelConverters.getInstance().addConverter(new ModelResolver(om));
+
 		return om;
 	}
 }
