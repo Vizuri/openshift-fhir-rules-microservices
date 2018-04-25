@@ -198,10 +198,43 @@
  
       </pluginRepositories>
     </profile>
+         <profile>
+           <id>redhat-ga</id>
+           <repositories>
+             <repository>
+               <releases>
+                 <updatePolicy>never</updatePolicy>
+               </releases>
+               <snapshots>
+                 <enabled>false</enabled>
+                 <updatePolicy>never</updatePolicy>
+               </snapshots>
+               <id>jboss-ga-repository</id>
+               <name>RedHat GA Maven Repository</name>
+               <url>https://maven.repository.redhat.com/ga</url>
+             </repository>
+           </repositories>
+           <pluginRepositories>
+             <pluginRepository>
+               <releases>
+                 <updatePolicy>never</updatePolicy>
+               </releases>
+               <snapshots>
+                 <enabled>false</enabled>
+                 <updatePolicy>never</updatePolicy>
+               </snapshots>
+               <id>redhat-ga-plugin-repository</id>
+               <name>RedHat GA Plugin Repository</name>
+               <url>https://maven.repository.redhat.com/ga</url>
+             </pluginRepository>
+           </pluginRepositories>
+         </profile>
+
   </profiles>
 
   <activeProfiles>
-    <activeProfile>fuse.repos</activeProfile>
+    <!--<activeProfile>fuse.repos</activeProfile>-->
+    <activeProfile>redhat-ga</activeProfile>
   </activeProfiles>
 
 </settings>
