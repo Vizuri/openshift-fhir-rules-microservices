@@ -23,7 +23,7 @@ aws.secret.access.key = bd06t6VNOqk8QxyVJHeNeh6mJofY/Q5TugInSAKn
      -->
     <bean class="com.amazonaws.auth.BasicAWSCredentials" id="awsCredentials">
         <constructor-arg value="{{AWS_ACCESS_KEY_ID}}"/>
-        <constructor-arg value="{{AWS_SECRET_ACCESS_KEY}}""/>
+        <constructor-arg value="{{AWS_SECRET_ACCESS_KEY}}"/>
     </bean>
     <camelContext id="camel" xmlns="http://camel.apache.org/schema/spring">
         <endpoint id="toPatientJson" uri="dozer:toPatientJson?sourceModel=generated_1526345463028.Patient&amp;targetModel=output.Output&amp;marshalId=transform-json&amp;unmarshalId=generated_1526345463028&amp;mappingFile=transformation.xml"/>
