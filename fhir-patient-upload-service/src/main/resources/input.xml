@@ -1,0 +1,7 @@
+<patient>
+   <id>123-AAA</id>
+   <firstName>Kent</firstName>
+   <lastName>Eudy</lastName>
+   <gender>male</gender>
+   <birthDate>1964-09-10</birthDate>
+</patient>

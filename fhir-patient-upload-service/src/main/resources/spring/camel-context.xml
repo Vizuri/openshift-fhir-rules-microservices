@@ -1,0 +1,61 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+    xmlns:camel="http://camel.apache.org/schema/spring"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="        http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd        http://camel.apache.org/schema/spring http://camel.apache.org/schema/spring/camel-spring.xsd">
+    <!-- Define a traditional camel context here -->
+
+    <bean
+        class="org.apache.camel.dataformat.bindy.csv.BindyCsvDataFormat" id="bindyDataformat">
+        <constructor-arg value="com.vizuri.fhir.model.Patient"/>
+    </bean>
+    <bean
+        class="org.apache.camel.component.servlet.CamelHttpTransportServlet" id="camelHttpTransportServlet"/>
+    <bean class="com.amazonaws.services.s3.AmazonS3Client" id="awsS3Client">
+        <constructor-arg ref="awsCredentials"/>
+    </bean>
+    <!-- 
+    <bean class="com.amazonaws.auth.BasicAWSCredentials" id="awsCredentials">
+        <constructor-arg value="{{aws.access.key.id}}"/>
+        <constructor-arg value="{{aws.secret.access.key}}"/>
+    </bean>
+    aws.access.key.id = AKIAI26QYALEIUBPC2AQ
+aws.secret.access.key = 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
+    
+     -->
+    <bean class="com.amazonaws.auth.BasicAWSCredentials" id="awsCredentials">
+        <constructor-arg value="AKIAI26QYALEIUBPC2AQ"/>
+        <constructor-arg value="bd06t6VNOqk8QxyVJHeNeh6mJofY/Q5TugInSAKn"/>
+    </bean>    
+ 
+    <camelContext id="camel" xmlns="http://camel.apache.org/schema/spring">
+        <endpoint id="toPatientJson" uri="dozer:toPatientJson?sourceModel=generated_1526345463028.Patient&amp;targetModel=output.Output&amp;marshalId=transform-json&amp;unmarshalId=generated_1526345463028&amp;mappingFile=transformation.xml"/>
+        <dataFormats>
+            <jaxb contextPath="generated_1524597927477" id="generated_1524597927477"/>
+            <json id="transform-json" library="Jackson"/>
+            <jaxb contextPath="generated_1526345463028" id="generated_1526345463028"/>
+        </dataFormats>
+        <route id="simple-route">
+            <from id="_from1" uri="aws-s3://fhir-input?amazonS3Client=#awsS3Client&amp;delay=10000&amp;maxMessagesPerPoll=5&amp;deleteAfterRead=true"/>
+            <convertBodyTo id="_convertBodyTo1" type="java.lang.String"/>
+            <log id="route-log" message=">>> ${body}"/>
+            <split id="_split1" streaming="false">
+                <tokenize token="\n"/>
+                <log id="_log1" message=">>> ${body}"/>
+                <unmarshal id="_unmarshal1" ref="bindyDataformat"/>
+                <log id="after-bindy" message=">>> ${body}"/>
+                <to id="_to2" uri="ref:toPatientJson"/>
+                <log id="after-trans" message=">>> ${body}"/>
+                <setHeader headerName="Content-Type" id="_setHeader2">
+                    <constant>application/json</constant>
+                </setHeader>
+                <setHeader headerName="CamelHttpMethod" id="_setHeader1">
+                    <constant>POST</constant>
+                </setHeader>
+                <setHeader headerName="user-key" id="_setHeader3">
+                    <constant>b1a4709beb1076afb232af87e59d92bd</constant>
+                </setHeader>
+                <to id="_to3" uri="http://patient-apicast-prod.54.145.234.45.xip.io/patient"/>
+            </split>
+        </route>
+    </camelContext>
+</beans>

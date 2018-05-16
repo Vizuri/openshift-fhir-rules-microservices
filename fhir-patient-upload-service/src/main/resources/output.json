@@ -1,0 +1,17 @@
+{
+	"resourceType": "Patient",
+	"id": "2222",
+	"name": [
+		{
+			"text": "Wilma Flintstone",
+			"family": "Flintstone",
+			"given": [
+				"Wilma",
+				"C",
+				"Flintstone"
+				]
+		}
+	],
+	"gender": "male",
+	"birthDate": "1964-09-10"
+}

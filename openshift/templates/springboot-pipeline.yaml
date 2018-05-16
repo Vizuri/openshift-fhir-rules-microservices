@@ -41,7 +41,7 @@ parameters:
   value: "-Xms128m -Xmx256m"
 - description: POD Memory Limit
   name: MEMORY_LIMIT
-  value: 256Mi
+  value: 312Mi
 - description: POD CPU Limit
   name: CPU_LIMIT
   value: 750m
@@ -50,7 +50,7 @@ parameters:
   value: 256Mi
 - description: POD CPU Request
   name: CPU_REQUEST
-  value: 200m
+  value: 100m
 objects:
 - apiVersion: v1
   kind: ImageStream
@@ -234,8 +234,6 @@ objects:
             protocol: TCP
           resources:
             limits:
-              cpu: ${CPU_LIMIT}
-              memory: ${MEMORY_LIMIT}
             requests:
               cpu: ${CPU_REQUEST}
               memory: ${MEMORY_REQUEST}
@@ -245,7 +243,7 @@ objects:
     triggers:
     - type: ConfigChange
     - imageChangeParams:
-        automatic: true
+        automatic: false
         containerNames:
         - ${APP_NAME}
         from:
