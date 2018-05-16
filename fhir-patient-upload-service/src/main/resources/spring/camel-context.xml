@@ -1,8 +1,16 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <beans xmlns="http://www.springframework.org/schema/beans"
     xmlns:camel="http://camel.apache.org/schema/spring"
-    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="        http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd        http://camel.apache.org/schema/spring http://camel.apache.org/schema/spring/camel-spring.xsd">
-    <!-- Define a traditional camel context here -->
+    xmlns:context="http://www.springframework.org/schema/context"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="        
+    http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd        
+    http://camel.apache.org/schema/spring http://camel.apache.org/schema/spring/camel-spring.xsd
+    http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context-4.2.xsd"
+    >
+    <!-- Define a traditional camel context here 
+    -->
+    <context:property-placeholder location="classpath:application.properties" />
+    
     <bean
         class="org.apache.camel.dataformat.bindy.csv.BindyCsvDataFormat" id="bindyDataformat">
         <constructor-arg value="com.vizuri.fhir.model.Patient"/>
@@ -17,15 +25,17 @@
         <constructor-arg value="{{aws.access.key.id}}"/>
         <constructor-arg value="{{aws.secret.access.key}}"/>
     </bean>
-    aws.access.key.id = AKIAI26QYALEIUBPC2AQ
-aws.secret.access.key = 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
     
      -->
     <bean class="com.amazonaws.auth.BasicAWSCredentials" id="awsCredentials">
-        <constructor-arg value="{{AWS_ACCESS_KEY_ID}}"/>
-        <constructor-arg value="{{AWS_SECRET_ACCESS_KEY}}"/>
+        <constructor-arg value="${aws.access.key.id}"/>
+        <constructor-arg value="${aws.secret.access.key}"/>
     </bean>
     <camelContext id="camel" xmlns="http://camel.apache.org/schema/spring">
+     	<propertyPlaceholder
+      		id="properties"
+      		location="application.properties"
+   		/>
         <endpoint id="toPatientJson" uri="dozer:toPatientJson?sourceModel=generated_1526345463028.Patient&amp;targetModel=output.Output&amp;marshalId=transform-json&amp;unmarshalId=generated_1526345463028&amp;mappingFile=transformation.xml"/>
         <dataFormats>
             <jaxb contextPath="generated_1524597927477" id="generated_1524597927477"/>
@@ -33,7 +43,7 @@ aws.secret.access.key = bd06t6VNOqk8QxyVJHeNeh6mJofY/Q5TugInSAKn
             <jaxb contextPath="generated_1526345463028" id="generated_1526345463028"/>
         </dataFormats>
         <route id="simple-route">
-            <from id="_from1" uri="aws-s3://fhir-input?amazonS3Client=#awsS3Client&amp;delay=10000&amp;maxMessagesPerPoll=5&amp;deleteAfterRead=true"/>
+            <from id="_from1" uri="aws-s3://fhir-patient-upload?amazonS3Client=#awsS3Client&amp;delay=10000&amp;maxMessagesPerPoll=5&amp;deleteAfterRead=true"/>
             <convertBodyTo id="_convertBodyTo1" type="java.lang.String"/>
             <log id="route-log" message=">>> ${body}"/>
             <split id="_split1" streaming="false">
