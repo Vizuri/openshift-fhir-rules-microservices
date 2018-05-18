@@ -60,9 +60,9 @@
                     <constant>POST</constant>
                 </setHeader>
                 <setHeader headerName="user-key" id="_setHeader3">
-                    <constant>b1a4709beb1076afb232af87e59d92bd</constant>
+                    <constant>c223df53950afeb510d93c64f8e21b13</constant>
                 </setHeader>
-                <to id="_to3" uri="http://patient-apicast-prod.54.145.234.45.xip.io/patient"/>
+                <to id="_to3" uri="http://patient-apicast-prod.app.ocpdemo.sandbox.vizuri.com/patient"/>
             </split>
         </route>
     </camelContext>
