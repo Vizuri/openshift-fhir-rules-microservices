@@ -1,8 +1,7 @@
 #!/usr/bin/groovy
 @Library('github.com/vizuri/openshift-pipeline-templates@master')
 
-
-node ('maven') { 
+node('maven') { 
     stage('Setup') {
 	    println(">>>> Starting")
 	    def utils = new com.vizuri.openshift.Utils()
