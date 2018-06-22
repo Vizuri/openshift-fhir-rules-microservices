@@ -5,5 +5,5 @@ def dummy
 node {
     def utils = new com.vizuri.openshift.Utils()
     utils.helloWorld()
-    #utils.addAnnotationToBuild('fabric8.io/foo', 'bar')
+    //utils.addAnnotationToBuild('fabric8.io/foo', 'bar')
 }
