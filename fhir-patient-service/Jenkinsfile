@@ -1,14 +1,14 @@
 #!/usr/bin/groovy
 @Library('github.com/vizuri/openshift-pipeline-templates@master')
 
-println ">>>> Starting ... "
+echo ">>>> Starting ... "
 
 node () {
     def utils = new com.vizuri.openshift.Utils()
     utils.helloWorld()
     //utils.addAnnotationToBuild('fabric8.io/foo', 'bar')
 
-   println ">>>>>  Build Number ${BUILD_NUMBER}"
+   echo ">>>>>  Build Number ${BUILD_NUMBER}"
    def ocp_project
    def image_project
    def app_name="patient-service"
@@ -18,7 +18,7 @@ node () {
    def release_number
    def staging_build_job="fhir-staging/fhir-patient-service-staging"
    
-   println ">>>>>>  Branch Name:" + BRANCH_NAME
+   echo ">>>>>>  Branch Name:" + BRANCH_NAME
    
    
    if(BRANCH_NAME.startsWith("release")) {
