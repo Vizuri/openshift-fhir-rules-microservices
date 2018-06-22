@@ -1,8 +1,9 @@
 #!/usr/bin/groovy
-@Library('github.com/fabric8io/fabric8-pipeline-library@master')
+@Library('github.com/vizuri/openshift-pipeline-templates@master')
 
 def dummy
 node {
-    def utils = new io.fabric8.Utils()
-    utils.addAnnotationToBuild('fabric8.io/foo', 'bar')
+    def utils = new com.vizuri.openshift.Utils()
+    utils.helloWorld()
+    #utils.addAnnotationToBuild('fabric8.io/foo', 'bar')
 }
