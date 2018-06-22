@@ -2,7 +2,7 @@
 @Library('github.com/vizuri/openshift-pipeline-templates@master')
 
 
-node () {
+node ('maven') { 
     stage('Setup') {
 	    println(">>>> Starting")
 	    def utils = new com.vizuri.openshift.Utils()
@@ -44,10 +44,7 @@ node () {
 		   ocp_project="fhir-development"
 	   }
 	}
-}
 
-
-node ('maven') { 
     stage('Checkout') {
         println( "In checkout" )
     	checkout scm
