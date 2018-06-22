@@ -1,7 +1,7 @@
 #!/usr/bin/groovy
 @Library('github.com/vizuri/openshift-pipeline-templates@master')
 
-node {
+node () {
     def utils = new com.vizuri.openshift.Utils()
     utils.helloWorld()
     //utils.addAnnotationToBuild('fabric8.io/foo', 'bar')
@@ -18,8 +18,6 @@ node {
    
    println "Branch Name:" + BRANCH_NAME
    
-   
-   //try {
    
    if(BRANCH_NAME.startsWith("release")) {
 	   //def (branch_name, branch_release_number) = BRANCH_NAME.tokenize( '/' )
@@ -102,4 +100,3 @@ node ('maven') {
        //     message: "Version :: " + version + " FAILED: Job '${env.JOB_NAME} BUILD: [${env.BUILD_NUMBER}]' (${env.BUILD_URL})"
         //)
 //}
-
