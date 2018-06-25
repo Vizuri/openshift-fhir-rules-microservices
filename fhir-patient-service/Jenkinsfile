@@ -1,5 +1,5 @@
 #!/usr/bin/groovy
-@Library('github.com/vizuri/openshift-pipeline-templates@master');
+@Library('github.com/vizuri/openshift-pipeline-templates@master')
 
 println ">>>> Starting";
 def utils = new com.vizuri.openshift.Utils();
