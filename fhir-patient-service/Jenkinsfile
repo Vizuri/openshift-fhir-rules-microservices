@@ -1,7 +1,7 @@
 #!/usr/bin/groovy
 @Library('github.com/vizuri/openshift-pipeline-templates@master')
 
-echo(''>>>> Starting'')
+echo('>>>> Starting')
 def utils = new com.vizuri.openshift.Utils()
 utils.helloWorld()
 //utils.addAnnotationToBuild('fabric8.io/foo', 'bar')
