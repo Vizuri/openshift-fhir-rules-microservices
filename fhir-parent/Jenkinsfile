@@ -55,10 +55,7 @@ node('maven') {
     	//	thresholds: [[$class: 'FailedThreshold', unstableThreshold: '1']],
     	//	tools: [[$class: 'JUnitType', pattern: 'target/surefire-reports/*.xml']]])
         
-	sh "ls"
-	sh "ls fhir-parent"
-	sh "ls fhir-parent/target"
-        stash includes: 'fhir-parent/target/*.jar', name: 'artifacts'
+        //stash includes: 'fhir-parent/target/*.jar', name: 'artifacts'
     }
 }
 //node () { 
