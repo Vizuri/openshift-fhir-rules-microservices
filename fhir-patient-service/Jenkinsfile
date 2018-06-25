@@ -48,7 +48,7 @@ node('maven') {
    }
     stage('MavenBuild') {
         echo "In Build"
-        sh "mvn -Dbuild.number=${release_number} clean install deploy"
+        sh "mvn -Dbuild.number=${release_number} -f fhir-patient-service clean install deploy"
         junit 'target/surefire-reports/*.xml'
         
        // step([$class: 'XUnitBuilder',
