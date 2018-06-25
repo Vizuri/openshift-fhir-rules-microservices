@@ -48,7 +48,7 @@ node('maven') {
    }
     stage('MavenBuild') {
         echo "In Build"
-        sh "mvn -s ../configuration/settings.xml -Dbuild.number=${release_number} -f fhir-parent clean install deploy"
+        sh "mvn -s configuration/settings.xml -Dbuild.number=${release_number} -f fhir-parent clean install deploy"
         junit 'target/surefire-reports/*.xml'
         
        // step([$class: 'XUnitBuilder',
