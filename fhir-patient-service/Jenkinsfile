@@ -21,7 +21,7 @@ echo ">>>>>>  Branch Name: " + BRANCH_NAME;
    
 if(BRANCH_NAME.startsWith("release")) {
    //def (branch_name, branch_release_number) = BRANCH_NAME.tokenize( '/' )
-   def t	okens = BRANCH_NAME.tokenize( '/' )
+   def tokens = BRANCH_NAME.tokenize( '/' )
    branch_name = tokens[0]
    branch_release_number = tokens[1]
    
