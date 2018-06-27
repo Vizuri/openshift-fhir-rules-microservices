@@ -75,24 +75,24 @@ node('maven') {
       withSonarQubeEnv('sonar') {
         sh "${scannerHome}/bin/sonar-scanner"
       }
-	  echo "sonarProps: " + sonarProps
-	  def ceTaskUrl = 'ceTaskUrl'
-	  sonarProps.split('\n').each { line ->
-		  if (line.startsWith(ceTaskUrl)) {
-			   env.SONAR_CE_TASK_URL = line.substring(ceTaskUrl.length() + 1)
-			   echo "env.SONAR_CE_TASK_URL: " + env.SONAR_CE_TASK_URL
-		  }
-		  
-		  if (line.startsWith('serverUrl')) {
-			   def sonarServerUrl = line.split('=')[1]
-			   if (!sonarServerUrl.endsWith('/')) {
-					sonarServerUrl += '/'
-			   }
-
-			   env.SONAR_SERVER_URL = sonarServerUrl
-			   echo "env.SONAR_SERVER_URL: " + env.SONAR_SERVER_URL
-		  }
-	  }
+//	  echo "sonarProps: " + sonarProps
+//	  def ceTaskUrl = 'ceTaskUrl'
+//	  sonarProps.split('\n').each { line ->
+//		  if (line.startsWith(ceTaskUrl)) {
+//			   env.SONAR_CE_TASK_URL = line.substring(ceTaskUrl.length() + 1)
+//			   echo "env.SONAR_CE_TASK_URL: " + env.SONAR_CE_TASK_URL
+//		  }
+//		  
+//		  if (line.startsWith('serverUrl')) {
+//			   def sonarServerUrl = line.split('=')[1]
+//			   if (!sonarServerUrl.endsWith('/')) {
+//					sonarServerUrl += '/'
+//			   }
+//
+//			   env.SONAR_SERVER_URL = sonarServerUrl
+//			   echo "env.SONAR_SERVER_URL: " + env.SONAR_SERVER_URL
+//		  }
+//	  }
     }
     stage("Quality Gate") {
       steps {
