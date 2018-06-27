@@ -31,11 +31,15 @@ import org.junit.runner.RunWith;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.autoconfigure.AutoConfigurationPackage;
+import org.springframework.boot.test.autoconfigure.data.mongo.DataMongoTest;
 //import org.springframework.boot.test.SpringApplicationConfiguration;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.context.SpringBootTest.WebEnvironment;
 import org.springframework.boot.test.web.client.TestRestTemplate;
+import org.springframework.context.annotation.ComponentScan;
 import org.springframework.http.ResponseEntity;
+import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.TestPropertySource;
 import org.springframework.test.context.junit4.SpringRunner;
 
@@ -50,12 +54,20 @@ import ca.uhn.fhir.parser.JsonParser;
 @RunWith(SpringRunner.class)
 @SpringBootTest(webEnvironment=WebEnvironment.RANDOM_PORT)
 @TestPropertySource(locations="classpath:application-test.properties")
+//@DataMongoTest
+//@AutoConfigurationPackage
+//@ComponentScan("com.vizuri.fhir")
+//@ContextConfiguration(classes = {FhirPatientServiceApplication.class, FhirConfig.class})
 public class FhirPatientServiceApplicationTests {
 	private static Logger logger = LoggerFactory.getLogger(FhirPatientServiceApplicationTests.class);
 
 	@Autowired
 	private TestRestTemplate restTemplate;
 
+	@Test
+	public void testEcho() {
+		assert(true);
+	}
 
 	@Test
 	public void testPatientService() {

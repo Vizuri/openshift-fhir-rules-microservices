@@ -1,0 +1,1 @@
+java -javaagent:../fhir-base-container/jolokia.jar=port=8778,protocol=https,caCert=/var/run/secrets/kubernetes.io/serviceaccount/ca.crt,clientPrincipal=cn=system:master-proxy,useSslClientAuthentication=true,extraClientCheck=true,host=0.0.0.0,discoveryEnabled=false -Xms128m -Xmx256m -jar target/fhir-patient-service-0.0.1-SNAPSHOT.jar
