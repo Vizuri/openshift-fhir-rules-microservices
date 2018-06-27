@@ -67,7 +67,7 @@ node('maven') {
       sonar.projectName=$pom.name
       sonar.projectVersion=$pom.version
 	  sonar.java.binaries=fhir-patient-service/target/classes
-	  sonar.junit.reportPaths=fhir-patient-service/target/surefire-reports
+	  sonar.tests=fhir-patient-service/target/jacoco.exec
       sonar.sources=fhir-patient-service/src/main/java"""
       archive 'sonar-project.properties'
 
@@ -75,6 +75,7 @@ node('maven') {
       withSonarQubeEnv('sonar') {
         sh "${scannerHome}/bin/sonar-scanner"
       }
+	  sh "env"
 //	  echo "sonarProps: " + sonarProps
 //	  def ceTaskUrl = 'ceTaskUrl'
 //	  sonarProps.split('\n').each { line ->
