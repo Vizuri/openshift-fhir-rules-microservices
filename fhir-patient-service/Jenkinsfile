@@ -63,8 +63,8 @@ node('maven') {
       sonar.projectKey=$pom.groupId:$pom.artifactId
       sonar.projectName=$pom.name
       sonar.projectVersion=$pom.version
-      sonar.genericcoverage.reportPaths=target/surefire-reports/TEST-jenkins.plugins.jsonHelper.FromJsonStepTest.xml
-      sonar.sources=src/main/java"""
+      sonar.genericcoverage.reportPaths=fhir-patient-service/target/surefire-reports/TEST-jenkins.plugins.jsonHelper.FromJsonStepTest.xml
+      sonar.sources=fhir-patient-service/src/main/java"""
       archive 'sonar-project.properties'
 
       def scannerHome = tool 'sonar';
