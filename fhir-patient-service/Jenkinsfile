@@ -58,7 +58,7 @@ node('maven') {
         //stash includes: 'fhir-patient-service/target/*.jar', name: 'artifacts'
     }
     stage('SonarQube analysis') {
-      def pom = readMavenPom();
+      def pom = readMavenPom file: 'fhir-patient-service/pom.xml'
       writeFile encoding: 'UTF-8', file: 'sonar-project.properties', text: """
       sonar.projectKey=$pom.groupId:$pom.artifactId
       sonar.projectName=$pom.name
