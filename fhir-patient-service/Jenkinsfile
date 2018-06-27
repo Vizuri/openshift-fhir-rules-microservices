@@ -59,6 +59,14 @@ node('maven') {
     }
     stage('SonarQube analysis') {
       def scannerHome = tool 'sonar';
+      def pom = readMavenPom()
+      writeFile encoding: 'UTF-8', file: 'sonar-project.properties', text: """
+      # must be unique in a given SonarQube instance
+      sonar.projectKey=$pom.groupId:$pom.artifactId
+      sonar.projectName=$pom.name
+      sonar.projectVersion=$pom.version
+      sonar.genericcoverage.reportPaths=target/surefire-reports/TEST-jenkins.plugins.jsonHelper.FromJsonStepTest.xml
+
       withSonarQubeEnv('sonar') {
         sh "${scannerHome}/bin/sonar-scanner"
       }
