@@ -77,8 +77,7 @@ public class FhirPatientServiceApplicationTests {
 		
 		Patient patient = (Patient) ctx.newJsonParser().parseResource(reader);	
 		String id = patient.getIdElement().getIdPart();
-
-		
+				
 		logger.info(">>>> Sending Request:" + patient.getId() + ":" +  patient.getName());		
 
 		ResponseEntity<Patient> retPatient = restTemplate.postForEntity("/patient", patient, Patient.class);
@@ -91,7 +90,7 @@ public class FhirPatientServiceApplicationTests {
 		List<Patient> retPatients = restTemplate.getForObject("/patient", List.class);
 
 		logger.info("Got Patients:" + retPatients.size());
-		assertTrue(retPatients.size() == 1);
+		assertTrue(retPatients.size() > 0);
 
 		
 		Patient p3 = restTemplate.getForObject("/patient/" + id, Patient.class);
