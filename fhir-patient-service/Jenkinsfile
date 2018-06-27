@@ -59,7 +59,7 @@ node('maven') {
     }
     stage('SonarQube analysis') {
       def scannerHome = tool 'sonar';
-      withSonarQubeEnv('My SonarQube Server') {
+      withSonarQubeEnv('sonar') {
         sh "${scannerHome}/bin/sonar-scanner"
       }
     }
