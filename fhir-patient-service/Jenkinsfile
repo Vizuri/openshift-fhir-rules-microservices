@@ -58,7 +58,7 @@ node('maven') {
         //stash includes: 'fhir-patient-service/target/*.jar', name: 'artifacts'
     }
     stage('SonarQube analysis') {
-      def scannerHome = tool 'sonarqube';
+      def scannerHome = tool 'sonar';
       withSonarQubeEnv('My SonarQube Server') {
         sh "${scannerHome}/bin/sonar-scanner"
       }
