@@ -58,15 +58,16 @@ node('maven') {
         //stash includes: 'fhir-patient-service/target/*.jar', name: 'artifacts'
     }
     stage('SonarQube analysis') {
-      def scannerHome = tool 'sonar';
-      def pom = readMavenPom()
+      def pom = readMavenPom();
       writeFile encoding: 'UTF-8', file: 'sonar-project.properties', text: """
-      # must be unique in a given SonarQube instance
       sonar.projectKey=$pom.groupId:$pom.artifactId
       sonar.projectName=$pom.name
       sonar.projectVersion=$pom.version
       sonar.genericcoverage.reportPaths=target/surefire-reports/TEST-jenkins.plugins.jsonHelper.FromJsonStepTest.xml
+      sonar.sources=src/main/java"""
+      archive 'sonar-project.properties'
 
+      def scannerHome = tool 'sonar';
       withSonarQubeEnv('sonar') {
         sh "${scannerHome}/bin/sonar-scanner"
       }
