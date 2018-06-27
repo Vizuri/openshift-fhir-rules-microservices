@@ -58,6 +58,7 @@ node('maven') {
         //stash includes: 'fhir-patient-service/target/*.jar', name: 'artifacts'
     }
 	
+	//sonar.genericcoverage.reportPaths=fhir-patient-service/target/surefire-reports
 	
     stage('SonarQube analysis') {
       def pom = readMavenPom file: 'fhir-patient-service/pom.xml'
@@ -66,7 +67,7 @@ node('maven') {
       sonar.projectName=$pom.name
       sonar.projectVersion=$pom.version
 	  sonar.java.binaries=fhir-patient-service/target/classes
-	  sonar.genericcoverage.reportPaths=fhir-patient-service/target/surefire-reports
+	  sonar.junit.reportPaths=fhir-patient-service/target/surefire-reports
       sonar.sources=fhir-patient-service/src/main/java"""
       archive 'sonar-project.properties'
 
