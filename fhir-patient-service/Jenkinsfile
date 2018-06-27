@@ -55,7 +55,23 @@ node('maven') {
     	//	thresholds: [[$class: 'FailedThreshold', unstableThreshold: '1']],
     	//	tools: [[$class: 'JUnitType', pattern: 'target/surefire-reports/*.xml']]])
         
-        stash includes: 'fhir-patient-service/target/*.jar', name: 'artifacts'
+        //stash includes: 'fhir-patient-service/target/*.jar', name: 'artifacts'
+    }
+    stage('SonarQube analysis') {
+      def scannerHome = tool 'sonarqube';
+      withSonarQubeEnv('My SonarQube Server') {
+        sh "${scannerHome}/bin/sonar-scanner"
+      }
+    }
+    stage("Quality Gate") {
+      steps {
+        timeout(time: 1, unit: 'HOURS') {
+           // Parameter indicates whether to set pipeline to UNSTABLE if Quality Gate fails
+           // true = set pipeline to UNSTABLE, false = don't
+           // Requires SonarQube Scanner for Jenkins 2.7+
+           waitForQualityGate abortPipeline: true
+        }
+      }
     }
 }
 //node () { 
