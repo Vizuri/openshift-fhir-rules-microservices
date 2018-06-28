@@ -120,10 +120,22 @@ node('maven') {
 					//String fileContents = new File('.scannerwork/report-task.txt').getText('UTF-8')
 					def ceTaskId = ( fileContents =~ "ceTaskId=(.*)")[0][1]
 					
-					sh "wget https://github.com/stedolan/jq/releases/download/jq-1.5/jq-linux64 -o jq;chmod +x jq"
-			
+						
 					echo "sonarId ${ceTaskId}"
 					def sonarUrl = "http://sonarqube:9000/sonar/api/ce/task?id=${ceTaskId}"
+					
+					def sonarResponse = sh script: "wget -qO- '${sonarUrl}' --no-proxy --content-on-error",returnStdout:true
+					
+					echo "sonarResponse -> ${sonarResponse}"
+					
+					def jsonSlurper = new JsonSlurper()
+					def jsonResponse = jsonSlurper.parseText(sonarResponse)
+					
+				
+					echo "jsonResponse -> ${jsonResponse.task}"
+					
+					sh "wget https://github.com/stedolan/jq/releases/download/jq-1.5/jq-linux64 -o jq;chmod +x jq"
+					
 					def sonarStatus = sh script: "wget -qO- '${sonarUrl}' --no-proxy --content-on-error | ./jq -r '.task' | ./jq -r '.status' ",returnStdout:true
 					echo "Sonar status ... ${sonarStatus}"
 					if(sonarStatus.trim() == "SUCCESS"){
