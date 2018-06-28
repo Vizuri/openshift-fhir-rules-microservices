@@ -71,7 +71,8 @@ node('maven') {
       sonar.sources=fhir-patient-service/src/main/java"""
       archive 'sonar-project.properties'
 
-      def scannerHome` = tool 'sonar';
+	  def scannerHome = tool 'sonar';
+	  
       withSonarQubeEnv('sonar') {
         sh "${scannerHome}/bin/sonar-scanner"
       }
