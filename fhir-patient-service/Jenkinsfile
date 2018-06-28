@@ -71,11 +71,11 @@ node('maven') {
       sonar.sources=fhir-patient-service/src/main/java"""
       archive 'sonar-project.properties'
 
-      def scannerHome = tool 'sonar';
+      def xx` = tool 'sonar';
       withSonarQubeEnv('sonar') {
         sh "${scannerHome}/bin/sonar-scanner"
       }
-	  sh "env"
+//	  sh "env"
 //	  echo "sonarProps: " + sonarProps
 //	  def ceTaskUrl = 'ceTaskUrl'
 //	  sonarProps.split('\n').each { line ->
@@ -101,7 +101,9 @@ node('maven') {
            // Parameter indicates whether to set pipeline to UNSTABLE if Quality Gate fails
            // true = set pipeline to UNSTABLE, false = don't
            // Requires SonarQube Scanner for Jenkins 2.7+
-           waitForQualityGate abortPipeline: true
+		   withSonarQubeEnv('sonar') {
+	          waitForQualityGate abortPipeline: true
+		   }
         }
       }
     }
