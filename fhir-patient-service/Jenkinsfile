@@ -75,7 +75,8 @@ node('maven') {
 	  
       withSonarQubeEnv('sonar') {
         sh "${scannerHome}/bin/sonar-scanner"
-		String fileContents = new File('.scannerwork/report-task.txt').getText('UTF-8')
+		def fileContents = readFile file: '.scannerwork/report-task.txt'
+		//String fileContents = new File('.scannerwork/report-task.txt').getText('UTF-8')
 		def ceTaskId = ( fileContents =~ "ceTaskId=(.*)")[0][1]
 		echo "TaskId: ${ceTaskId}"
       }
