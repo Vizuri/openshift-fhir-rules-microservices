@@ -134,11 +134,10 @@ node('maven') {
 					//def jsonResponse = jsonSlurper.parseText(sonarResponse)
 					
 				
-					echo "sonarResponseJSON -> ${sonarResponseJSON.task} + -> ${sonarResponseJSON.task.status}"
+					//echo "sonarResponseJSON -> ${sonarResponseJSON.task} + -> ${sonarResponseJSON.task.status}"
 					
-					sh "wget https://github.com/stedolan/jq/releases/download/jq-1.5/jq-linux64 -o jq;chmod +x jq"
 					
-					def sonarStatus = sh script: "wget -qO- '${sonarUrl}' --no-proxy --content-on-error | ./jq -r '.task' | ./jq -r '.status' ",returnStdout:true
+					def sonarStatus =  ${sonarResponseJSON.task.status}
 					echo "Sonar status ... ${sonarStatus}"
 					if(sonarStatus.trim() == "SUCCESS"){
 						echo "BREAK";
