@@ -122,7 +122,7 @@ node('maven') {
 					
 						
 					echo "sonarId ${ceTaskId}"
-					def sonarUrl = "http://sonarqube:9000/sonar/api/ce/task?id=${ceTaskId}"
+					def sonarUrl = "http://sonarqube:9000/api/ce/task?id=${ceTaskId}"
 					
 					def sonarResponse = sh script: "wget -qO- '${sonarUrl}' --no-proxy --content-on-error",returnStdout:true
 					
