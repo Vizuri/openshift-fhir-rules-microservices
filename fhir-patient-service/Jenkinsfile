@@ -119,6 +119,11 @@ node('maven') {
 					def fileContents = readFile file: '.scannerwork/report-task.txt'
 					//String fileContents = new File('.scannerwork/report-task.txt').getText('UTF-8')
 					def ceTaskId = ( fileContents =~ "ceTaskId=(.*)")[0][1]
+					
+					def jq = tool 'jq';
+					
+					${jq}
+					
 			
 					echo "sonarId ${ceTaskId}"
 					def sonarUrl = "http://sonarqube:9000/sonar/api/ce/task?id=${ceTaskId}"
