@@ -128,11 +128,11 @@ node('maven') {
 					
 					echo "sonarResponse -> ${sonarResponse}"
 					
-					def jsonSlurper = new JsonSlurper()
-					def jsonResponse = jsonSlurper.parseText(sonarResponse)
+					//def jsonSlurper = new JsonSlurper()
+					//def jsonResponse = jsonSlurper.parseText(sonarResponse)
 					
 				
-					echo "jsonResponse -> ${jsonResponse.task}"
+					//echo "jsonResponse -> ${jsonResponse.task}"
 					
 					sh "wget https://github.com/stedolan/jq/releases/download/jq-1.5/jq-linux64 -o jq;chmod +x jq"
 					
