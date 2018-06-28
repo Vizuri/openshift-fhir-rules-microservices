@@ -75,8 +75,6 @@ node('maven') {
 	  
       withSonarQubeEnv('sonar') {
         sh "${scannerHome}/bin/sonar-scanner"
-		def fileContents = readFile file: '.scannerwork/report-task.txt'
-		//String fileContents = new File('.scannerwork/report-task.txt').getText('UTF-8')
       }
 //	  sh "env"
 //	  echo "sonarProps: " + sonarProps
@@ -118,6 +116,8 @@ node('maven') {
 					//def url="http://jenkins:8080/job/${env.JOB_NAME.replaceAll('/','/job/')}/lastBuild/consoleText";
 					//def sonarId = sh script: "wget -qO- --content-on-error --no-proxy --auth-no-challenge --http-user=${CRED_USR} --http-password=${CRED_PSW} '${url}'  | grep 'More about the report processing' | head -n1 ",returnStdout:true
 					//sonarId = sonarId.substring(sonarId.indexOf("=")+1)
+					def fileContents = readFile file: '.scannerwork/report-task.txt'
+					//String fileContents = new File('.scannerwork/report-task.txt').getText('UTF-8')
 					def ceTaskId = ( fileContents =~ "ceTaskId=(.*)")[0][1]
 			
 					echo "sonarId ${ceTaskId}"
