@@ -75,6 +75,9 @@ node('maven') {
 	  
       withSonarQubeEnv('sonar') {
         sh "${scannerHome}/bin/sonar-scanner"
+		String fileContents = new File('.scannerwork/report-task.txt').getText('UTF-8')
+		def ceTaskId = ( fileContents =~ "ceTaskId=(.*)")[0][1]
+		echo "TaskId: ${ceTaskId}"
       }
 //	  sh "env"
 //	  echo "sonarProps: " + sonarProps
@@ -98,42 +101,42 @@ node('maven') {
     }
 	
 	
-	stage("Quality Gate"){
-		timeout(time: 1, unit: 'HOURS') {
-			def qg = waitForQualityGate()
-			if (qg.status != 'OK') {
-				error "Pipeline aborted due to quality gate failure: ${qg.status}"
-			}
-		}
-	}
-	
-	
-	
-//	stage("Quality Gate") {
-//		steps {
-//			 script {
-//					while(true){
-//						sh "sleep 2"
-//						def url="http://jenkins:8080/job/${env.JOB_NAME.replaceAll('/','/job/')}/lastBuild/consoleText";
-//						def sonarId = sh script: "wget -qO- --content-on-error --no-proxy --auth-no-challenge --http-user=${CRED_USR} --http-password=${CRED_PSW} '${url}'  | grep 'More about the report processing' | head -n1 ",returnStdout:true
-//						sonarId = sonarId.substring(sonarId.indexOf("=")+1)
-//						echo "sonarId ${sonarId}"
-//						def sonarUrl = "http://sonarqube:9000/sonar/api/ce/task?id=${sonarId}"
-//						def sonarStatus = sh script: "wget -qO- '${sonarUrl}' --no-proxy --content-on-error | jq -r '.task' | jq -r '.status' ",returnStdout:true
-//						echo "Sonar status ... ${sonarStatus}"
-//						if(sonarStatus.trim() == "SUCCESS"){
-//							echo "BREAK";
-//							break;
-//						}
-//						if(sonarStatus.trim() == "FAILED "){
-//							echo "FAILED"
-//							currentBuild.result = 'FAILED'
-//							break;
-//						}
-//					}
-//				}
+//	stage("Quality Gate"){
+//		timeout(time: 1, unit: 'HOURS') {
+//			def qg = waitForQualityGate()
+//			if (qg.status != 'OK') {
+//				error "Pipeline aborted due to quality gate failure: ${qg.status}"
 //			}
 //		}
+//	}
+	
+	
+	
+	stage("Quality Gate") {
+		steps {
+			 script {
+					while(true){
+						sh "sleep 2"
+						//def url="http://jenkins:8080/job/${env.JOB_NAME.replaceAll('/','/job/')}/lastBuild/consoleText";
+						//def sonarId = sh script: "wget -qO- --content-on-error --no-proxy --auth-no-challenge --http-user=${CRED_USR} --http-password=${CRED_PSW} '${url}'  | grep 'More about the report processing' | head -n1 ",returnStdout:true
+						//sonarId = sonarId.substring(sonarId.indexOf("=")+1)
+						echo "sonarId ${ceTaskId}"
+						def sonarUrl = "http://sonarqube:9000/sonar/api/ce/task?id=${ceTaskId}"
+						def sonarStatus = sh script: "wget -qO- '${sonarUrl}' --no-proxy --content-on-error | jq -r '.task' | jq -r '.status' ",returnStdout:true
+						echo "Sonar status ... ${sonarStatus}"
+						if(sonarStatus.trim() == "SUCCESS"){
+							echo "BREAK";
+							break;
+						}
+						if(sonarStatus.trim() == "FAILED "){
+							echo "FAILED"
+							currentBuild.result = 'FAILED'
+							break;
+						}
+					}
+				}
+			}
+		}
 		
 		
 		
