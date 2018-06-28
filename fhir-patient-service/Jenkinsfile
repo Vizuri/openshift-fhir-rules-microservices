@@ -134,10 +134,10 @@ node('maven') {
 					//def jsonResponse = jsonSlurper.parseText(sonarResponse)
 					
 				
-					//echo "sonarResponseJSON -> ${sonarResponseJSON.task} + -> ${sonarResponseJSON.task.status}"
+					echo "sonarResponseJSON -> ${sonarResponseJSON.task} + -> ${sonarResponseJSON.task.status}"
 					
 					
-					def sonarStatus =  ${sonarResponseJSON.task.status}
+					def sonarStatus =  sonarResponseJSON.task.status
 					echo "Sonar status ... ${sonarStatus}"
 					if(sonarStatus.trim() == "SUCCESS"){
 						echo "BREAK";
