@@ -216,7 +216,7 @@ node () {
 //            sudo docker build -t docker.demo.vizuri.com/${image_project}/${app_name}:${release_number} .
 //            sudo docker push docker.demo.vizuri.com/${image_project}/${app_name}:${release_number}"""
   //    }
-}
+//}
 
 
 
