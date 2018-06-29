@@ -60,114 +60,12 @@ node('maven') {
     	//	tools: [[$class: 'JUnitType', pattern: 'target/surefire-reports/*.xml']]])
         
         //stash includes: 'fhir-patient-service/target/*.jar', name: 'artifacts'
+        stash includes: 'fhir-patient-service/target', name: 'target-stash'
     }
 	
 	//sonar.genericcoverage.reportPaths=fhir-patient-service/target/surefire-reports
 	
-    stage('SonarQube analysis') {
-      def pom = readMavenPom file: 'fhir-patient-service/pom.xml'
-      writeFile encoding: 'UTF-8', file: 'sonar-project.properties', text: """
-      sonar.projectKey=$pom.groupId:$pom.artifactId
-      sonar.projectName=$pom.name
-      sonar.projectVersion=$pom.version
-	  sonar.java.binaries=fhir-patient-service/target/classes
-	  sonar.tests=fhir-patient-service/target/jacoco.exec
-      sonar.sources=fhir-patient-service/src/main/java"""
-      archive 'sonar-project.properties'
 
-	  def scannerHome = tool 'sonar';
-	  
-      withSonarQubeEnv('sonar') {
-        sh "${scannerHome}/bin/sonar-scanner"
-      }
-//	  sh "env"
-//	  echo "sonarProps: " + sonarProps
-//	  def ceTaskUrl = 'ceTaskUrl'
-//	  sonarProps.split('\n').each { line ->
-//		  if (line.startsWith(ceTaskUrl)) {
-//			   env.SONAR_CE_TASK_URL = line.substring(ceTaskUrl.length() + 1)
-//			   echo "env.SONAR_CE_TASK_URL: " + env.SONAR_CE_TASK_URL
-//		  }
-//		  
-//		  if (line.startsWith('serverUrl')) {
-//			   def sonarServerUrl = line.split('=')[1]
-//			   if (!sonarServerUrl.endsWith('/')) {
-//					sonarServerUrl += '/'
-//			   }
-//
-//			   env.SONAR_SERVER_URL = sonarServerUrl
-//			   echo "env.SONAR_SERVER_URL: " + env.SONAR_SERVER_URL
-//		  }
-//	  }
-    }
-	
-	
-//	stage("Quality Gate"){
-//		timeout(time: 1, unit: 'HOURS') {
-//			def qg = waitForQualityGate()
-//			if (qg.status != 'OK') {
-//				error "Pipeline aborted due to quality gate failure: ${qg.status}"
-//			}
-//		}
-//	}
-	
-	
-	
-	stage("Quality Gate") {
-		 script {
-				while(true){
-					sh "sleep 2"
-					//def url="http://jenkins:8080/job/${env.JOB_NAME.replaceAll('/','/job/')}/lastBuild/consoleText";
-					//def sonarId = sh script: "wget -qO- --content-on-error --no-proxy --auth-no-challenge --http-user=${CRED_USR} --http-password=${CRED_PSW} '${url}'  | grep 'More about the report processing' | head -n1 ",returnStdout:true
-					//sonarId = sonarId.substring(sonarId.indexOf("=")+1)
-					def fileContents = readFile file: '.scannerwork/report-task.txt'
-					//String fileContents = new File('.scannerwork/report-task.txt').getText('UTF-8')
-					def ceTaskId = ( fileContents =~ "ceTaskId=(.*)")[0][1]
-					
-						
-					echo "sonarId ${ceTaskId}"
-					def sonarUrl = "http://sonarqube:9000/api/ce/task?id=${ceTaskId}"
-					
-					def sonarResponse = sh script: "wget -qO- '${sonarUrl}' --no-proxy --content-on-error",returnStdout:true
-					
-					echo "sonarResponse -> ${sonarResponse}"
-					
-					def sonarResponseJSON = readJSON text: sonarResponse;
-					
-					//def jsonSlurper = new JsonSlurper()
-					//def jsonResponse = jsonSlurper.parseText(sonarResponse)
-					
-				
-					echo "sonarResponseJSON -> ${sonarResponseJSON.task} + -> ${sonarResponseJSON.task.status}"
-					
-					
-					def sonarStatus =  sonarResponseJSON.task.status
-					echo "Sonar status ... ${sonarStatus}"
-					if(sonarStatus.trim() == "SUCCESS"){
-						echo "BREAK";
-						break;
-					}
-					if(sonarStatus.trim() == "FAILED "){
-						echo "FAILED"
-						currentBuild.result = 'FAILED'
-						break;
-					}
-				}
-			}
-		}
-		
-		
-		
-//    stage("Quality Gate") {
-//      steps {
-//        timeout(time: 1, unit: 'HOURS') {
-//           // Parameter indicates whether to set pipeline to UNSTABLE if Quality Gate fails
-//           // true = set pipeline to UNSTABLE, false = don't
-//           // Requires SonarQube Scanner for Jenkins 2.7+
-//	       waitForQualityGate abortPipeline: true
-//        }
-//      }
-//    }
 }
 //node () { 
 //    stage('DockerBuild') {
@@ -183,6 +81,144 @@ node('maven') {
 //            sudo docker push docker.demo.vizuri.com/${image_project}/${app_name}:${release_number}"""
 //    }
 //}
+
+
+node () {
+	unstash target-stash
+	stage('SonarQube analysis') {
+		def pom = readMavenPom file: 'fhir-patient-service/pom.xml'
+		writeFile encoding: 'UTF-8', file: 'sonar-project.properties', text: """
+      sonar.projectKey=$pom.groupId:$pom.artifactId
+      sonar.projectName=$pom.name
+      sonar.projectVersion=$pom.version
+	  sonar.java.binaries=fhir-patient-service/target/classes
+	  sonar.tests=fhir-patient-service/target/jacoco.exec
+      sonar.sources=fhir-patient-service/src/main/java"""
+		archive 'sonar-project.properties'
+  
+		def scannerHome = tool 'sonar';
+		
+		withSonarQubeEnv('sonar') {
+		  sh "${scannerHome}/bin/sonar-scanner"
+		}
+		
+		
+		
+  //	  sh "env"
+  //	  echo "sonarProps: " + sonarProps
+  //	  def ceTaskUrl = 'ceTaskUrl'
+  //	  sonarProps.split('\n').each { line ->
+  //		  if (line.startsWith(ceTaskUrl)) {
+  //			   env.SONAR_CE_TASK_URL = line.substring(ceTaskUrl.length() + 1)
+  //			   echo "env.SONAR_CE_TASK_URL: " + env.SONAR_CE_TASK_URL
+  //		  }
+  //
+  //		  if (line.startsWith('serverUrl')) {
+  //			   def sonarServerUrl = line.split('=')[1]
+  //			   if (!sonarServerUrl.endsWith('/')) {
+  //					sonarServerUrl += '/'
+  //			   }
+  //
+  //			   env.SONAR_SERVER_URL = sonarServerUrl
+  //			   echo "env.SONAR_SERVER_URL: " + env.SONAR_SERVER_URL
+  //		  }
+  //	  }
+	  }
+	  
+	  
+  	stage("Quality Gate"){
+  		timeout(time: 1, unit: 'HOURS') {
+  			def qg = waitForQualityGate()
+  			if (qg.status != 'OK') {
+  				error "Pipeline aborted due to quality gate failure: ${qg.status}"
+  			}
+  		}
+  	}
+	  
+	  
+	  
+//	  stage("Quality Gate") {
+//		   script {
+//				  while(true){
+//					  sh "sleep 2"
+//					  //def url="http://jenkins:8080/job/${env.JOB_NAME.replaceAll('/','/job/')}/lastBuild/consoleText";
+//					  //def sonarId = sh script: "wget -qO- --content-on-error --no-proxy --auth-no-challenge --http-user=${CRED_USR} --http-password=${CRED_PSW} '${url}'  | grep 'More about the report processing' | head -n1 ",returnStdout:true
+//					  //sonarId = sonarId.substring(sonarId.indexOf("=")+1)
+//					  def fileContents = readFile file: '.scannerwork/report-task.txt'
+//					  //String fileContents = new File('.scannerwork/report-task.txt').getText('UTF-8')
+//					  def ceTaskId = ( fileContents =~ "ceTaskId=(.*)")[0][1]
+//					  
+//						  
+//					  echo "sonarId ${ceTaskId}"
+//					  def sonarUrl = "http://sonarqube:9000/api/ce/task?id=${ceTaskId}"
+//					  
+//					  def sonarResponse = sh script: "wget -qO- '${sonarUrl}' --no-proxy --content-on-error",returnStdout:true
+//					  
+//					  echo "sonarResponse -> ${sonarResponse}"
+//					  
+//					  def sonarResponseJSON = readJSON text: sonarResponse;
+//					  
+//					  //def jsonSlurper = new JsonSlurper()
+//					  //def jsonResponse = jsonSlurper.parseText(sonarResponse)
+//					  
+//				  
+//					  echo "sonarResponseJSON -> ${sonarResponseJSON.task} + -> ${sonarResponseJSON.task.status}"
+//					  
+//					  
+//					  def sonarStatus =  sonarResponseJSON.task.status
+//					  def analysisId =  sonarResponseJSON.task.analysisId
+//					  echo "Sonar status ... ${sonarStatus}"
+//					  echo "analysisIds ... ${analysisId}"
+//					  if(sonarStatus.trim() == "SUCCESS"){
+//						  //http://sonarqube-cicd.127.0.0.1.xip.io/api/qualitygates/project_status?analysisId=
+//						  def sonarAnalysisUrl = "http://sonarqube:9000/qualitygates/project_status?analysisId=${analysisId}"
+//						  def analysisResponse = sh script: "wget -qO- '${sonarAnalysisUrl}' --no-proxy --content-on-error",returnStdout:true
+//						  def analysisResponseJSON = readJSON text: analysisResponse;
+//						  
+//						  echo "analysisStatus: ${analysisResponseJSON.status}"
+//						  
+//						  
+//						  echo "BREAK";
+//						  break;
+//					  }
+//					  if(sonarStatus.trim() == "FAILED "){
+//						  echo "FAILED"
+//						  currentBuild.result = 'FAILED'
+//						  break;
+//					  }
+//				  }
+//			  }
+//		  }
+		  
+		  
+		  
+  //    stage("Quality Gate") {
+  //      steps {
+  //        timeout(time: 1, unit: 'HOURS') {
+  //           // Parameter indicates whether to set pipeline to UNSTABLE if Quality Gate fails
+  //           // true = set pipeline to UNSTABLE, false = don't
+  //           // Requires SonarQube Scanner for Jenkins 2.7+
+  //	       waitForQualityGate abortPipeline: true
+  //        }
+  //      }
+  //    }
+  }
+  //node () {
+  //    stage('DockerBuild') {
+  //        dir('.') {
+  //            deleteDir()
+  //        }
+  //        checkout scm
+  //        echo "Checkout Done"
+  //        unstash 'artifacts'
+  //        sh """
+//            sudo docker login docker.demo.vizuri.com -u admin -p demopass34 
+//            sudo docker build -t docker.demo.vizuri.com/${image_project}/${app_name}:${release_number} .
+//            sudo docker push docker.demo.vizuri.com/${image_project}/${app_name}:${release_number}"""
+  //    }
+}
+
+
 
 //node ('fhir-jenkins-slave') { 
 //    stage('OpenShiftDeploy') {
