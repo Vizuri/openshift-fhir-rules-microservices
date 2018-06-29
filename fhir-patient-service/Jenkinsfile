@@ -60,7 +60,7 @@ node('maven') {
     	//	tools: [[$class: 'JUnitType', pattern: 'target/surefire-reports/*.xml']]])
         
         //stash includes: 'fhir-patient-service/target/*.jar', name: 'artifacts'
-        stash includes: 'fhir-patient-service/target', name: 'target-stash'
+        stash includes: 'fhir-patient-service/target/**', name: 'target-stash'
     }
 	
 	//sonar.genericcoverage.reportPaths=fhir-patient-service/target/surefire-reports
