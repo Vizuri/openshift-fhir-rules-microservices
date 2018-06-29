@@ -63,27 +63,9 @@ node('maven') {
         stash includes: 'fhir-patient-service/**', name: 'project-stash'
     }
 	
-	//sonar.genericcoverage.reportPaths=fhir-patient-service/target/surefire-reports
 	
-
-}
-//node () { 
-//    stage('DockerBuild') {
-//        dir('.') {
-//            deleteDir()
-//        }
-//        checkout scm
-//        echo "Checkout Done"
-//        unstash 'artifacts'
-//        sh """
-//            sudo docker login docker.demo.vizuri.com -u admin -p demopass34 
-//            sudo docker build -t docker.demo.vizuri.com/${image_project}/${app_name}:${release_number} .
-//            sudo docker push docker.demo.vizuri.com/${image_project}/${app_name}:${release_number}"""
-//    }
 //}
-
-
-node () {
+//node () {
 	stage('SonarQube analysis') {
 		unstash "project-stash"
 		
@@ -204,6 +186,25 @@ node () {
   //      }
   //    }
   }
+  
+  
+  
+  
+  
+  //node () {
+  //    stage('DockerBuild') {
+  //        dir('.') {
+  //            deleteDir()
+  //        }
+  //        checkout scm
+  //        echo "Checkout Done"
+  //        unstash 'artifacts'
+  //        sh """
+//            sudo docker login docker.demo.vizuri.com -u admin -p demopass34 
+//            sudo docker build -t docker.demo.vizuri.com/${image_project}/${app_name}:${release_number} .
+//            sudo docker push docker.demo.vizuri.com/${image_project}/${app_name}:${release_number}"""
+  //    }
+  //}
   //node () {
   //    stage('DockerBuild') {
   //        dir('.') {
