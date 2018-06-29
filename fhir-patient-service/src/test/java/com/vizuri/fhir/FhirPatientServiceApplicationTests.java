@@ -97,6 +97,8 @@ public class FhirPatientServiceApplicationTests {
 		logger.info("Got Patient:" + p3.getId());
 		assertTrue(id.equals(p3.getIdElement().getIdPart()));
 		
+		restTemplate.put("/patient/" + id, p3);
+		
 
 		restTemplate.delete("/patient/" + id);
 		

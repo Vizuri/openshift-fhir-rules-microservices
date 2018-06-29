@@ -134,6 +134,16 @@ public class FhirPatientServiceApplicationJUnitTests {
 		logger.info(">>>> Wrong Id FindById");
 		assertNull(response);
 	}
+	
+	@Test 
+	public void testUpdate() {
+		Patient response = repository.findOne("123");
+		
+		repository.save(response);
+	
+		assertNull(response);
+	}
+	
 	@Test 
 	public void testDelete() {
 		repository.delete("123");
