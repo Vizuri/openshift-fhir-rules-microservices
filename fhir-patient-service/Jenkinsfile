@@ -60,7 +60,7 @@ node('maven') {
     	//	tools: [[$class: 'JUnitType', pattern: 'target/surefire-reports/*.xml']]])
         
         //stash includes: 'fhir-patient-service/target/*.jar', name: 'artifacts'
-        stash includes: 'fhir-patient-service/target/**', name: 'target-stash'
+        stash includes: 'fhir-patient-service/**', name: 'project-stash'
     }
 	
 	//sonar.genericcoverage.reportPaths=fhir-patient-service/target/surefire-reports
@@ -85,7 +85,7 @@ node('maven') {
 
 node () {
 	stage('SonarQube analysis') {
-		unstash "target-stash"
+		unstash "project-stash"
 		
 		def pom = readMavenPom file: 'fhir-patient-service/pom.xml'
 		writeFile encoding: 'UTF-8', file: 'sonar-project.properties', text: """
