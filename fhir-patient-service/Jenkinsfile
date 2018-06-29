@@ -50,6 +50,10 @@ node('maven') {
         echo "In Build"
         sh "mvn -s configuration/settings.xml -Dbuild.number=${release_number} -f fhir-patient-service clean install deploy"
         junit 'fhir-patient-service/target/surefire-reports/*.xml'
+		
+		sh "ls"
+		sh "ls fhir-patient-service"
+		sh "ls fhir-partint-service/target"
         
        // step([$class: 'XUnitBuilder',
     	//	thresholds: [[$class: 'FailedThreshold', unstableThreshold: '1']],
