@@ -60,23 +60,24 @@ node('maven') {
     	//	tools: [[$class: 'JUnitType', pattern: 'target/surefire-reports/*.xml']]])
         
         //stash includes: 'fhir-patient-service/target/*.jar', name: 'artifacts'
-        stash includes: 'fhir-patient-service/**', name: 'project-stash'
+       // stash includes: 'fhir-patient-service/**', name: 'project-stash'
     }
 	
 	
 //}
 //node () {
 	stage('SonarQube analysis') {
-		unstash "project-stash"
+		//unstash "project-stash"
 		
-		def pom = readMavenPom file: 'fhir-patient-service/pom.xml'
-		writeFile encoding: 'UTF-8', file: 'sonar-project.properties', text: """
+	  def pom = readMavenPom file: 'fhir-patient-service/pom.xml'
+	  writeFile encoding: 'UTF-8', file: 'sonar-project.properties', text: """
+	  sonar.projectBaseDir=fhir-patient-service
       sonar.projectKey=$pom.groupId:$pom.artifactId
       sonar.projectName=$pom.name
       sonar.projectVersion=$pom.version
-	  sonar.java.binaries=fhir-patient-service/target/classes
-	  sonar.tests=fhir-patient-service/target/jacoco.exec
-      sonar.sources=fhir-patient-service/src/main/java"""
+	  sonar.java.binaries=target/classes
+	  sonar.tests=target/jacoco.exec
+      sonar.sources=src/main/java"""
 		archive 'sonar-project.properties'
   
 		def scannerHome = tool 'sonar';
