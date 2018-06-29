@@ -53,7 +53,7 @@ node('maven') {
 		
 		sh "ls"
 		sh "ls fhir-patient-service"
-		sh "ls fhir-partint-service/target"
+		sh "ls fhir-patient-service/target"
         
        // step([$class: 'XUnitBuilder',
     	//	thresholds: [[$class: 'FailedThreshold', unstableThreshold: '1']],
