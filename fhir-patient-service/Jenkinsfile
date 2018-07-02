@@ -185,12 +185,13 @@ node('maven') {
           unstash 'artifacts'
 		  unstash 'docker'
           sh """
-            //sudo docker login docker.demo.vizuri.com -u admin -p demopass34 
-            docker build -t fhir-patient-service:1.0 .
-            //sudo docker build -t docker.demo.vizuri.com/${image_project}/${app_name}:${release_number} .
-            //sudo docker push docker.demo.vizuri.com/${image_project}/${app_name}:${release_number}"""
+            docker build -t fhir-patient-service:1.0 ."""
       }
   }
+  //sudo docker login docker.demo.vizuri.com -u admin -p demopass34
+  //sudo docker build -t docker.demo.vizuri.com/${image_project}/${app_name}:${release_number} .
+  //sudo docker push docker.demo.vizuri.com/${image_project}/${app_name}:${release_number}"""
+
   
   
   
