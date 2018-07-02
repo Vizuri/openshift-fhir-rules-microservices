@@ -185,6 +185,7 @@ node('maven') {
           unstash 'artifacts'
 		  unstash 'docker'
           sh """
+		    cd fhir-patient-service
             docker build -t fhir-patient-service:1.0 ."""
       }
   }
