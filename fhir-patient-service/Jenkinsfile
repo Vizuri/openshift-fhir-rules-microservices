@@ -185,7 +185,7 @@ node('maven') {
           unstash 'artifacts'
 		  unstash 'docker'
 		  
-		  docker.build('fhir/fhir-patient-service')
+		  docker.build('fhir/fhir-patient-service', "fhir-patient-service")
 		  
 		  docker.withRegistry('https://505576296154.dkr.ecr.us-east-1.amazonaws.com', 'ecr:us-east-1:AWSs') {
 			  docker.image('fhir/fhir-patient-service').push('1.0')
