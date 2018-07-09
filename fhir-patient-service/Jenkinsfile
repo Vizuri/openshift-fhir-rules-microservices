@@ -184,9 +184,17 @@ node('maven') {
           echo "Checkout Done"
           unstash 'artifacts'
 		  unstash 'docker'
-          sh """
-		    cd fhir-patient-service
-            docker build -t fhir-patient-service:1.0 ."""
+		  withAWS(credentials:'AWS') {
+			  // do something
+				  def login = ecrLogin()
+				  sh """ 
+				    ${login}
+				  	cd fhir-patient-service
+				  	docker build -t 505576296154.dkr.ecr.us-east-1.amazonaws.com/fhir/fhir-patient-service:1.0 .
+				    docker push 505576296154.dkr.ecr.us-east-1.amazonaws.com/fhir/fhir-patient-service:1.0
+				  """
+		  }
+
       }
   }
   //sudo docker login docker.demo.vizuri.com -u admin -p demopass34
