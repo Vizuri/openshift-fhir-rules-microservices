@@ -184,15 +184,23 @@ node('maven') {
           echo "Checkout Done"
           unstash 'artifacts'
 		  unstash 'docker'
+		  
+		  docker.build('fhir/fhir-patient-service')
+		  
+		  docker.withRegistry('https://505576296154.dkr.ecr.us-east-1.amazonaws.com', 'ecr:us-east-1:AWSs') {
+			  docker.image('fhir/fhir-patient-service').push('1.0')
+			}
+		  
+		  
 		  withAWS(credentials:'AWS') {
 			  // do something
-				  def login = ecrLogin()
-				  sh """ 
-				    ${login}
-				  	cd fhir-patient-service
-				  	docker build -t 505576296154.dkr.ecr.us-east-1.amazonaws.com/fhir/fhir-patient-service:1.0 .
-				    docker push 505576296154.dkr.ecr.us-east-1.amazonaws.com/fhir/fhir-patient-service:1.0
-				  """
+//				  def login = ecrLogin()
+//				  sh """ 
+//				    ${login}
+//				  	cd fhir-patient-service
+//				  	docker build -t 505576296154.dkr.ecr.us-east-1.amazonaws.com/fhir/fhir-patient-service:1.0 .
+//				    docker push 505576296154.dkr.ecr.us-east-1.amazonaws.com/fhir/fhir-patient-service:1.0
+//				  """
 		  }
 
       }
