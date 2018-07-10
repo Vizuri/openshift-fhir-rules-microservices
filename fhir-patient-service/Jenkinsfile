@@ -180,8 +180,8 @@ node('maven') {
 //          dir('.') {
 //              deleteDir()
 //          }
-          checkout scm
-          echo "Checkout Done"
+//          checkout scm
+//          echo "Checkout Done"
           unstash 'artifacts'
 		  unstash 'docker'
 		  
@@ -192,7 +192,7 @@ node('maven') {
 			}
 		  
 		  
-		  withAWS(credentials:'AWS') {
+//		  withAWS(credentials:'AWS') {
 			  // do something
 //				  def login = ecrLogin()
 //				  sh """ 
@@ -201,9 +201,22 @@ node('maven') {
 //				  	docker build -t 505576296154.dkr.ecr.us-east-1.amazonaws.com/fhir/fhir-patient-service:1.0 .
 //				    docker push 505576296154.dkr.ecr.us-east-1.amazonaws.com/fhir/fhir-patient-service:1.0
 //				  """
-		  }
+//		  }
 
       }
+	  
+	  stage('Deploy Dev') {
+		  openshift.withCluster( 'ocplocal' ) {
+			  echo "Hello from ${openshift.cluster()}'s default project: ${openshift.project()}"
+		  
+			  // But we can easily change project contexts
+			  openshift.withProject( 'fhir-development' ) {
+				  
+				  def app = openshift.newApp( '--file=https://raw.githubusercontent.com/Vizuri/openshift-fhir-rules-microservices/master/openshift/templates/springboot-dc.yaml -p APP_NAME=fhir-patient-service -p IMAGE_NAME=505576296154.dkr.ecr.us-east-1.amazonaws.com/fhir/fhir-patient-service:1.0' )
+			  }
+		  }
+		  
+	  }
   }
   //sudo docker login docker.demo.vizuri.com -u admin -p demopass34
   //sudo docker build -t docker.demo.vizuri.com/${image_project}/${app_name}:${release_number} .
