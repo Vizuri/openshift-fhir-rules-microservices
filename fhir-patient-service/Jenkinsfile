@@ -208,12 +208,8 @@ node('maven') {
 	  stage('Deploy Dev') {
 		 // openshift.withCluster( 'ocplocal' ) {
 		  openshift.withCluster( 'https://127.0.0.1:8443', 'eyJhbGciOiJSUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJrdWJlcm5ldGVzL3NlcnZpY2VhY2NvdW50Iiwia3ViZXJuZXRlcy5pby9zZXJ2aWNlYWNjb3VudC9uYW1lc3BhY2UiOiJjaWNkIiwia3ViZXJuZXRlcy5pby9zZXJ2aWNlYWNjb3VudC9zZWNyZXQubmFtZSI6ImNpY2QtdG9rZW4tZ2ZkNW4iLCJrdWJlcm5ldGVzLmlvL3NlcnZpY2VhY2NvdW50L3NlcnZpY2UtYWNjb3VudC5uYW1lIjoiY2ljZCIsImt1YmVybmV0ZXMuaW8vc2VydmljZWFjY291bnQvc2VydmljZS1hY2NvdW50LnVpZCI6IjliNzZhOTE4LTg0NjktMTFlOC1hYWNhLTAyNTAwMDAwMDAwMSIsInN1YiI6InN5c3RlbTpzZXJ2aWNlYWNjb3VudDpjaWNkOmNpY2QifQ.Jff5baFIyAvWjz71g1byC6rZIkgEmY5UDe_XPeRcF2CVn5spQ3Owf1pvtaCO_SBbAzMl6oB-aqcc7dYiBcqxV4SYx_fYF-6wKNL7GmiWK_cuTc_HvBR05z9QBivpwB53UUlIX-XipBedhD2p7kU_KnoHCCFav20au_knBIsuGj0dVmcVMV5TxbAqj2sgJpojE2lht1pdW4o6rii2EgJSakKzZETl5JW2FXs8ztwYpE4yaog0taA0VVaOyiAy_ZDTLtAdGAHukQynaxqk3flYv23RTZsd78l7lIWFRPtaiAcniIbf9-iXuWg45jZtihCEm2PdyYcZK0VP59xhXGNpaQ' ) {
-			  echo "Hello from ${openshift.cluster()}'s default project: ${openshift.project()}"
-		  
-			  // But we can easily change project contexts
 			  openshift.withProject( 'fhir-development' ) {
-				  
-				  
+				  openshift.selector( 'deploymentconfig/fhir-patient-service' ).describe()
 				  def app = openshift.newApp( '--file=https://raw.githubusercontent.com/Vizuri/openshift-fhir-rules-microservices/master/openshift/templates/springboot-dc.yaml -p APP_NAME=fhir-patient-service -p IMAGE_NAME=505576296154.dkr.ecr.us-east-1.amazonaws.com/fhir/fhir-patient-service:1.0 -e SPRING_PROFILES_ACTIVE=openshift' )
 			  }
 		  }
