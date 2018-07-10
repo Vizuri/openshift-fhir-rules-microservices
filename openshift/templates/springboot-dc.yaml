@@ -98,7 +98,7 @@ objects:
             value: '27017'
           - name: JAVA_OPTS
             value: '${JAVA_OPTS}'
-          image: ${CONTAINER_IMAGE}
+          image: ${IMAGE_NAME}
           imagePullPolicy: "Always"
           name: "${APP_NAME}"
           readinessProbe:
