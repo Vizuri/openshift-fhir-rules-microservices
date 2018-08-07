@@ -111,8 +111,8 @@ node('maven') {
 //          echo "Checkout Done"
           unstash 'artifacts'
 		  unstash 'docker'
-		  openshift.withCluster( 'https://webconsole.openshift-web-console.svc', 'eyJhbGciOiJSUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJrdWJlcm5ldGVzL3NlcnZpY2VhY2NvdW50Iiwia3ViZXJuZXRlcy5pby9zZXJ2aWNlYWNjb3VudC9uYW1lc3BhY2UiOiJjaWNkIiwia3ViZXJuZXRlcy5pby9zZXJ2aWNlYWNjb3VudC9zZWNyZXQubmFtZSI6ImNpY2QtdG9rZW4ta2Y2Zm0iLCJrdWJlcm5ldGVzLmlvL3NlcnZpY2VhY2NvdW50L3NlcnZpY2UtYWNjb3VudC5uYW1lIjoiY2ljZCIsImt1YmVybmV0ZXMuaW8vc2VydmljZWFjY291bnQvc2VydmljZS1hY2NvdW50LnVpZCI6Ijg5OTBjYzU4LTlhNjMtMTFlOC04MmYyLTEyNzk3NzdlYmU0MiIsInN1YiI6InN5c3RlbTpzZXJ2aWNlYWNjb3VudDpjaWNkOmNpY2QifQ.KaMFkaTBG1d4rcJTDw5d3q6BCQK4IFum_kgDDnxoU0MMfCjoIjc6x359iPWqJS-at3GmHEzT--lnqiVNdxVjCSeXT7KVCEnmU8g14dNSkaRhF8TNBseN2wtwm1oSxD-3xQfUUld7U7OXcvo32nmhwKe7JLpuXJVN6kHM5gGk26wKIpYe188nMf_BTq2_gyRZxaS8VP3erF3r6g_OuDsD_vQGyowjcGx6LUWkghI-YCDUrcuqaXwexwgSIlS4fnX0s4vNA3zjlNDxXnmqfO_TZytFSO_MdnYlaYuOdrD0ZrZ8iAs-FvDNFFV4lsIt-OsOx__5anAwvdSiyBFdcUbz3Q' ) {
-			  openshift.withProject( 'fhir-development' ) {
+		  openshift.withCluster( 'mycluster' ) {
+        	 openshift.withProject( 'fhir-development' ) {
               def build = openshift.startBuild("fhir-patient-service", "--from-file=fhir-patient-service/target/fhir-patient-service-0.0.1-SNAPSHOT.jar")  
             }
           }     	  
