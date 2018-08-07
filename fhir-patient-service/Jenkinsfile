@@ -115,7 +115,7 @@ node('maven') {
         	 openshift.withProject( 'fhir-development' ) {
               def build = openshift.newBuild("fhir-patient-service", "--strategy=docker --name=fhir-patient-service")  
               
-              def build = openshift.startBuild("fhir-patient-service", "--from-dir=fhir-patient-service")  
+              def build2 = openshift.startBuild("fhir-patient-service", "--from-dir=fhir-patient-service")  
             }
           }     	  
                    
