@@ -60,7 +60,8 @@ node('maven') {
         stash includes: 'fhir-patient-service/Dockerfile', name: 'docker'
        // stash includes: 'fhir-patient-service/**', name: 'project-stash'
     }
-	
+
+/*	
 	stage('SonarQube analysis') {
 		//unstash "project-stash"
 		
@@ -81,27 +82,6 @@ node('maven') {
 		  sh "${scannerHome}/bin/sonar-scanner"
 		}
 		
-		
-		
-  //	  sh "env"
-  //	  echo "sonarProps: " + sonarProps
-  //	  def ceTaskUrl = 'ceTaskUrl'
-  //	  sonarProps.split('\n').each { line ->
-  //		  if (line.startsWith(ceTaskUrl)) {
-  //			   env.SONAR_CE_TASK_URL = line.substring(ceTaskUrl.length() + 1)
-  //			   echo "env.SONAR_CE_TASK_URL: " + env.SONAR_CE_TASK_URL
-  //		  }
-  //
-  //		  if (line.startsWith('serverUrl')) {
-  //			   def sonarServerUrl = line.split('=')[1]
-  //			   if (!sonarServerUrl.endsWith('/')) {
-  //					sonarServerUrl += '/'
-  //			   }
-  //
-  //			   env.SONAR_SERVER_URL = sonarServerUrl
-  //			   echo "env.SONAR_SERVER_URL: " + env.SONAR_SERVER_URL
-  //		  }
-  //	  }
 	  }
 	  
 	  
@@ -113,61 +93,8 @@ node('maven') {
   			}
   		}
   	}
+*/	  
 	  
-	  
-	  
-//	  stage("Quality Gate") {
-//		   script {
-//				  while(true){
-//					  sh "sleep 2"
-//					  //def url="http://jenkins:8080/job/${env.JOB_NAME.replaceAll('/','/job/')}/lastBuild/consoleText";
-//					  //def sonarId = sh script: "wget -qO- --content-on-error --no-proxy --auth-no-challenge --http-user=${CRED_USR} --http-password=${CRED_PSW} '${url}'  | grep 'More about the report processing' | head -n1 ",returnStdout:true
-//					  //sonarId = sonarId.substring(sonarId.indexOf("=")+1)
-//					  def fileContents = readFile file: '.scannerwork/report-task.txt'
-//					  //String fileContents = new File('.scannerwork/report-task.txt').getText('UTF-8')
-//					  def ceTaskId = ( fileContents =~ "ceTaskId=(.*)")[0][1]
-//					  
-//						  
-//					  echo "sonarId ${ceTaskId}"
-//					  def sonarUrl = "http://sonarqube:9000/api/ce/task?id=${ceTaskId}"
-//					  
-//					  def sonarResponse = sh script: "wget -qO- '${sonarUrl}' --no-proxy --content-on-error",returnStdout:true
-//					  
-//					  echo "sonarResponse -> ${sonarResponse}"
-//					  
-//					  def sonarResponseJSON = readJSON text: sonarResponse;
-//					  
-//					  //def jsonSlurper = new JsonSlurper()
-//					  //def jsonResponse = jsonSlurper.parseText(sonarResponse)
-//					  
-//				  
-//					  echo "sonarResponseJSON -> ${sonarResponseJSON.task} + -> ${sonarResponseJSON.task.status}"
-//					  
-//					  
-//					  def sonarStatus =  sonarResponseJSON.task.status
-//					  def analysisId =  sonarResponseJSON.task.analysisId
-//					  echo "Sonar status ... ${sonarStatus}"
-//					  echo "analysisIds ... ${analysisId}"
-//					  if(sonarStatus.trim() == "SUCCESS"){
-//						  //http://sonarqube-cicd.127.0.0.1.xip.io/api/qualitygates/project_status?analysisId=
-//						  def sonarAnalysisUrl = "http://sonarqube:9000/qualitygates/project_status?analysisId=${analysisId}"
-//						  def analysisResponse = sh script: "wget -qO- '${sonarAnalysisUrl}' --no-proxy --content-on-error",returnStdout:true
-//						  def analysisResponseJSON = readJSON text: analysisResponse;
-//						  
-//						  echo "analysisStatus: ${analysisResponseJSON.status}"
-//						  
-//						  
-//						  echo "BREAK";
-//						  break;
-//					  }
-//					  if(sonarStatus.trim() == "FAILED "){
-//						  echo "FAILED"
-//						  currentBuild.result = 'FAILED'
-//						  break;
-//					  }
-//				  }
-//			  }
-//		  }
 		  
   }
   
@@ -184,7 +111,7 @@ node('maven') {
 //          echo "Checkout Done"
           unstash 'artifacts'
 		  unstash 'docker'
-		  openshift.withCluster( 'https://webconsole.openshift-web-console.svc', 'eyJhbGciOiJSUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJrdWJlcm5ldGVzL3NlcnZpY2VhY2NvdW50Iiwia3ViZXJuZXRlcy5pby9zZXJ2aWNlYWNjb3VudC9uYW1lc3BhY2UiOiJjaWNkIiwia3ViZXJuZXRlcy5pby9zZXJ2aWNlYWNjb3VudC9zZWNyZXQubmFtZSI6ImNpY2QtdG9rZW4tZ2ZkNW4iLCJrdWJlcm5ldGVzLmlvL3NlcnZpY2VhY2NvdW50L3NlcnZpY2UtYWNjb3VudC5uYW1lIjoiY2ljZCIsImt1YmVybmV0ZXMuaW8vc2VydmljZWFjY291bnQvc2VydmljZS1hY2NvdW50LnVpZCI6IjliNzZhOTE4LTg0NjktMTFlOC1hYWNhLTAyNTAwMDAwMDAwMSIsInN1YiI6InN5c3RlbTpzZXJ2aWNlYWNjb3VudDpjaWNkOmNpY2QifQ.Jff5baFIyAvWjz71g1byC6rZIkgEmY5UDe_XPeRcF2CVn5spQ3Owf1pvtaCO_SBbAzMl6oB-aqcc7dYiBcqxV4SYx_fYF-6wKNL7GmiWK_cuTc_HvBR05z9QBivpwB53UUlIX-XipBedhD2p7kU_KnoHCCFav20au_knBIsuGj0dVmcVMV5TxbAqj2sgJpojE2lht1pdW4o6rii2EgJSakKzZETl5JW2FXs8ztwYpE4yaog0taA0VVaOyiAy_ZDTLtAdGAHukQynaxqk3flYv23RTZsd78l7lIWFRPtaiAcniIbf9-iXuWg45jZtihCEm2PdyYcZK0VP59xhXGNpaQ' ) {
+		  openshift.withCluster( 'https://webconsole.openshift-web-console.svc', 'eyJhbGciOiJSUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJrdWJlcm5ldGVzL3NlcnZpY2VhY2NvdW50Iiwia3ViZXJuZXRlcy5pby9zZXJ2aWNlYWNjb3VudC9uYW1lc3BhY2UiOiJjaWNkIiwia3ViZXJuZXRlcy5pby9zZXJ2aWNlYWNjb3VudC9zZWNyZXQubmFtZSI6ImNpY2QtdG9rZW4ta2Y2Zm0iLCJrdWJlcm5ldGVzLmlvL3NlcnZpY2VhY2NvdW50L3NlcnZpY2UtYWNjb3VudC5uYW1lIjoiY2ljZCIsImt1YmVybmV0ZXMuaW8vc2VydmljZWFjY291bnQvc2VydmljZS1hY2NvdW50LnVpZCI6Ijg5OTBjYzU4LTlhNjMtMTFlOC04MmYyLTEyNzk3NzdlYmU0MiIsInN1YiI6InN5c3RlbTpzZXJ2aWNlYWNjb3VudDpjaWNkOmNpY2QifQ.KaMFkaTBG1d4rcJTDw5d3q6BCQK4IFum_kgDDnxoU0MMfCjoIjc6x359iPWqJS-at3GmHEzT--lnqiVNdxVjCSeXT7KVCEnmU8g14dNSkaRhF8TNBseN2wtwm1oSxD-3xQfUUld7U7OXcvo32nmhwKe7JLpuXJVN6kHM5gGk26wKIpYe188nMf_BTq2_gyRZxaS8VP3erF3r6g_OuDsD_vQGyowjcGx6LUWkghI-YCDUrcuqaXwexwgSIlS4fnX0s4vNA3zjlNDxXnmqfO_TZytFSO_MdnYlaYuOdrD0ZrZ8iAs-FvDNFFV4lsIt-OsOx__5anAwvdSiyBFdcUbz3Q' ) {
 			  openshift.withProject( 'fhir-development' ) {
               def build = openshift.startBuild("fhir-patient-service", "--from-file=fhir-patient-service/target/fhir-patient-service-0.0.1-SNAPSHOT.jar")  
             }
@@ -212,7 +139,7 @@ node('maven') {
 	  
 	  stage('Deploy Dev') {
 		 // openshift.withCluster( 'ocplocal' ) {
-		  openshift.withCluster( 'https://webconsole.openshift-web-console.svc', 'eyJhbGciOiJSUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJrdWJlcm5ldGVzL3NlcnZpY2VhY2NvdW50Iiwia3ViZXJuZXRlcy5pby9zZXJ2aWNlYWNjb3VudC9uYW1lc3BhY2UiOiJjaWNkIiwia3ViZXJuZXRlcy5pby9zZXJ2aWNlYWNjb3VudC9zZWNyZXQubmFtZSI6ImNpY2QtdG9rZW4tZ2ZkNW4iLCJrdWJlcm5ldGVzLmlvL3NlcnZpY2VhY2NvdW50L3NlcnZpY2UtYWNjb3VudC5uYW1lIjoiY2ljZCIsImt1YmVybmV0ZXMuaW8vc2VydmljZWFjY291bnQvc2VydmljZS1hY2NvdW50LnVpZCI6IjliNzZhOTE4LTg0NjktMTFlOC1hYWNhLTAyNTAwMDAwMDAwMSIsInN1YiI6InN5c3RlbTpzZXJ2aWNlYWNjb3VudDpjaWNkOmNpY2QifQ.Jff5baFIyAvWjz71g1byC6rZIkgEmY5UDe_XPeRcF2CVn5spQ3Owf1pvtaCO_SBbAzMl6oB-aqcc7dYiBcqxV4SYx_fYF-6wKNL7GmiWK_cuTc_HvBR05z9QBivpwB53UUlIX-XipBedhD2p7kU_KnoHCCFav20au_knBIsuGj0dVmcVMV5TxbAqj2sgJpojE2lht1pdW4o6rii2EgJSakKzZETl5JW2FXs8ztwYpE4yaog0taA0VVaOyiAy_ZDTLtAdGAHukQynaxqk3flYv23RTZsd78l7lIWFRPtaiAcniIbf9-iXuWg45jZtihCEm2PdyYcZK0VP59xhXGNpaQ' ) {
+		  openshift.withCluster( 'https://webconsole.openshift-web-console.svc', 'eyJhbGciOiJSUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJrdWJlcm5ldGVzL3NlcnZpY2VhY2NvdW50Iiwia3ViZXJuZXRlcy5pby9zZXJ2aWNlYWNjb3VudC9uYW1lc3BhY2UiOiJjaWNkIiwia3ViZXJuZXRlcy5pby9zZXJ2aWNlYWNjb3VudC9zZWNyZXQubmFtZSI6ImNpY2QtdG9rZW4ta2Y2Zm0iLCJrdWJlcm5ldGVzLmlvL3NlcnZpY2VhY2NvdW50L3NlcnZpY2UtYWNjb3VudC5uYW1lIjoiY2ljZCIsImt1YmVybmV0ZXMuaW8vc2VydmljZWFjY291bnQvc2VydmljZS1hY2NvdW50LnVpZCI6Ijg5OTBjYzU4LTlhNjMtMTFlOC04MmYyLTEyNzk3NzdlYmU0MiIsInN1YiI6InN5c3RlbTpzZXJ2aWNlYWNjb3VudDpjaWNkOmNpY2QifQ.KaMFkaTBG1d4rcJTDw5d3q6BCQK4IFum_kgDDnxoU0MMfCjoIjc6x359iPWqJS-at3GmHEzT--lnqiVNdxVjCSeXT7KVCEnmU8g14dNSkaRhF8TNBseN2wtwm1oSxD-3xQfUUld7U7OXcvo32nmhwKe7JLpuXJVN6kHM5gGk26wKIpYe188nMf_BTq2_gyRZxaS8VP3erF3r6g_OuDsD_vQGyowjcGx6LUWkghI-YCDUrcuqaXwexwgSIlS4fnX0s4vNA3zjlNDxXnmqfO_TZytFSO_MdnYlaYuOdrD0ZrZ8iAs-FvDNFFV4lsIt-OsOx__5anAwvdSiyBFdcUbz3Q' ) {
 			  openshift.withProject( 'fhir-development' ) {
 				  openshift.selector( 'deploymentconfig/fhir-patient-service' ).describe()
 				  def app = openshift.newApp( '--file=https://raw.githubusercontent.com/Vizuri/openshift-fhir-rules-microservices/master/openshift/templates/springboot-dc.yaml -p APP_NAME=fhir-patient-service -p IMAGE_NAME=505576296154.dkr.ecr.us-east-1.amazonaws.com/fhir/fhir-patient-service:1.0 -e SPRING_PROFILES_ACTIVE=openshift' )
