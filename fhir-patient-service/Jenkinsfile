@@ -184,12 +184,17 @@ node('maven') {
 //          echo "Checkout Done"
           unstash 'artifacts'
 		  unstash 'docker'
+		  openshift.withCluster( 'https://webconsole.openshift-web-console.svc', 'eyJhbGciOiJSUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJrdWJlcm5ldGVzL3NlcnZpY2VhY2NvdW50Iiwia3ViZXJuZXRlcy5pby9zZXJ2aWNlYWNjb3VudC9uYW1lc3BhY2UiOiJjaWNkIiwia3ViZXJuZXRlcy5pby9zZXJ2aWNlYWNjb3VudC9zZWNyZXQubmFtZSI6ImNpY2QtdG9rZW4tZ2ZkNW4iLCJrdWJlcm5ldGVzLmlvL3NlcnZpY2VhY2NvdW50L3NlcnZpY2UtYWNjb3VudC5uYW1lIjoiY2ljZCIsImt1YmVybmV0ZXMuaW8vc2VydmljZWFjY291bnQvc2VydmljZS1hY2NvdW50LnVpZCI6IjliNzZhOTE4LTg0NjktMTFlOC1hYWNhLTAyNTAwMDAwMDAwMSIsInN1YiI6InN5c3RlbTpzZXJ2aWNlYWNjb3VudDpjaWNkOmNpY2QifQ.Jff5baFIyAvWjz71g1byC6rZIkgEmY5UDe_XPeRcF2CVn5spQ3Owf1pvtaCO_SBbAzMl6oB-aqcc7dYiBcqxV4SYx_fYF-6wKNL7GmiWK_cuTc_HvBR05z9QBivpwB53UUlIX-XipBedhD2p7kU_KnoHCCFav20au_knBIsuGj0dVmcVMV5TxbAqj2sgJpojE2lht1pdW4o6rii2EgJSakKzZETl5JW2FXs8ztwYpE4yaog0taA0VVaOyiAy_ZDTLtAdGAHukQynaxqk3flYv23RTZsd78l7lIWFRPtaiAcniIbf9-iXuWg45jZtihCEm2PdyYcZK0VP59xhXGNpaQ' ) {
+			  openshift.withProject( 'fhir-development' ) {
+              def build = openshift.startBuild("fhir-patient-service", "--from-file=fhir-patient-service/target/fhir-patient-service-0.0.1-SNAPSHOT.jar")  
+            }
+          }     	  
+                   
+//		  docker.build('fhir/fhir-patient-service', "fhir-patient-service")
 		  
-		  docker.build('fhir/fhir-patient-service', "fhir-patient-service")
-		  
-		  docker.withRegistry('https://505576296154.dkr.ecr.us-east-1.amazonaws.com', 'ecr:us-east-1:ecr-credentials') {
-			  docker.image('fhir/fhir-patient-service').push('1.0')
-			}
+//		  docker.withRegistry('https://505576296154.dkr.ecr.us-east-1.amazonaws.com', 'ecr:us-east-1:ecr-credentials') {
+//			  docker.image('fhir/fhir-patient-service').push('1.0')
+//			}
 		  
 		  
 //		  withAWS(credentials:'AWS') {
