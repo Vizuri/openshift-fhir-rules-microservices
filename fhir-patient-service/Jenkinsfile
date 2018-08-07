@@ -113,7 +113,8 @@ node('maven') {
 		  unstash 'docker'
 		  openshift.withCluster( 'mycluster' ) {
         	 openshift.withProject( 'fhir-development' ) {
-              def build = openshift.startBuild("fhir-patient-service", "--from-file=fhir-patient-service/target/fhir-patient-service-0.0.1-SNAPSHOT.jar")  
+              def build = openshift.newBuild("fhir-patient-service", "--strategy=docker --name=fhir-patient-service")  
+              //def build = openshift.startBuild("fhir-patient-service", "--from-file=fhir-patient-service/target/fhir-patient-service-0.0.1-SNAPSHOT.jar")  
             }
           }     	  
                    
