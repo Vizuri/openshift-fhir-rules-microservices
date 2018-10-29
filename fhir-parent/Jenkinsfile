@@ -3,9 +3,9 @@
 
 def utils = new com.vizuri.openshift.Utils();
 
-def javaBuildPipeline = new com.vizuri.openshift.JavaBuildPipeline();
+def pomBuildPipeline = new com.vizuri.openshift.PomBuildPipeline();
 
-javaBuildPipeline {
+pomBuildPipeline {
     app_name = 'fhir-parent'
     project_folder = 'fhir-parent'
 }
