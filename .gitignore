@@ -2,6 +2,9 @@
 .settings/
 .project
 .idea/
+.scannerwork
+.springBeans
+.transformations
 out/
 .gradle
 build/

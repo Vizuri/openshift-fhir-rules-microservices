@@ -1,0 +1,100 @@
+#!/usr/bin/groovy
+@Library('github.com/vizuri/openshift-pipeline-templates@master')
+def utils = new com.vizuri.openshift.Utils();
+utils.helloWorld();
+
+println ">>>> Starting";
+//utils.addAnnotationToBuild('fabric8.io/foo', 'bar')
+
+println ">>>>>  Build Number ${BUILD_NUMBER}";
+def ocp_project;
+def image_project;
+def app_name="fhir-base";
+def image_tag="v1.${BUILD_NUMBER}";
+   
+def snapshot_release_number = "1.0-SNAPSHOT";
+def release_number;
+def staging_build_job="fhir-staging/fhir-patient-service-staging";
+
+echo ">>>>>>  Branch Name: " + BRANCH_NAME;
+   
+   
+if(BRANCH_NAME.startsWith("release")) {
+   //def (branch_name, branch_release_number) = BRANCH_NAME.tokenize( '/' )
+   def tokens = BRANCH_NAME.tokenize( '/' )
+   branch_name = tokens[0]
+   branch_release_number = tokens[1]
+   
+   image_project="fhir"
+   ocp_project="fhir-test"
+   
+   release_number = branch_release_number
+   
+   stage('Confirm Deploy?') {
+       milestone 1
+           input message: "Do you want to deploy release ${BRANCH_NAME} to test?" 
+	   }
+}
+else {
+   release_number = snapshot_release_number
+   image_project="fhir-snapshot"
+   ocp_project="fhir-development"
+}
+
+node('maven') {	
+   stage('Checkout') {
+        echo "In checkout" 
+    	checkout scm
+   }
+    stage('MavenBuild') {
+        echo "In Build"
+        sh "mvn -s configuration/settings.xml -Dbuild.number=${release_number} -f fhir-base clean install deploy"
+        //junit 'target/surefire-reports/*.xml'
+        
+       // step([$class: 'XUnitBuilder',
+    	//	thresholds: [[$class: 'FailedThreshold', unstableThreshold: '1']],
+    	//	tools: [[$class: 'JUnitType', pattern: 'target/surefire-reports/*.xml']]])
+        
+        stash includes: 'fhir-base/target/*.jar', name: 'artifacts'
+    }
+}
+//node () { 
+//    stage('DockerBuild') {
+//        dir('.') {
+//            deleteDir()
+//        }
+//        checkout scm
+//        echo "Checkout Done"
+//        unstash 'artifacts'
+//        sh """
+//            sudo docker login docker.demo.vizuri.com -u admin -p demopass34 
+//            sudo docker build -t docker.demo.vizuri.com/${image_project}/${app_name}:${release_number} .
+//            sudo docker push docker.demo.vizuri.com/${image_project}/${app_name}:${release_number}"""
+//    }
+//}
+
+//node ('fhir-jenkins-slave') { 
+//    stage('OpenShiftDeploy') {
+//        sh """
+//            oc project ${ocp_project}
+//            oc tag -n ${ocp_project} docker.demo.vizuri.com/${image_project}/${app_name}:${release_number} ${app_name}:latest --insecure=true
+//            """
+//            //oc deploy ${app_name} --latest -n fhir-development"""
+//    }
+//}
+
+//node () {
+//   if(BRANCH_NAME.startsWith("release")) {
+//	stage ('DeployToStaging?') {
+//	     input message: "Do you want to deploy release ${release_number} to staging?" 
+//	     build job: staging_build_job, wait: false, parameters: [[$class: 'StringParameterValue', name: 'release_number', value: release_number]]
+//	}
+//  }
+//}
+
+
+//} catch (exc) {
+       // hipchatSend (color: 'RED', notify: true,
+       //     message: "Version :: " + version + " FAILED: Job '${env.JOB_NAME} BUILD: [${env.BUILD_NUMBER}]' (${env.BUILD_URL})"
+        //)
+//}

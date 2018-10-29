@@ -1,0 +1,197 @@
+kind: Template
+apiVersion: v1
+labels:
+  version: 5.2.1-1
+  group: infrastructure
+metadata:
+  annotations:
+    description: Creates the infrastructure for the end-to-end content and security management story.
+    tags: instant-app,artifactory
+    version: 5.2.1-1
+  name: artifactory
+objects:
+- kind: ImageStream
+  apiVersion: v1
+  metadata:
+    name: artifactory
+  spec:
+    tags:
+      - name: "5.2.1"
+        from:
+          kind: DockerImage
+          name: "docker.bintray.io/jfrog/artifactory-oss:5.2.1"
+        importPolicy: {}
+      - name: latest
+        from:
+          kind: ImageStreamTag
+          name: "${ARTIFACTORY_VERSION}"
+- kind: Route
+  apiVersion: v1
+  metadata:
+    name: artifactory
+  spec:
+    to:
+      kind: Service
+      name: artifactory
+- kind: Service
+  apiVersion: v1
+  metadata:
+    name: artifactory
+    annotations:
+      app: artifactory
+      service.openshift.io/infrastructure: 'true'
+      service.alpha.openshift.io/serving-cert-secret-name: artifactory
+  spec:
+    ports:
+    - name: artifactory
+      port: 8081
+      protocol: TCP
+      targetPort: 8081
+    selector:
+      app: artifactory
+    sessionAffinity: None
+    type: ClusterIP
+- kind: StatefulSet
+  apiVersion: apps/v1beta1
+  metadata:
+    name: artifactory
+    labels:
+      app: artifactory
+  spec:
+    serviceName: artifactory
+    replicas: 1
+    triggers:
+      - type: ConfigChange
+      - type: ImageChange
+        imageChangeParams:
+          automatic: true
+          containerNames:
+            - artifactory
+          from:
+            kind: ImageStreamTag
+            name: artifactory:a5.2.1
+          lastTriggeredImage: ''
+    test: false
+    strategy:
+      recreateParams:
+        timeoutSeconds: 600
+      resources: {}
+      type: Recreate
+    template:
+      metadata:
+        labels:
+          deploymentconfig: artifactory
+          app: artifactory
+      spec:
+        serviceAccountName: artifactory
+        serviceAccount: artifactory
+        containers:
+        - name: artifactory
+          image: docker.bintray.io/jfrog/artifactory-oss:5.2.1
+          imagePullPolicy: Always
+          env:
+          livenessProbe:
+            failureThreshold: 3
+            initialDelaySeconds: 130
+            periodSeconds: 10
+            successThreshold: 1
+            timeoutSeconds: 5
+            httpGet:
+              path: /
+              port: 8081
+          ports:
+          - containerPort: 8081
+            protocol: TCP
+          resources:
+            limits:
+              cpu: 512m
+              memory: 768Mi
+          securityContext:
+            capabilities: {}
+            privileged: false
+          terminationMessagePath: /dev/termination-log
+          volumeMounts:
+          - mountPath: /var/opt/jfrog/artifactory
+            name: artifactory-data
+          - name: generated-certificate-volume
+            mountPath: /etc/opt/jfrog/certs/
+            readOnly: true
+        dnsPolicy: ClusterFirst
+        restartPolicy: Always
+        securityContext: {}
+        terminationGracePeriodSeconds: 30
+        volumes:
+        - name: artifactory-etc
+          configMap:
+            name: artifactory-default-config
+            items:
+              - key: default
+                path: default
+              - key: artifactory.system.properties
+                path: artifactory.system.properties
+              - key: artifactory.config.xml
+                path: artifactory.config.xml
+              - key: artifactory.lic
+                path: artifactory.lic
+        - name: artifactory-data
+          persistentVolumeClaim:
+            claimName: artifactory-data
+        - name: artifactory-logs
+          persistentVolumeClaim:
+            claimName: artifactory-logs
+        - name: artifactory-backup
+          persistentVolumeClaim:
+            claimName: artifactory-backup
+        - name: artifactory-var
+          persistentVolumeClaim:
+            claimName: artifactory-var
+        - name: generated-certificate-volume
+          secret:
+            secretName: artifactory
+    volumeClaimTemplates:
+      - metadata:
+          name: artifactory-data
+          annotations:
+            app: artifactory
+        spec:
+          accessModes:
+            - "ReadWriteOnce"
+          resources:
+            requests:
+              storage: 1Gi
+      - metadata:
+          name: artifactory-logs
+          annotations:
+            app: artifactory
+        spec:
+          accessModes:
+            - "ReadWriteOnce"
+          resources:
+            requests:
+              storage: 1Gi
+      - metadata:
+          name: artifactory-backup
+          annotations:
+            app: artifactory
+        spec:
+          accessModes:
+            - "ReadWriteOnce"
+          resources:
+            requests:
+              storage: 1Gi
+      - metadata:
+          name: artifactory-var
+          annotations:
+            app: artifactory
+        spec:
+          accessModes:
+            - "ReadWriteOnce"
+          resources:
+            requests:
+              storage: 1Gi
+parameters:
+  - name: ARTIFACTORY_VERSION
+    displayName: Artifactory Version
+    description: 'Version of the Artifactory container image to be used'
+    value: "5.2.1"
+    required: true

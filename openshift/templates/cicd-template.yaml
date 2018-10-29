@@ -1,0 +1,214 @@
+apiVersion: v1
+kind: Template
+labels:
+  template: cicd
+  group: cicd
+metadata:
+  annotations:
+    iconClass: icon-jenkins
+    tags: instant-app,jenkins,gogs,nexus,cicd
+  name: cicd
+message: "Use the following credentials for login:\nJenkins: use your OpenShift credentials\nNexus: admin/admin123\nSonarQube: admin/admin\nGogs Git Server: gogs/gogs"
+parameters:
+- name: APP_NAME
+  description: The name assigned to all of the application objects defined in this template.
+  displayName: Application Name
+  required: true
+- displayName: DEV project name
+  value: dev
+  name: DEV_PROJECT
+  required: true
+- displayName: STAGE project name
+  value: stage
+  name: STAGE_PROJECT
+  required: true
+- displayName: Deploy SonarQube
+  description: If SonarQube should be deployed and used in the pipeline. Set to false to preserve resources.
+  value: "true"
+  name: WITH_SONAR
+  required: true
+- displayName: Deploy Eclipse Che
+  description: Deploy Eclipse Che in order to use as an online IDE for changing code in this demo
+  value: "false"
+  name: WITH_CHE
+  required: true
+- displayName: Ephemeral
+  description: Use no persistent storage for Gogs and Nexus
+  value: "true"
+  name: EPHEMERAL
+  required: true
+- description: Webhook secret
+  from: '[a-zA-Z0-9]{8}'
+  generate: expression
+  name: WEBHOOK_SECRET
+  required: true
+- name: GIT_SOURCE_URL
+  description: The source URL for the application
+  displayName: Source URL
+  required: true
+- name: GIT_SOURCE_REF
+  description: The source Ref for the application
+  displayName: Source Ref
+  required: true
+  value: develop
+- name: CONTEXT_DIR
+  description: Path within Git project to build; empty for root project directory.
+  displayName: Context Directory
+  required: false
+objects:
+- apiVersion: v1
+  kind: BuildConfig
+  metadata:
+    annotations:
+      pipeline.alpha.openshift.io/uses: '[{"name": "jenkins", "namespace": "", "kind": "DeploymentConfig"}]'
+    labels:
+      app: ${APP_NAME}-pipeline
+      name: ${APP_NAME}-pipeline
+    name: ${APP_NAME}-pipeline
+  spec:
+    triggers:
+      - type: GitHub
+        github:
+          secret: ${WEBHOOK_SECRET}
+      - type: Generic
+        generic:
+          secret: ${WEBHOOK_SECRET}
+    runPolicy: Serial
+    source:
+      type: None
+    strategy:
+      jenkinsPipelineStrategy:
+        env:
+        - name: DEV_PROJECT
+          value: ${DEV_PROJECT}
+        - name: STAGE_PROJECT
+          value: ${STAGE_PROJECT}
+        - name: WITH_SONAR
+          value: ${WITH_SONAR}
+        jenkinsfile: |-
+          def version, mvnCmd = "mvn -s ../configuration/settings.xml"
+
+          pipeline {
+            agent {
+              label 'maven'
+            }
+            stages {
+              stage('Build App') {
+                steps {
+                  git url: "${GIT_SOURCE_URL}", branch: "${GIT_SOURCE_REF}"
+                  sh "cd ${CONTEXT_DIR};${mvnCmd} -DskipTests=true clean install"
+                }
+              }
+              stage('Archive App') {
+                steps {
+                  //sh "${mvnCmd} deploy pTests=true -P nexus3"
+                  sh "cd ${CONTEXT_DIR};${mvnCmd} deploy -DskipTests=true"
+                }
+              }
+              stage('Create Image Builder') {
+                when {
+                  expression {
+                    openshift.withCluster() {
+                      openshift.withProject(env.DEV_PROJECT) {
+                        return !openshift.selector("bc", "${APP_NAME}").exists();
+                      }
+                    }
+                  }
+                }
+                steps {
+                  script {
+                    openshift.withCluster() {
+                      openshift.withProject(env.DEV_PROJECT){
+                        openshift.newBuild("--name=${APP_NAME}", "--image-stream=fhir-base-container", "--dockerfile='FROM fhir-base-container:latest\nCOPY ${APP_NAME}.jar .\nENV APP_JAR=${APP_NAME}.jar'")
+                      }
+                    }
+                  }
+                }
+              }
+              stage('Build Image') {
+                steps {
+                  sh "rm -rf oc-build && mkdir -p oc-build/deployments"
+                  sh "cp ${CONTEXT_DIR}/target/*.jar oc-build/deployments/${APP_NAME}.jar"
+                  
+                  script {
+                    openshift.withCluster() {
+                      openshift.withProject(env.DEV_PROJECT) {
+                        openshift.selector("bc", "${APP_NAME}").startBuild(" --from-file=oc-build/deployments/${APP_NAME}.jar", "--wait=true")
+                      }
+                    }
+                  }
+                }
+              }
+              stage('Create DEV') {
+                when {
+                  expression {
+                    openshift.withCluster() {
+                      openshift.withProject(env.DEV_PROJECT) {
+                        return !openshift.selector('dc', '${APP_NAME}').exists()
+                      }
+                    }
+                  }
+                }
+                steps {
+                  script {
+                    openshift.withCluster() {
+                      openshift.withProject(env.DEV_PROJECT) {
+                        def app = openshift.newApp("--template=springboot-dc", "-p APP_NAME=${APP_NAME}" )
+                        //app.narrow("svc").expose();
+
+                        def dc = openshift.selector("dc", "${APP_NAME}")
+                        //while (dc.object().spec.replicas != dc.object().status.availableReplicas) {
+                        //    sleep 10
+                        //}
+                        openshift.set("triggers", "dc/${APP_NAME}", "--manual")
+                      }
+                    }
+                  }
+                }
+              }
+              stage('Deploy DEV') {
+                steps {
+                  script {
+                    openshift.withCluster() {
+                      openshift.withProject(env.DEV_PROJECT) {
+                        openshift.selector("dc", "${APP_NAME}").rollout().latest();
+                      }
+                    }
+                  }
+                }
+              }
+              stage('Promote to STAGE?') {
+                steps {
+                  timeout(time:15, unit:'MINUTES') {
+                      input message: "Promote to STAGE?", ok: "Promote"
+                  }
+
+                  script {
+                    openshift.withCluster() {
+                      openshift.tag("${env.DEV_PROJECT}/${APP_NAME}:latest", "${env.STAGE_PROJECT}/${APP_NAME}:latest")
+                    }
+                  }
+                }
+              }
+              stage('Deploy STAGE') {
+                steps {
+                  script {
+                    openshift.withCluster() {
+                      openshift.withProject(env.STAGE_PROJECT) {
+                        if (openshift.selector('dc', '${APP_NAME}').exists()) {
+                          openshift.selector('dc', '${APP_NAME}').delete()
+                          openshift.selector('svc', '${APP_NAME}').delete()
+                          openshift.selector('route', '${APP_NAME}').delete()
+                        }
+
+                        //openshift.newApp("${APP_NAME}:${version}").narrow("svc").expose()
+                        openshift.newApp("--template=springboot-dc", "-p APP_NAME=${APP_NAME}" )
+                        openshift.selector("dc", "${APP_NAME}").rollout().latest();
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          }
+      type: JenkinsPipeline

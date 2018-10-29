@@ -28,6 +28,7 @@ if(BRANCH_NAME.startsWith("release")) {
    image_project="fhir"
    ocp_project="fhir-test"
    
+   
    release_number = branch_release_number
    
    stage('Confirm Deploy?') {
@@ -68,13 +69,13 @@ node('maven') {
 	  def pom = readMavenPom file: 'fhir-patient-service/pom.xml'
 	  writeFile encoding: 'UTF-8', file: 'sonar-project.properties', text: """
 	  sonar.projectBaseDir=fhir-patient-service
-      sonar.projectKey=$pom.groupId:$pom.artifactId
-      sonar.projectName=$pom.name
-      sonar.projectVersion=$pom.version
+          sonar.projectKey=$pom.groupId:$pom.artifactId
+          sonar.projectName=$pom.name
+          sonar.projectVersion=$pom.version
 	  sonar.java.binaries=target/classes
 	  sonar.tests=target/jacoco.exec
-      sonar.sources=src/main/java"""
-		archive 'sonar-project.properties'
+          sonar.sources=src/main/java"""
+          archive 'sonar-project.properties'
   
 		def scannerHome = tool 'sonar';
 		

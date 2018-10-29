@@ -153,6 +153,8 @@ objects:
             value: ${HORNETQ_QUEUES}
           - name: HORNETQ_TOPICS
             value: ${HORNETQ_TOPICS}
+          - name: JAVA_MAX_MEM_RATIO
+            value: "70"
           image: ${APPLICATION_NAME}
           imagePullPolicy: Always
           name: ${APPLICATION_NAME}
@@ -165,8 +167,6 @@ objects:
             protocol: TCP
           resources:
             limits:
-              cpu: ${CPU_LIMIT}
-              memory: ${MEMORY_LIMIT}
             requests:
               cpu: ${CPU_REQUEST}
               memory: ${MEMORY_REQUEST}
@@ -260,7 +260,7 @@ parameters:
   name: ARTIFACT_DIR
 - description: POD Memory Limit 
   name: MEMORY_LIMIT
-  value: 500Mi
+  value: 512Mi
 - description: POD CPU Limit 
   name: CPU_LIMIT
   value: 750m

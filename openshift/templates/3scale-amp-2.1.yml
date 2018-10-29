@@ -214,6 +214,7 @@ objects:
     resources:
       requests:
         storage: "100Mi"
+    storageClassName: local-storage
 
 - apiVersion: "v1"
   kind: "PersistentVolumeClaim"
@@ -1470,7 +1471,7 @@ objects:
               cpu: '1000m'
               memory: 300Mi
             requests:
-              cpu: '500m'
+              cpu: '100m'
               memory: 300Mi
           volumeMounts:
           - name: system-storage
@@ -1534,7 +1535,7 @@ objects:
                 cpu: '1'
                 memory: 2Gi
               requests:
-                cpu: '1'
+                cpu: '100m'
                 memory: 1Gi
             readinessProbe:
               timeoutSeconds: 5
@@ -1692,7 +1693,7 @@ objects:
               cpu: '1'
               memory: 250Mi
             requests:
-              cpu: 250m
+              cpu: 100m
               memory: 150M
           env:
             - name: RAILS_LOG_TO_STDOUT
@@ -1844,7 +1845,7 @@ objects:
               cpu: '1000m'
               memory: 500Mi
             requests:
-              cpu: '300m'
+              cpu: '100m'
               memory: 500Mi
         volumes:
         - name: "zync-database-data"
