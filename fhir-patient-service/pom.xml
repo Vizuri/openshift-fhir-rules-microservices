@@ -4,18 +4,20 @@
 	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
 	<modelVersion>4.0.0</modelVersion>
 
-	<groupId>com.vizuri.fhir</groupId>
+	<properties>
+		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+		<project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
+		<java.version>1.8</java.version>
+		<build.number>0.0.1-SNAPSHOT</build.number>	
+	</properties>
+	
 	<artifactId>fhir-patient-service</artifactId>
-	<version>0.0.1-SNAPSHOT</version>
+	<version>${build.number}</version>
 	<packaging>jar</packaging>
 
 	<name>fhir-patient-service</name>
 	<description>Patient Microservice</description>
 
-	<!-- <properties> <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding> 
-		<project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding> 
-		<build.number>1.0-SNAPSHOT</build.number> <java.version>1.8</java.version> 
-		</properties> -->
 
 	<parent>
 		<groupId>com.vizuri.fhir</groupId>
@@ -24,11 +26,7 @@
 		<relativePath /> <!-- lookup parent from repository -->
 	</parent>
 
-	<properties>
-		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-		<project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
-		<java.version>1.8</java.version>
-	</properties>
+
 
 	<dependencies>
 		<dependency>
