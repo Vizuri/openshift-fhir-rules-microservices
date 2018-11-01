@@ -18,7 +18,7 @@
     <mirror>
       <id>nexus-central</id>
       <name>Nexus Mirror Central</name>
-      <url>http://nexus:8081/repository/maven-central/</url>
+      <url>${nexus.url}/repository/maven-central/</url>
       <mirrorOf>central</mirrorOf>
     </mirror>
   </mirrors>
@@ -30,7 +30,7 @@
         <repository>
           <id>fhir-public</id>
           <name>Fhir public</name>
-          <url>http://nexus:8081/repository/maven-public</url>
+          <url>${nexus.url}/repository/maven-public</url>
           <snapshots>
             <enabled>true</enabled>
             <updatePolicy>always</updatePolicy>
