@@ -12,7 +12,7 @@
  * the License.
  */
 
-package com.vizuri.fhir;
+package com.vizuri.fhir.test.unit;
 
 import static org.junit.Assert.*;
 
