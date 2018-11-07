@@ -1,0 +1,27 @@
+apiVersion: v1
+kind: BuildConfig
+metadata:
+  annotations:
+    pipeline.alpha.openshift.io/uses: '[{"name": "${NAME}", "namespace": "", "kind": "DeploymentConfig"}]'
+  labels:
+    name: fhir-parent
+  name: fhir-parent
+spec:
+  strategy:
+    jenkinsPipelineStrategy:
+      env:
+        - name: PS_GIT_URI
+          value: 'https://github.com/Vizuri/openshift-fhir-rules-microservices.git'
+        - name: BRANCH_NAME
+          value: develop
+      jenkinsfile: |-
+        #!/usr/bin/groovy
+        @Library('github.com/vizuri/openshift-pipeline-templates@master')
+        def utils = new com.vizuri.openshift.Utils();
+        def pomBuildPipeline = new com.vizuri.openshift.PomBuildPipelineOCP();
+        pomBuildPipeline {
+            app_name = 'fhir-parent'
+            project_folder = 'fhir-parent'
+        }
+    type: JenkinsPipeline
+  triggers:
