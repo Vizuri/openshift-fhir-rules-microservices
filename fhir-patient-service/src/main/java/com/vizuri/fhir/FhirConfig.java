@@ -140,4 +140,13 @@ public class FhirConfig {
 	          .build()
 	        ;
 	  }
+	
+	public void foo() {
+		if(true) {
+			return;
+		}
+		
+		logger.info("Got Here");
+		return;
+	}
 }
