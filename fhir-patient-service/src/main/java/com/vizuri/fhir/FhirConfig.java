@@ -142,11 +142,11 @@ public class FhirConfig {
 	  }
 	
 	public void foo() {
-		if(true) {
-			return;
-		}
+		int i;
+		i = 1+1;
+		i = 1+1;
+		i = 1+1;
+		i = 1+1;
 		
-		logger.info("Got Here");
-		return;
 	}
 }
