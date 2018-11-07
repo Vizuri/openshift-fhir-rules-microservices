@@ -141,12 +141,12 @@ public class FhirConfig {
 	        ;
 	  }
 	
-//	public void badCode() {
-//		int i;
-//		i = 1+1;
-//		i = 1+1;
-//		i = 1+1;
-//		i = 1+1;
-//		
-//	}
+	public void badCode() {
+		int i;
+		i = 1+1;
+		i = 1+1;
+		i = 1+1;
+		i = 1+1;
+		
+	}
 }
