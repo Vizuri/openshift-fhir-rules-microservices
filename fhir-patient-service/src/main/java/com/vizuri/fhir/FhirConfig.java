@@ -141,8 +141,8 @@ public class FhirConfig {
 	        ;
 	  }
 	
-	public void badCode() {
-		int i =0;
-		i = 1+1;		
-	}
+//	public void badCode() {
+//		int i =0;
+//		i = 1+1;		
+//	}
 }
