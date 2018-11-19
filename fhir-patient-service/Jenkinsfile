@@ -4,7 +4,7 @@
 def utils = new com.vizuri.openshift.Utils();
 utils.helloWorld();
 
-def javaDeliveryPipeline = new com.vizuri.openshift.JavaDeliveryPipeline();
+def javaDeliveryPipeline = new com.vizuri.openshift.JavaDeliveryPipelineOCP();
 
 javaDeliveryPipeline {
 	app_name = 'fhir-patient-service'
