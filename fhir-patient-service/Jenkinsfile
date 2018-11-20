@@ -1,6 +1,5 @@
 #!/usr/bin/groovy
 @Library('github.com/vizuri/openshift-pipeline-templates@master')
-def javaDeliveryPipeline = new com.vizuri.openshift.TestPipeline();
 
 def javaDeliveryPipeline = new com.vizuri.openshift.JavaDeliveryPipelineOCP();
 
