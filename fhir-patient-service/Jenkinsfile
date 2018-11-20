@@ -2,7 +2,6 @@
 @Library('github.com/vizuri/openshift-pipeline-templates@master')
 
 def utils = new com.vizuri.openshift.Utils();
-utils.helloWorld();
 
 def javaDeliveryPipeline = new com.vizuri.openshift.JavaDeliveryPipelineOCP();
 
