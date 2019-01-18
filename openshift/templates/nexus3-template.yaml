@@ -157,7 +157,7 @@ parameters:
   displayName: Volume Space for Nexus
   name: VOLUME_CAPACITY
   required: true
-  value: 2Gi
+  value: 20Gi
 - description: Max memory allocated to the Nexus pod
   displayName: Max Memory
   name: MAX_MEMORY

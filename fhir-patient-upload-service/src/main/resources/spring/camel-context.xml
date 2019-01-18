@@ -13,7 +13,7 @@
     <bean
         class="org.apache.camel.component.servlet.CamelHttpTransportServlet" id="camelHttpTransportServlet"/>
     <bean class="com.amazonaws.services.s3.AmazonS3Client" id="awsS3Client">
-        <constructor-arg ref="awsCredentials"/>
+        <!--  <constructor-arg ref="awsCredentials"/>-->
     </bean>
     <!-- 
     <bean class="com.amazonaws.auth.BasicAWSCredentials" id="awsCredentials">
@@ -22,10 +22,7 @@
     </bean>
     
      -->
-    <bean class="com.amazonaws.auth.BasicAWSCredentials" id="awsCredentials">
-        <constructor-arg value="${aws.access.key.id}"/>
-        <constructor-arg value="${aws.secret.access.key}"/>
-    </bean>
+
     <camelContext id="camel" xmlns="http://camel.apache.org/schema/spring">
         <propertyPlaceholder id="properties" location="application.properties"/>
         <endpoint id="toPatientJson" uri="dozer:toPatientJson?sourceModel=generated_1526345463028.Patient&amp;targetModel=output.Output&amp;marshalId=transform-json&amp;unmarshalId=generated_1526345463028&amp;mappingFile=transformation.xml"/>
