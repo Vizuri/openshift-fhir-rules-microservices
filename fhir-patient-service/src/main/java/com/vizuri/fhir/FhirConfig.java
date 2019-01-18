@@ -140,4 +140,9 @@ public class FhirConfig {
 	          .build()
 	        ;
 	  }
+	
+//	public void badCode() {
+//		int i =0;
+//		i = 1+1;		
+//	}
 }

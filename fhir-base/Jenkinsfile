@@ -6,5 +6,6 @@ def utils = new com.vizuri.openshift.Utils();
 def javaBuildPipeline = new com.vizuri.openshift.JavaBuildPipeline();
 
 javaBuildPipeline {
-    app_name = 'ldap-demo'
+    app_name = 'fhir-base'
+    project_folder = 'fhir-base'
 }
