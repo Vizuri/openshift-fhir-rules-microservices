@@ -54,7 +54,7 @@
                 <setHeader headerName="user-key" id="_setHeader3">
                     <constant>c223df53950afeb510d93c64f8e21b13</constant>
                 </setHeader>
-                <to id="_to3" uri="http://patient-apicast-prod.app.ocpdemo.sandbox.vizuri.com/patient"/>
+                <to id="_to3" uri="http://fhir-patient-service:8080/patient"/>
             </split>
         </route>
     </camelContext>

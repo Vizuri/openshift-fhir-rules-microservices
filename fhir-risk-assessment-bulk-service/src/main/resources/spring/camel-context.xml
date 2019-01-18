@@ -32,8 +32,9 @@
             <corsHeaders key="Access-Control-Allow-Methods" value="GET, HEAD, POST, PUT, DELETE, TRACE, OPTIONS, CONNECT, PATCH"/>
             <corsHeaders key="Access-Control-Allow-Headers" value="Origin, Accept, X-Requested-With, Content-Type, Access-Control-Request-Method, Access-Control-Request-Headers"/>
         </restConfiguration>
-        <rest path="/riskassessment">
-            <post outType="org.hl7.fhir.dstu3.model.Bundle" type="org.hl7.fhir.dstu3.model.Bundle">
+        <rest id="rest-46904ba4-a56a-4952-8a7d-38883ff2d191" path="/riskassessment">
+            <post id="post-5dd07bf9-0417-439d-9a8d-9ed2a26b56c5"
+                outType="org.hl7.fhir.dstu3.model.Bundle" type="org.hl7.fhir.dstu3.model.Bundle">
                 <to uri="direct:processBundle"/>
             </post>
         </rest>
