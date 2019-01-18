@@ -92,7 +92,7 @@ objects:
                     git url: "${GIT_SOURCE_URL}", branch: "${GIT_SOURCE_REF}"
                   }
                   stage("Build Jar") {
-                    sh "cd ${CONTEXT_DIR};mvn -s ../configuration/settings.xml -DskipTests=true clean install"
+                    sh "cd ${CONTEXT_DIR};mvn -Dnexus.url=http://nexus:8081 -s ../configuration/settings.xml -DskipTests=true clean install"
                     sh "cp ${CONTEXT_DIR}/target/*.jar ${APP_NAME}.jar"
                     stash name:"jar", includes:" ${APP_NAME}.jar"
                   }
