@@ -1,4 +1,4 @@
-FROM node:6
+FROM node:10.15.0
 
 RUN mkdir -p /usr/src/app
 RUN chmod 777 -R /usr/src
