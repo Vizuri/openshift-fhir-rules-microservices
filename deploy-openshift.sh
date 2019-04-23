@@ -2,8 +2,8 @@ SERVICE_GIT_URL=https://github.com/Vizuri/openshift-fhir-rules-microservices.git
 RULES_GIT_URL=https://github.com/Vizuri/openshift-fhir-rules-rules.git
 PROJECT=fhir-development
 #OCP_WILDCARD_DNS=192.168.99.100.nip.io
-#OCP_WILDCARD_DNS=app.ocpdemo.sandbox.vizuri.com
-OCP_WILDCARD_DNS=54.84.189.66.xip.io
+OCP_WILDCARD_DNS=apps.ocpdemo.kee.vizuri.com
+#OCP_WILDCARD_DNS=54.84.189.66.xip.io
 
 oc new-project $PROJECT
 

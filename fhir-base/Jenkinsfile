@@ -1,11 +1,21 @@
 #!/usr/bin/groovy
-@Library('github.com/vizuri/openshift-pipeline-templates@master')
+  
+@Library('github.com/vizuri/openshift-fhir-rules-cicd@master')
 
-def utils = new com.vizuri.openshift.Utils();
+def javaDeliveryPipeline = new com.vizuri.openshift.JavaBuildPipeline();
 
-def javaBuildPipeline = new com.vizuri.openshift.JavaBuildPipeline();
 
-javaBuildPipeline {
-    app_name = 'fhir-base'
-    project_folder = 'fhir-base'
+javaDeliveryPipeline {
+    ocpAppSuffix = 'apps.ocpdemo.kee.vizuri.com'
+    imageNamespace = 'admin';
+    imageBase = 'quay.apps.ocpdemo.kee.vizuri.com'
+    registryUsername = 'admin'
+    registryPassword = 'P@ssw0rd'
+    app_name = 'fhir-parent'
+    ocp_dev_cluster = 'ocp-demo'
+    ocp_dev_project = 'demo-fhir-dev'
+    ocp_test_cluster = 'ocp-demo'
+    ocp_test_project = 'demo-fhir-test'
+    ocp_prod_cluster = 'ocp-demo'
+    ocp_prod_project = 'demo-fhir-prod'
 }

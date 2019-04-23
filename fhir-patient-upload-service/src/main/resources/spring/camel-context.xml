@@ -22,7 +22,6 @@
     </bean>
     
      -->
-
     <camelContext id="camel" xmlns="http://camel.apache.org/schema/spring">
         <propertyPlaceholder id="properties" location="application.properties"/>
         <endpoint id="toPatientJson" uri="dozer:toPatientJson?sourceModel=generated_1526345463028.Patient&amp;targetModel=output.Output&amp;marshalId=transform-json&amp;unmarshalId=generated_1526345463028&amp;mappingFile=transformation.xml"/>

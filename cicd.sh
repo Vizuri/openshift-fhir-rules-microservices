@@ -7,7 +7,8 @@ oc new-project cicd
 oc create sa cicd
 oc adm policy add-cluster-role-to-user admin -z cicd
 
-oc new-app -f openshift/templates/jenkins-persistent.yaml --name=jenkins -p MEMORY_LIMIT=1Gi -p VOLUME_CAPACITY=1Gi
+oc new-app --template jenkins-persistent --name=jenkins -p MEMORY_LIMIT=1Gi -p VOLUME_CAPACITY=10Gi
+##oc new-app -f openshift/templates/jenkins-persistent.yaml --name=jenkins -p MEMORY_LIMIT=1Gi -p VOLUME_CAPACITY=10Gi
 
 ##oc new-app -f openshift/templates/jenkins-persistent.yaml --name=jenkins -p MEMORY_LIMIT=1Gi -p VOLUME_CAPACITY=1Gi
 

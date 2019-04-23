@@ -1,26 +1,21 @@
 #!/usr/bin/groovy
-@Library('github.com/vizuri/openshift-pipeline-templates@master')
+  
+@Library('github.com/vizuri/openshift-fhir-rules-cicd@master')
 
-def javaDeliveryPipeline = new com.vizuri.openshift.JavaDeliveryPipelineOCP();
+def javaDeliveryPipeline = new com.vizuri.openshift.JavaDeliveryPipeline();
 
-//javaDeliveryPipeline {
-//	app_name = 'fhir-patient-service'
-//	project_folder = 'fhir-patient-service'
-//	ocp_dev_cluster = 'ocp-nonprod-01'
-//	ocp_dev_project = 'fhir-development'
-//	ocp_test_cluster = 'ocp-nonprod-01'
-//	ocp_test_project = 'fhir-test'
-//	ocp_prod_cluster = 'ocp-nonprod-01'
-//	ocp_prod_project = 'fhir-prod'
-//}
 
 javaDeliveryPipeline {
-	app_name = 'fhir-patient-service'
-	project_folder = 'fhir-patient-service'
-	ocp_dev_cluster = 'aws-ocp-02'
-	ocp_dev_project = 'fhir-development'
-	ocp_test_cluster = 'aws-ocp-02'
-	ocp_test_project = 'fhir-test'
-	ocp_prod_cluster = 'aws-ocp-02'
-	ocp_prod_project = 'fhir-prod'
+    ocpAppSuffix = 'apps.ocpdemo.kee.vizuri.com'
+    imageNamespace = 'admin';
+    imageBase = 'quay.apps.ocpdemo.kee.vizuri.com'
+    registryUsername = 'admin'
+    registryPassword = 'P@ssw0rd'
+    app_name = 'fhir-parent'
+    ocp_dev_cluster = 'ocp-demo'
+    ocp_dev_project = 'demo-fhir-dev'
+    ocp_test_cluster = 'ocp-demo'
+    ocp_test_project = 'demo-fhir-test'
+    ocp_prod_cluster = 'ocp-demo'
+    ocp_prod_project = 'demo-fhir-prod'
 }
