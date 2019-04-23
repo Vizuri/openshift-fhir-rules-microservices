@@ -18,4 +18,7 @@ javaDeliveryPipeline {
     ocp_test_project = 'demo-fhir-test'
     ocp_prod_cluster = 'ocp-demo'
     ocp_prod_project = 'demo-fhir-prod'
+    project_folder = 'fhir-base'
+    nexusUrl = 'http://nexus-student-1-cicd.apps.ocpdemo.kee.vizuri.com'
+    
 }
